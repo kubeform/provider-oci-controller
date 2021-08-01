@@ -27,8 +27,9 @@ import (
 	"sync"
 	"time"
 
-	oci "github.com/equinix/terraform-provider-metal/metal"
 	"github.com/gobuffalo/flect"
+	tfschema "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	oci "github.com/terraform-providers/terraform-provider-oci/oci"
 	auditlib "go.bytebuilders.dev/audit/lib"
 	arv1 "k8s.io/api/admissionregistration/v1"
 	"k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -39,36 +40,118 @@ import (
 	admissionregistrationv1 "k8s.io/client-go/kubernetes/typed/admissionregistration/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
-	bgpv1alpha1 "kubeform.dev/provider-oci-api/apis/bgp/v1alpha1"
-	connectionv1alpha1 "kubeform.dev/provider-oci-api/apis/connection/v1alpha1"
-	devicev1alpha1 "kubeform.dev/provider-oci-api/apis/device/v1alpha1"
-	gatewayv1alpha1 "kubeform.dev/provider-oci-api/apis/gateway/v1alpha1"
-	ipv1alpha1 "kubeform.dev/provider-oci-api/apis/ip/v1alpha1"
-	organizationv1alpha1 "kubeform.dev/provider-oci-api/apis/organization/v1alpha1"
-	portv1alpha1 "kubeform.dev/provider-oci-api/apis/port/v1alpha1"
-	projectv1alpha1 "kubeform.dev/provider-oci-api/apis/project/v1alpha1"
-	reservedv1alpha1 "kubeform.dev/provider-oci-api/apis/reserved/v1alpha1"
-	spotv1alpha1 "kubeform.dev/provider-oci-api/apis/spot/v1alpha1"
-	sshv1alpha1 "kubeform.dev/provider-oci-api/apis/ssh/v1alpha1"
-	userv1alpha1 "kubeform.dev/provider-oci-api/apis/user/v1alpha1"
-	virtualv1alpha1 "kubeform.dev/provider-oci-api/apis/virtual/v1alpha1"
-	vlanv1alpha1 "kubeform.dev/provider-oci-api/apis/vlan/v1alpha1"
-	volumev1alpha1 "kubeform.dev/provider-oci-api/apis/volume/v1alpha1"
-	controllersbgp "kubeform.dev/provider-oci-controller/controllers/bgp"
-	controllersconnection "kubeform.dev/provider-oci-controller/controllers/connection"
-	controllersdevice "kubeform.dev/provider-oci-controller/controllers/device"
-	controllersgateway "kubeform.dev/provider-oci-controller/controllers/gateway"
-	controllersip "kubeform.dev/provider-oci-controller/controllers/ip"
-	controllersorganization "kubeform.dev/provider-oci-controller/controllers/organization"
-	controllersport "kubeform.dev/provider-oci-controller/controllers/port"
-	controllersproject "kubeform.dev/provider-oci-controller/controllers/project"
-	controllersreserved "kubeform.dev/provider-oci-controller/controllers/reserved"
-	controllersspot "kubeform.dev/provider-oci-controller/controllers/spot"
-	controllersssh "kubeform.dev/provider-oci-controller/controllers/ssh"
-	controllersuser "kubeform.dev/provider-oci-controller/controllers/user"
-	controllersvirtual "kubeform.dev/provider-oci-controller/controllers/virtual"
-	controllersvlan "kubeform.dev/provider-oci-controller/controllers/vlan"
-	controllersvolume "kubeform.dev/provider-oci-controller/controllers/volume"
+	analyticsv1alpha1 "kubeform.dev/provider-oci-api/apis/analytics/v1alpha1"
+	apigatewayv1alpha1 "kubeform.dev/provider-oci-api/apis/apigateway/v1alpha1"
+	apmv1alpha1 "kubeform.dev/provider-oci-api/apis/apm/v1alpha1"
+	artifactsv1alpha1 "kubeform.dev/provider-oci-api/apis/artifacts/v1alpha1"
+	auditv1alpha1 "kubeform.dev/provider-oci-api/apis/audit/v1alpha1"
+	autoscalingv1alpha1 "kubeform.dev/provider-oci-api/apis/autoscaling/v1alpha1"
+	bastionv1alpha1 "kubeform.dev/provider-oci-api/apis/bastion/v1alpha1"
+	bdsv1alpha1 "kubeform.dev/provider-oci-api/apis/bds/v1alpha1"
+	blockchainv1alpha1 "kubeform.dev/provider-oci-api/apis/blockchain/v1alpha1"
+	budgetv1alpha1 "kubeform.dev/provider-oci-api/apis/budget/v1alpha1"
+	cloudv1alpha1 "kubeform.dev/provider-oci-api/apis/cloud/v1alpha1"
+	containerenginev1alpha1 "kubeform.dev/provider-oci-api/apis/containerengine/v1alpha1"
+	corev1alpha1 "kubeform.dev/provider-oci-api/apis/core/v1alpha1"
+	datav1alpha1 "kubeform.dev/provider-oci-api/apis/data/v1alpha1"
+	databasev1alpha1 "kubeform.dev/provider-oci-api/apis/database/v1alpha1"
+	datacatalogv1alpha1 "kubeform.dev/provider-oci-api/apis/datacatalog/v1alpha1"
+	dataflowv1alpha1 "kubeform.dev/provider-oci-api/apis/dataflow/v1alpha1"
+	dataintegrationv1alpha1 "kubeform.dev/provider-oci-api/apis/dataintegration/v1alpha1"
+	datasciencev1alpha1 "kubeform.dev/provider-oci-api/apis/datascience/v1alpha1"
+	devopsv1alpha1 "kubeform.dev/provider-oci-api/apis/devops/v1alpha1"
+	dnsv1alpha1 "kubeform.dev/provider-oci-api/apis/dns/v1alpha1"
+	emailv1alpha1 "kubeform.dev/provider-oci-api/apis/email/v1alpha1"
+	eventsv1alpha1 "kubeform.dev/provider-oci-api/apis/events/v1alpha1"
+	filev1alpha1 "kubeform.dev/provider-oci-api/apis/file/v1alpha1"
+	functionsv1alpha1 "kubeform.dev/provider-oci-api/apis/functions/v1alpha1"
+	genericv1alpha1 "kubeform.dev/provider-oci-api/apis/generic/v1alpha1"
+	goldenv1alpha1 "kubeform.dev/provider-oci-api/apis/golden/v1alpha1"
+	healthv1alpha1 "kubeform.dev/provider-oci-api/apis/health/v1alpha1"
+	identityv1alpha1 "kubeform.dev/provider-oci-api/apis/identity/v1alpha1"
+	integrationv1alpha1 "kubeform.dev/provider-oci-api/apis/integration/v1alpha1"
+	jmsv1alpha1 "kubeform.dev/provider-oci-api/apis/jms/v1alpha1"
+	kmsv1alpha1 "kubeform.dev/provider-oci-api/apis/kms/v1alpha1"
+	limitsv1alpha1 "kubeform.dev/provider-oci-api/apis/limits/v1alpha1"
+	loadv1alpha1 "kubeform.dev/provider-oci-api/apis/load/v1alpha1"
+	logv1alpha1 "kubeform.dev/provider-oci-api/apis/log/v1alpha1"
+	loggingv1alpha1 "kubeform.dev/provider-oci-api/apis/logging/v1alpha1"
+	managementv1alpha1 "kubeform.dev/provider-oci-api/apis/management/v1alpha1"
+	marketplacev1alpha1 "kubeform.dev/provider-oci-api/apis/marketplace/v1alpha1"
+	meteringv1alpha1 "kubeform.dev/provider-oci-api/apis/metering/v1alpha1"
+	monitoringv1alpha1 "kubeform.dev/provider-oci-api/apis/monitoring/v1alpha1"
+	mysqlv1alpha1 "kubeform.dev/provider-oci-api/apis/mysql/v1alpha1"
+	networkv1alpha1 "kubeform.dev/provider-oci-api/apis/network/v1alpha1"
+	nosqlv1alpha1 "kubeform.dev/provider-oci-api/apis/nosql/v1alpha1"
+	objectstoragev1alpha1 "kubeform.dev/provider-oci-api/apis/objectstorage/v1alpha1"
+	ocev1alpha1 "kubeform.dev/provider-oci-api/apis/oce/v1alpha1"
+	ocvpv1alpha1 "kubeform.dev/provider-oci-api/apis/ocvp/v1alpha1"
+	odav1alpha1 "kubeform.dev/provider-oci-api/apis/oda/v1alpha1"
+	onsv1alpha1 "kubeform.dev/provider-oci-api/apis/ons/v1alpha1"
+	opsiv1alpha1 "kubeform.dev/provider-oci-api/apis/opsi/v1alpha1"
+	optimizerv1alpha1 "kubeform.dev/provider-oci-api/apis/optimizer/v1alpha1"
+	osmanagementv1alpha1 "kubeform.dev/provider-oci-api/apis/osmanagement/v1alpha1"
+	schv1alpha1 "kubeform.dev/provider-oci-api/apis/sch/v1alpha1"
+	servicev1alpha1 "kubeform.dev/provider-oci-api/apis/service/v1alpha1"
+	streamingv1alpha1 "kubeform.dev/provider-oci-api/apis/streaming/v1alpha1"
+	vulnerabilityv1alpha1 "kubeform.dev/provider-oci-api/apis/vulnerability/v1alpha1"
+	waasv1alpha1 "kubeform.dev/provider-oci-api/apis/waas/v1alpha1"
+	controllersanalytics "kubeform.dev/provider-oci-controller/controllers/analytics"
+	controllersapigateway "kubeform.dev/provider-oci-controller/controllers/apigateway"
+	controllersapm "kubeform.dev/provider-oci-controller/controllers/apm"
+	controllersartifacts "kubeform.dev/provider-oci-controller/controllers/artifacts"
+	controllersaudit "kubeform.dev/provider-oci-controller/controllers/audit"
+	controllersautoscaling "kubeform.dev/provider-oci-controller/controllers/autoscaling"
+	controllersbastion "kubeform.dev/provider-oci-controller/controllers/bastion"
+	controllersbds "kubeform.dev/provider-oci-controller/controllers/bds"
+	controllersblockchain "kubeform.dev/provider-oci-controller/controllers/blockchain"
+	controllersbudget "kubeform.dev/provider-oci-controller/controllers/budget"
+	controllerscloud "kubeform.dev/provider-oci-controller/controllers/cloud"
+	controllerscontainerengine "kubeform.dev/provider-oci-controller/controllers/containerengine"
+	controllerscore "kubeform.dev/provider-oci-controller/controllers/core"
+	controllersdata "kubeform.dev/provider-oci-controller/controllers/data"
+	controllersdatabase "kubeform.dev/provider-oci-controller/controllers/database"
+	controllersdatacatalog "kubeform.dev/provider-oci-controller/controllers/datacatalog"
+	controllersdataflow "kubeform.dev/provider-oci-controller/controllers/dataflow"
+	controllersdataintegration "kubeform.dev/provider-oci-controller/controllers/dataintegration"
+	controllersdatascience "kubeform.dev/provider-oci-controller/controllers/datascience"
+	controllersdevops "kubeform.dev/provider-oci-controller/controllers/devops"
+	controllersdns "kubeform.dev/provider-oci-controller/controllers/dns"
+	controllersemail "kubeform.dev/provider-oci-controller/controllers/email"
+	controllersevents "kubeform.dev/provider-oci-controller/controllers/events"
+	controllersfile "kubeform.dev/provider-oci-controller/controllers/file"
+	controllersfunctions "kubeform.dev/provider-oci-controller/controllers/functions"
+	controllersgeneric "kubeform.dev/provider-oci-controller/controllers/generic"
+	controllersgolden "kubeform.dev/provider-oci-controller/controllers/golden"
+	controllershealth "kubeform.dev/provider-oci-controller/controllers/health"
+	controllersidentity "kubeform.dev/provider-oci-controller/controllers/identity"
+	controllersintegration "kubeform.dev/provider-oci-controller/controllers/integration"
+	controllersjms "kubeform.dev/provider-oci-controller/controllers/jms"
+	controllerskms "kubeform.dev/provider-oci-controller/controllers/kms"
+	controllerslimits "kubeform.dev/provider-oci-controller/controllers/limits"
+	controllersload "kubeform.dev/provider-oci-controller/controllers/load"
+	controllerslog "kubeform.dev/provider-oci-controller/controllers/log"
+	controllerslogging "kubeform.dev/provider-oci-controller/controllers/logging"
+	controllersmanagement "kubeform.dev/provider-oci-controller/controllers/management"
+	controllersmarketplace "kubeform.dev/provider-oci-controller/controllers/marketplace"
+	controllersmetering "kubeform.dev/provider-oci-controller/controllers/metering"
+	controllersmonitoring "kubeform.dev/provider-oci-controller/controllers/monitoring"
+	controllersmysql "kubeform.dev/provider-oci-controller/controllers/mysql"
+	controllersnetwork "kubeform.dev/provider-oci-controller/controllers/network"
+	controllersnosql "kubeform.dev/provider-oci-controller/controllers/nosql"
+	controllersobjectstorage "kubeform.dev/provider-oci-controller/controllers/objectstorage"
+	controllersoce "kubeform.dev/provider-oci-controller/controllers/oce"
+	controllersocvp "kubeform.dev/provider-oci-controller/controllers/ocvp"
+	controllersoda "kubeform.dev/provider-oci-controller/controllers/oda"
+	controllersons "kubeform.dev/provider-oci-controller/controllers/ons"
+	controllersopsi "kubeform.dev/provider-oci-controller/controllers/opsi"
+	controllersoptimizer "kubeform.dev/provider-oci-controller/controllers/optimizer"
+	controllersosmanagement "kubeform.dev/provider-oci-controller/controllers/osmanagement"
+	controllerssch "kubeform.dev/provider-oci-controller/controllers/sch"
+	controllersservice "kubeform.dev/provider-oci-controller/controllers/service"
+	controllersstreaming "kubeform.dev/provider-oci-controller/controllers/streaming"
+	controllersvulnerability "kubeform.dev/provider-oci-controller/controllers/vulnerability"
+	controllerswaas "kubeform.dev/provider-oci-controller/controllers/waas"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 )
@@ -253,345 +336,5511 @@ func updateVWC(vwcClient *admissionregistrationv1.AdmissionregistrationV1Client,
 func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVersionKind, auditor *auditlib.EventPublisher, watchOnlyDefault bool) error {
 	switch gvk {
 	case schema.GroupVersionKind{
-		Group:   "bgp.oci.kubeform.com",
+		Group:   "analytics.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Session",
+		Kind:    "AnalyticsInstance",
 	}:
-		if err := (&controllersbgp.SessionReconciler{
+		if err := (&controllersanalytics.AnalyticsInstanceReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Session"),
+			Log:              ctrl.Log.WithName("controllers").WithName("AnalyticsInstance"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_bgp_session"],
-			TypeName:         "metal_bgp_session",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_analytics_analytics_instance"],
+			TypeName:         "oci_analytics_analytics_instance",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Session")
+			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsInstance")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "connection.oci.kubeform.com",
+		Group:   "analytics.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Connection",
+		Kind:    "AnalyticsInstancePrivateAccessChannel",
 	}:
-		if err := (&controllersconnection.ConnectionReconciler{
+		if err := (&controllersanalytics.AnalyticsInstancePrivateAccessChannelReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Connection"),
+			Log:              ctrl.Log.WithName("controllers").WithName("AnalyticsInstancePrivateAccessChannel"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_connection"],
-			TypeName:         "metal_connection",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_analytics_analytics_instance_private_access_channel"],
+			TypeName:         "oci_analytics_analytics_instance_private_access_channel",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Connection")
+			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsInstancePrivateAccessChannel")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "device.oci.kubeform.com",
+		Group:   "analytics.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Device",
+		Kind:    "AnalyticsInstanceVanityURL",
 	}:
-		if err := (&controllersdevice.DeviceReconciler{
+		if err := (&controllersanalytics.AnalyticsInstanceVanityURLReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Device"),
+			Log:              ctrl.Log.WithName("controllers").WithName("AnalyticsInstanceVanityURL"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_device"],
-			TypeName:         "metal_device",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_analytics_analytics_instance_vanity_url"],
+			TypeName:         "oci_analytics_analytics_instance_vanity_url",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Device")
+			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsInstanceVanityURL")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "device.oci.kubeform.com",
+		Group:   "apigateway.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "NetworkType",
+		Kind:    "Api",
 	}:
-		if err := (&controllersdevice.NetworkTypeReconciler{
+		if err := (&controllersapigateway.ApiReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("NetworkType"),
+			Log:              ctrl.Log.WithName("controllers").WithName("Api"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_device_network_type"],
-			TypeName:         "metal_device_network_type",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_apigateway_api"],
+			TypeName:         "oci_apigateway_api",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "NetworkType")
+			setupLog.Error(err, "unable to create controller", "controller", "Api")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "gateway.oci.kubeform.com",
+		Group:   "apigateway.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Certificate",
+	}:
+		if err := (&controllersapigateway.CertificateReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Certificate"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_apigateway_certificate"],
+			TypeName:         "oci_apigateway_certificate",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Certificate")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "apigateway.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Deployment",
+	}:
+		if err := (&controllersapigateway.DeploymentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Deployment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_apigateway_deployment"],
+			TypeName:         "oci_apigateway_deployment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Deployment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "apigateway.oci.kubeform.com",
 		Version: "v1alpha1",
 		Kind:    "Gateway",
 	}:
-		if err := (&controllersgateway.GatewayReconciler{
+		if err := (&controllersapigateway.GatewayReconciler{
 			Client:           mgr.GetClient(),
 			Log:              ctrl.Log.WithName("controllers").WithName("Gateway"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_gateway"],
-			TypeName:         "metal_gateway",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_apigateway_gateway"],
+			TypeName:         "oci_apigateway_gateway",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Gateway")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "ip.oci.kubeform.com",
+		Group:   "apm.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Attachment",
+		Kind:    "ApmDomain",
 	}:
-		if err := (&controllersip.AttachmentReconciler{
+		if err := (&controllersapm.ApmDomainReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Attachment"),
+			Log:              ctrl.Log.WithName("controllers").WithName("ApmDomain"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_ip_attachment"],
-			TypeName:         "metal_ip_attachment",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_apm_apm_domain"],
+			TypeName:         "oci_apm_apm_domain",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Attachment")
+			setupLog.Error(err, "unable to create controller", "controller", "ApmDomain")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "organization.oci.kubeform.com",
+		Group:   "apm.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Organization",
+		Kind:    "SyntheticsMonitor",
 	}:
-		if err := (&controllersorganization.OrganizationReconciler{
+		if err := (&controllersapm.SyntheticsMonitorReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Organization"),
+			Log:              ctrl.Log.WithName("controllers").WithName("SyntheticsMonitor"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_organization"],
-			TypeName:         "metal_organization",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_apm_synthetics_monitor"],
+			TypeName:         "oci_apm_synthetics_monitor",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Organization")
+			setupLog.Error(err, "unable to create controller", "controller", "SyntheticsMonitor")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "port.oci.kubeform.com",
+		Group:   "apm.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "VlanAttachment",
+		Kind:    "SyntheticsScript",
 	}:
-		if err := (&controllersport.VlanAttachmentReconciler{
+		if err := (&controllersapm.SyntheticsScriptReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("VlanAttachment"),
+			Log:              ctrl.Log.WithName("controllers").WithName("SyntheticsScript"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_port_vlan_attachment"],
-			TypeName:         "metal_port_vlan_attachment",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_apm_synthetics_script"],
+			TypeName:         "oci_apm_synthetics_script",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "VlanAttachment")
+			setupLog.Error(err, "unable to create controller", "controller", "SyntheticsScript")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "project.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Project",
+		Kind:    "ContainerConfiguration",
 	}:
-		if err := (&controllersproject.ProjectReconciler{
+		if err := (&controllersartifacts.ContainerConfigurationReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Project"),
+			Log:              ctrl.Log.WithName("controllers").WithName("ContainerConfiguration"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_project"],
-			TypeName:         "metal_project",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_artifacts_container_configuration"],
+			TypeName:         "oci_artifacts_container_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Project")
+			setupLog.Error(err, "unable to create controller", "controller", "ContainerConfiguration")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "project.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "ApiKey",
+		Kind:    "ContainerImageSignature",
 	}:
-		if err := (&controllersproject.ApiKeyReconciler{
+		if err := (&controllersartifacts.ContainerImageSignatureReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("ApiKey"),
+			Log:              ctrl.Log.WithName("controllers").WithName("ContainerImageSignature"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_project_api_key"],
-			TypeName:         "metal_project_api_key",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_artifacts_container_image_signature"],
+			TypeName:         "oci_artifacts_container_image_signature",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "ApiKey")
+			setupLog.Error(err, "unable to create controller", "controller", "ContainerImageSignature")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "project.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "SshKey",
+		Kind:    "ContainerRepository",
 	}:
-		if err := (&controllersproject.SshKeyReconciler{
+		if err := (&controllersartifacts.ContainerRepositoryReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("SshKey"),
+			Log:              ctrl.Log.WithName("controllers").WithName("ContainerRepository"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_project_ssh_key"],
-			TypeName:         "metal_project_ssh_key",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_artifacts_container_repository"],
+			TypeName:         "oci_artifacts_container_repository",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "SshKey")
+			setupLog.Error(err, "unable to create controller", "controller", "ContainerRepository")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "reserved.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "IpBlock",
+		Kind:    "GenericArtifact",
 	}:
-		if err := (&controllersreserved.IpBlockReconciler{
+		if err := (&controllersartifacts.GenericArtifactReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("IpBlock"),
+			Log:              ctrl.Log.WithName("controllers").WithName("GenericArtifact"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_reserved_ip_block"],
-			TypeName:         "metal_reserved_ip_block",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_artifacts_generic_artifact"],
+			TypeName:         "oci_artifacts_generic_artifact",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "IpBlock")
+			setupLog.Error(err, "unable to create controller", "controller", "GenericArtifact")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "spot.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "MarketRequest",
+		Kind:    "Repository",
 	}:
-		if err := (&controllersspot.MarketRequestReconciler{
+		if err := (&controllersartifacts.RepositoryReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("MarketRequest"),
+			Log:              ctrl.Log.WithName("controllers").WithName("Repository"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_spot_market_request"],
-			TypeName:         "metal_spot_market_request",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_artifacts_repository"],
+			TypeName:         "oci_artifacts_repository",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "MarketRequest")
+			setupLog.Error(err, "unable to create controller", "controller", "Repository")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "ssh.oci.kubeform.com",
+		Group:   "audit.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Key",
+		Kind:    "Configuration",
 	}:
-		if err := (&controllersssh.KeyReconciler{
+		if err := (&controllersaudit.ConfigurationReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Key"),
+			Log:              ctrl.Log.WithName("controllers").WithName("Configuration"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_ssh_key"],
-			TypeName:         "metal_ssh_key",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_audit_configuration"],
+			TypeName:         "oci_audit_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Key")
+			setupLog.Error(err, "unable to create controller", "controller", "Configuration")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "user.oci.kubeform.com",
+		Group:   "autoscaling.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "ApiKey",
+		Kind:    "AutoScalingConfiguration",
 	}:
-		if err := (&controllersuser.ApiKeyReconciler{
+		if err := (&controllersautoscaling.AutoScalingConfigurationReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("ApiKey"),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutoScalingConfiguration"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_user_api_key"],
-			TypeName:         "metal_user_api_key",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_autoscaling_auto_scaling_configuration"],
+			TypeName:         "oci_autoscaling_auto_scaling_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "ApiKey")
+			setupLog.Error(err, "unable to create controller", "controller", "AutoScalingConfiguration")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "virtual.oci.kubeform.com",
+		Group:   "bastion.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Circuit",
+		Kind:    "Bastion",
 	}:
-		if err := (&controllersvirtual.CircuitReconciler{
+		if err := (&controllersbastion.BastionReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Circuit"),
+			Log:              ctrl.Log.WithName("controllers").WithName("Bastion"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_virtual_circuit"],
-			TypeName:         "metal_virtual_circuit",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_bastion_bastion"],
+			TypeName:         "oci_bastion_bastion",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Circuit")
+			setupLog.Error(err, "unable to create controller", "controller", "Bastion")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "vlan.oci.kubeform.com",
+		Group:   "bastion.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Session",
+	}:
+		if err := (&controllersbastion.SessionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Session"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_bastion_session"],
+			TypeName:         "oci_bastion_session",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Session")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "bds.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutoScalingConfiguration",
+	}:
+		if err := (&controllersbds.AutoScalingConfigurationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutoScalingConfiguration"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_bds_auto_scaling_configuration"],
+			TypeName:         "oci_bds_auto_scaling_configuration",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutoScalingConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "bds.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BdsInstance",
+	}:
+		if err := (&controllersbds.BdsInstanceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BdsInstance"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_bds_bds_instance"],
+			TypeName:         "oci_bds_bds_instance",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BdsInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "blockchain.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BlockchainPlatform",
+	}:
+		if err := (&controllersblockchain.BlockchainPlatformReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BlockchainPlatform"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_blockchain_blockchain_platform"],
+			TypeName:         "oci_blockchain_blockchain_platform",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BlockchainPlatform")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "blockchain.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Osn",
+	}:
+		if err := (&controllersblockchain.OsnReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Osn"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_blockchain_osn"],
+			TypeName:         "oci_blockchain_osn",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Osn")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "blockchain.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Peer",
+	}:
+		if err := (&controllersblockchain.PeerReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Peer"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_blockchain_peer"],
+			TypeName:         "oci_blockchain_peer",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Peer")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "budget.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AlertRule",
+	}:
+		if err := (&controllersbudget.AlertRuleReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AlertRule"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_budget_alert_rule"],
+			TypeName:         "oci_budget_alert_rule",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AlertRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "budget.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Budget",
+	}:
+		if err := (&controllersbudget.BudgetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Budget"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_budget_budget"],
+			TypeName:         "oci_budget_budget",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Budget")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardCloudGuardConfiguration",
+	}:
+		if err := (&controllerscloud.GuardCloudGuardConfigurationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GuardCloudGuardConfiguration"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_cloud_guard_cloud_guard_configuration"],
+			TypeName:         "oci_cloud_guard_cloud_guard_configuration",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GuardCloudGuardConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardDataMaskRule",
+	}:
+		if err := (&controllerscloud.GuardDataMaskRuleReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GuardDataMaskRule"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_cloud_guard_data_mask_rule"],
+			TypeName:         "oci_cloud_guard_data_mask_rule",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GuardDataMaskRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardDetectorRecipe",
+	}:
+		if err := (&controllerscloud.GuardDetectorRecipeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GuardDetectorRecipe"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_cloud_guard_detector_recipe"],
+			TypeName:         "oci_cloud_guard_detector_recipe",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GuardDetectorRecipe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardManagedList",
+	}:
+		if err := (&controllerscloud.GuardManagedListReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GuardManagedList"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_cloud_guard_managed_list"],
+			TypeName:         "oci_cloud_guard_managed_list",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GuardManagedList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardResponderRecipe",
+	}:
+		if err := (&controllerscloud.GuardResponderRecipeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GuardResponderRecipe"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_cloud_guard_responder_recipe"],
+			TypeName:         "oci_cloud_guard_responder_recipe",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GuardResponderRecipe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardTarget",
+	}:
+		if err := (&controllerscloud.GuardTargetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GuardTarget"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_cloud_guard_target"],
+			TypeName:         "oci_cloud_guard_target",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GuardTarget")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "containerengine.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Cluster",
+	}:
+		if err := (&controllerscontainerengine.ClusterReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Cluster"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_containerengine_cluster"],
+			TypeName:         "oci_containerengine_cluster",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Cluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "containerengine.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NodePool",
+	}:
+		if err := (&controllerscontainerengine.NodePoolReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("NodePool"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_containerengine_node_pool"],
+			TypeName:         "oci_containerengine_node_pool",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "NodePool")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AppCatalogListingResourceVersionAgreement",
+	}:
+		if err := (&controllerscore.AppCatalogListingResourceVersionAgreementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AppCatalogListingResourceVersionAgreement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_app_catalog_listing_resource_version_agreement"],
+			TypeName:         "oci_core_app_catalog_listing_resource_version_agreement",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AppCatalogListingResourceVersionAgreement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AppCatalogSubscription",
+	}:
+		if err := (&controllerscore.AppCatalogSubscriptionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AppCatalogSubscription"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_app_catalog_subscription"],
+			TypeName:         "oci_core_app_catalog_subscription",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AppCatalogSubscription")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BootVolume",
+	}:
+		if err := (&controllerscore.BootVolumeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BootVolume"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_boot_volume"],
+			TypeName:         "oci_core_boot_volume",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BootVolume")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BootVolumeBackup",
+	}:
+		if err := (&controllerscore.BootVolumeBackupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BootVolumeBackup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_boot_volume_backup"],
+			TypeName:         "oci_core_boot_volume_backup",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BootVolumeBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ClusterNetwork",
+	}:
+		if err := (&controllerscore.ClusterNetworkReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ClusterNetwork"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_cluster_network"],
+			TypeName:         "oci_core_cluster_network",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ClusterNetwork")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputeCapacityReservation",
+	}:
+		if err := (&controllerscore.ComputeCapacityReservationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ComputeCapacityReservation"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_compute_capacity_reservation"],
+			TypeName:         "oci_core_compute_capacity_reservation",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ComputeCapacityReservation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputeImageCapabilitySchema",
+	}:
+		if err := (&controllerscore.ComputeImageCapabilitySchemaReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ComputeImageCapabilitySchema"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_compute_image_capability_schema"],
+			TypeName:         "oci_core_compute_image_capability_schema",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ComputeImageCapabilitySchema")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ConsoleHistory",
+	}:
+		if err := (&controllerscore.ConsoleHistoryReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ConsoleHistory"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_console_history"],
+			TypeName:         "oci_core_console_history",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ConsoleHistory")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Cpe",
+	}:
+		if err := (&controllerscore.CpeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Cpe"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_cpe"],
+			TypeName:         "oci_core_cpe",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Cpe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CrossConnect",
+	}:
+		if err := (&controllerscore.CrossConnectReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CrossConnect"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_cross_connect"],
+			TypeName:         "oci_core_cross_connect",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CrossConnect")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CrossConnectGroup",
+	}:
+		if err := (&controllerscore.CrossConnectGroupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CrossConnectGroup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_cross_connect_group"],
+			TypeName:         "oci_core_cross_connect_group",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CrossConnectGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DedicatedVmHost",
+	}:
+		if err := (&controllerscore.DedicatedVmHostReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DedicatedVmHost"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_dedicated_vm_host"],
+			TypeName:         "oci_core_dedicated_vm_host",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DedicatedVmHost")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DefaultDHCPOptions",
+	}:
+		if err := (&controllerscore.DefaultDHCPOptionsReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DefaultDHCPOptions"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_default_dhcp_options"],
+			TypeName:         "oci_core_default_dhcp_options",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DefaultDHCPOptions")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DefaultRouteTable",
+	}:
+		if err := (&controllerscore.DefaultRouteTableReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DefaultRouteTable"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_default_route_table"],
+			TypeName:         "oci_core_default_route_table",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DefaultRouteTable")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DefaultSecurityList",
+	}:
+		if err := (&controllerscore.DefaultSecurityListReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DefaultSecurityList"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_default_security_list"],
+			TypeName:         "oci_core_default_security_list",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DefaultSecurityList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DhcpOptions",
+	}:
+		if err := (&controllerscore.DhcpOptionsReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DhcpOptions"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_dhcp_options"],
+			TypeName:         "oci_core_dhcp_options",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DhcpOptions")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Drg",
+	}:
+		if err := (&controllerscore.DrgReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Drg"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_drg"],
+			TypeName:         "oci_core_drg",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Drg")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgAttachment",
+	}:
+		if err := (&controllerscore.DrgAttachmentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DrgAttachment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_drg_attachment"],
+			TypeName:         "oci_core_drg_attachment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DrgAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgAttachmentManagement",
+	}:
+		if err := (&controllerscore.DrgAttachmentManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DrgAttachmentManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_drg_attachment_management"],
+			TypeName:         "oci_core_drg_attachment_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DrgAttachmentManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgAttachmentsList",
+	}:
+		if err := (&controllerscore.DrgAttachmentsListReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DrgAttachmentsList"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_drg_attachments_list"],
+			TypeName:         "oci_core_drg_attachments_list",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DrgAttachmentsList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgRouteDistribution",
+	}:
+		if err := (&controllerscore.DrgRouteDistributionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DrgRouteDistribution"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_drg_route_distribution"],
+			TypeName:         "oci_core_drg_route_distribution",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DrgRouteDistribution")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgRouteDistributionStatement",
+	}:
+		if err := (&controllerscore.DrgRouteDistributionStatementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DrgRouteDistributionStatement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_drg_route_distribution_statement"],
+			TypeName:         "oci_core_drg_route_distribution_statement",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DrgRouteDistributionStatement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgRouteTable",
+	}:
+		if err := (&controllerscore.DrgRouteTableReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DrgRouteTable"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_drg_route_table"],
+			TypeName:         "oci_core_drg_route_table",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DrgRouteTable")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgRouteTableRouteRule",
+	}:
+		if err := (&controllerscore.DrgRouteTableRouteRuleReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DrgRouteTableRouteRule"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_drg_route_table_route_rule"],
+			TypeName:         "oci_core_drg_route_table_route_rule",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DrgRouteTableRouteRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Image",
+	}:
+		if err := (&controllerscore.ImageReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Image"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_image"],
+			TypeName:         "oci_core_image",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Image")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Instance",
+	}:
+		if err := (&controllerscore.InstanceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Instance"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_instance"],
+			TypeName:         "oci_core_instance",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Instance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InstanceConfiguration",
+	}:
+		if err := (&controllerscore.InstanceConfigurationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("InstanceConfiguration"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_instance_configuration"],
+			TypeName:         "oci_core_instance_configuration",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "InstanceConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InstanceConsoleConnection",
+	}:
+		if err := (&controllerscore.InstanceConsoleConnectionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("InstanceConsoleConnection"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_instance_console_connection"],
+			TypeName:         "oci_core_instance_console_connection",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "InstanceConsoleConnection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InstancePool",
+	}:
+		if err := (&controllerscore.InstancePoolReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("InstancePool"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_instance_pool"],
+			TypeName:         "oci_core_instance_pool",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "InstancePool")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InstancePoolInstance",
+	}:
+		if err := (&controllerscore.InstancePoolInstanceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("InstancePoolInstance"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_instance_pool_instance"],
+			TypeName:         "oci_core_instance_pool_instance",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "InstancePoolInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InternetGateway",
+	}:
+		if err := (&controllerscore.InternetGatewayReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("InternetGateway"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_internet_gateway"],
+			TypeName:         "oci_core_internet_gateway",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "InternetGateway")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Ipsec",
+	}:
+		if err := (&controllerscore.IpsecReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Ipsec"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_ipsec"],
+			TypeName:         "oci_core_ipsec",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Ipsec")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "IpsecConnectionTunnelManagement",
+	}:
+		if err := (&controllerscore.IpsecConnectionTunnelManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("IpsecConnectionTunnelManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_ipsec_connection_tunnel_management"],
+			TypeName:         "oci_core_ipsec_connection_tunnel_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "IpsecConnectionTunnelManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Ipv6",
+	}:
+		if err := (&controllerscore.Ipv6Reconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Ipv6"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_ipv6"],
+			TypeName:         "oci_core_ipv6",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Ipv6")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ListingResourceVersionAgreement",
+	}:
+		if err := (&controllerscore.ListingResourceVersionAgreementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ListingResourceVersionAgreement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_listing_resource_version_agreement"],
+			TypeName:         "oci_core_listing_resource_version_agreement",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ListingResourceVersionAgreement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LocalPeeringGateway",
+	}:
+		if err := (&controllerscore.LocalPeeringGatewayReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("LocalPeeringGateway"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_local_peering_gateway"],
+			TypeName:         "oci_core_local_peering_gateway",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "LocalPeeringGateway")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NatGateway",
+	}:
+		if err := (&controllerscore.NatGatewayReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("NatGateway"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_nat_gateway"],
+			TypeName:         "oci_core_nat_gateway",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "NatGateway")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NetworkSecurityGroup",
+	}:
+		if err := (&controllerscore.NetworkSecurityGroupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("NetworkSecurityGroup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_network_security_group"],
+			TypeName:         "oci_core_network_security_group",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "NetworkSecurityGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NetworkSecurityGroupSecurityRule",
+	}:
+		if err := (&controllerscore.NetworkSecurityGroupSecurityRuleReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("NetworkSecurityGroupSecurityRule"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_network_security_group_security_rule"],
+			TypeName:         "oci_core_network_security_group_security_rule",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "NetworkSecurityGroupSecurityRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PrivateIP",
+	}:
+		if err := (&controllerscore.PrivateIPReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("PrivateIP"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_private_ip"],
+			TypeName:         "oci_core_private_ip",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "PrivateIP")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PublicIP",
+	}:
+		if err := (&controllerscore.PublicIPReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("PublicIP"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_public_ip"],
+			TypeName:         "oci_core_public_ip",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "PublicIP")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PublicIPPool",
+	}:
+		if err := (&controllerscore.PublicIPPoolReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("PublicIPPool"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_public_ip_pool"],
+			TypeName:         "oci_core_public_ip_pool",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "PublicIPPool")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PublicIPPoolCapacity",
+	}:
+		if err := (&controllerscore.PublicIPPoolCapacityReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("PublicIPPoolCapacity"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_public_ip_pool_capacity"],
+			TypeName:         "oci_core_public_ip_pool_capacity",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "PublicIPPoolCapacity")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "RemotePeeringConnection",
+	}:
+		if err := (&controllerscore.RemotePeeringConnectionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("RemotePeeringConnection"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_remote_peering_connection"],
+			TypeName:         "oci_core_remote_peering_connection",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "RemotePeeringConnection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "RouteTable",
+	}:
+		if err := (&controllerscore.RouteTableReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("RouteTable"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_route_table"],
+			TypeName:         "oci_core_route_table",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "RouteTable")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "RouteTableAttachment",
+	}:
+		if err := (&controllerscore.RouteTableAttachmentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("RouteTableAttachment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_route_table_attachment"],
+			TypeName:         "oci_core_route_table_attachment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "RouteTableAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SecurityList",
+	}:
+		if err := (&controllerscore.SecurityListReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SecurityList"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_security_list"],
+			TypeName:         "oci_core_security_list",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SecurityList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ServiceGateway",
+	}:
+		if err := (&controllerscore.ServiceGatewayReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ServiceGateway"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_service_gateway"],
+			TypeName:         "oci_core_service_gateway",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ServiceGateway")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ShapeManagement",
+	}:
+		if err := (&controllerscore.ShapeManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ShapeManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_shape_management"],
+			TypeName:         "oci_core_shape_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ShapeManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Subnet",
+	}:
+		if err := (&controllerscore.SubnetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Subnet"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_subnet"],
+			TypeName:         "oci_core_subnet",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Subnet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Vcn",
+	}:
+		if err := (&controllerscore.VcnReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Vcn"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_vcn"],
+			TypeName:         "oci_core_vcn",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Vcn")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VirtualCircuit",
+	}:
+		if err := (&controllerscore.VirtualCircuitReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VirtualCircuit"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_virtual_circuit"],
+			TypeName:         "oci_core_virtual_circuit",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VirtualCircuit")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VirtualNetwork",
+	}:
+		if err := (&controllerscore.VirtualNetworkReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VirtualNetwork"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_virtual_network"],
+			TypeName:         "oci_core_virtual_network",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VirtualNetwork")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
 		Version: "v1alpha1",
 		Kind:    "Vlan",
 	}:
-		if err := (&controllersvlan.VlanReconciler{
+		if err := (&controllerscore.VlanReconciler{
 			Client:           mgr.GetClient(),
 			Log:              ctrl.Log.WithName("controllers").WithName("Vlan"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_vlan"],
-			TypeName:         "metal_vlan",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_vlan"],
+			TypeName:         "oci_core_vlan",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Vlan")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "volume.oci.kubeform.com",
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VnicAttachment",
+	}:
+		if err := (&controllerscore.VnicAttachmentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VnicAttachment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_vnic_attachment"],
+			TypeName:         "oci_core_vnic_attachment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VnicAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
 		Version: "v1alpha1",
 		Kind:    "Volume",
 	}:
-		if err := (&controllersvolume.VolumeReconciler{
+		if err := (&controllerscore.VolumeReconciler{
 			Client:           mgr.GetClient(),
 			Log:              ctrl.Log.WithName("controllers").WithName("Volume"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_volume"],
-			TypeName:         "metal_volume",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_volume"],
+			TypeName:         "oci_core_volume",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Volume")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "volume.oci.kubeform.com",
+		Group:   "core.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Attachment",
+		Kind:    "VolumeAttachment",
 	}:
-		if err := (&controllersvolume.AttachmentReconciler{
+		if err := (&controllerscore.VolumeAttachmentReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Attachment"),
+			Log:              ctrl.Log.WithName("controllers").WithName("VolumeAttachment"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
-			Provider:         oci.Provider(),
-			Resource:         oci.Provider().ResourcesMap["metal_volume_attachment"],
-			TypeName:         "metal_volume_attachment",
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_volume_attachment"],
+			TypeName:         "oci_core_volume_attachment",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Attachment")
+			setupLog.Error(err, "unable to create controller", "controller", "VolumeAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeBackup",
+	}:
+		if err := (&controllerscore.VolumeBackupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VolumeBackup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_volume_backup"],
+			TypeName:         "oci_core_volume_backup",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VolumeBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeBackupPolicy",
+	}:
+		if err := (&controllerscore.VolumeBackupPolicyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VolumeBackupPolicy"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_volume_backup_policy"],
+			TypeName:         "oci_core_volume_backup_policy",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VolumeBackupPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeBackupPolicyAssignment",
+	}:
+		if err := (&controllerscore.VolumeBackupPolicyAssignmentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VolumeBackupPolicyAssignment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_volume_backup_policy_assignment"],
+			TypeName:         "oci_core_volume_backup_policy_assignment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VolumeBackupPolicyAssignment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeGroup",
+	}:
+		if err := (&controllerscore.VolumeGroupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VolumeGroup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_volume_group"],
+			TypeName:         "oci_core_volume_group",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VolumeGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeGroupBackup",
+	}:
+		if err := (&controllerscore.VolumeGroupBackupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VolumeGroupBackup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_core_volume_group_backup"],
+			TypeName:         "oci_core_volume_group_backup",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VolumeGroupBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "data.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SafeDataSafeConfiguration",
+	}:
+		if err := (&controllersdata.SafeDataSafeConfigurationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SafeDataSafeConfiguration"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_data_safe_data_safe_configuration"],
+			TypeName:         "oci_data_safe_data_safe_configuration",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SafeDataSafeConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "data.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SafeDataSafePrivateEndpoint",
+	}:
+		if err := (&controllersdata.SafeDataSafePrivateEndpointReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SafeDataSafePrivateEndpoint"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_data_safe_data_safe_private_endpoint"],
+			TypeName:         "oci_data_safe_data_safe_private_endpoint",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SafeDataSafePrivateEndpoint")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "data.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SafeOnPremConnector",
+	}:
+		if err := (&controllersdata.SafeOnPremConnectorReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SafeOnPremConnector"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_data_safe_on_prem_connector"],
+			TypeName:         "oci_data_safe_on_prem_connector",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SafeOnPremConnector")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "data.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SafeTargetDatabase",
+	}:
+		if err := (&controllersdata.SafeTargetDatabaseReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SafeTargetDatabase"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_data_safe_target_database"],
+			TypeName:         "oci_data_safe_target_database",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SafeTargetDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousContainerDatabase",
+	}:
+		if err := (&controllersdatabase.AutonomousContainerDatabaseReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutonomousContainerDatabase"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_autonomous_container_database"],
+			TypeName:         "oci_database_autonomous_container_database",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutonomousContainerDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousContainerDatabaseDataguardAssociationOperation",
+	}:
+		if err := (&controllersdatabase.AutonomousContainerDatabaseDataguardAssociationOperationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutonomousContainerDatabaseDataguardAssociationOperation"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_autonomous_container_database_dataguard_association_operation"],
+			TypeName:         "oci_database_autonomous_container_database_dataguard_association_operation",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutonomousContainerDatabaseDataguardAssociationOperation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabase",
+	}:
+		if err := (&controllersdatabase.AutonomousDatabaseReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutonomousDatabase"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_autonomous_database"],
+			TypeName:         "oci_database_autonomous_database",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabaseBackup",
+	}:
+		if err := (&controllersdatabase.AutonomousDatabaseBackupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutonomousDatabaseBackup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_autonomous_database_backup"],
+			TypeName:         "oci_database_autonomous_database_backup",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabaseBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabaseInstanceWalletManagement",
+	}:
+		if err := (&controllersdatabase.AutonomousDatabaseInstanceWalletManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutonomousDatabaseInstanceWalletManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_autonomous_database_instance_wallet_management"],
+			TypeName:         "oci_database_autonomous_database_instance_wallet_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabaseInstanceWalletManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabaseRegionalWalletManagement",
+	}:
+		if err := (&controllersdatabase.AutonomousDatabaseRegionalWalletManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutonomousDatabaseRegionalWalletManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_autonomous_database_regional_wallet_management"],
+			TypeName:         "oci_database_autonomous_database_regional_wallet_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabaseRegionalWalletManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabaseWallet",
+	}:
+		if err := (&controllersdatabase.AutonomousDatabaseWalletReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutonomousDatabaseWallet"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_autonomous_database_wallet"],
+			TypeName:         "oci_database_autonomous_database_wallet",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabaseWallet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousExadataInfrastructure",
+	}:
+		if err := (&controllersdatabase.AutonomousExadataInfrastructureReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutonomousExadataInfrastructure"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_autonomous_exadata_infrastructure"],
+			TypeName:         "oci_database_autonomous_exadata_infrastructure",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutonomousExadataInfrastructure")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousVmCluster",
+	}:
+		if err := (&controllersdatabase.AutonomousVmClusterReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AutonomousVmCluster"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_autonomous_vm_cluster"],
+			TypeName:         "oci_database_autonomous_vm_cluster",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AutonomousVmCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Backup",
+	}:
+		if err := (&controllersdatabase.BackupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Backup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_backup"],
+			TypeName:         "oci_database_backup",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Backup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BackupDestination",
+	}:
+		if err := (&controllersdatabase.BackupDestinationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BackupDestination"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_backup_destination"],
+			TypeName:         "oci_database_backup_destination",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BackupDestination")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CloudExadataInfrastructure",
+	}:
+		if err := (&controllersdatabase.CloudExadataInfrastructureReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CloudExadataInfrastructure"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_cloud_exadata_infrastructure"],
+			TypeName:         "oci_database_cloud_exadata_infrastructure",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CloudExadataInfrastructure")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CloudVmCluster",
+	}:
+		if err := (&controllersdatabase.CloudVmClusterReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CloudVmCluster"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_cloud_vm_cluster"],
+			TypeName:         "oci_database_cloud_vm_cluster",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CloudVmCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DataGuardAssociation",
+	}:
+		if err := (&controllersdatabase.DataGuardAssociationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DataGuardAssociation"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_data_guard_association"],
+			TypeName:         "oci_database_data_guard_association",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DataGuardAssociation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Database",
+	}:
+		if err := (&controllersdatabase.DatabaseReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Database"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_database"],
+			TypeName:         "oci_database_database",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Database")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DatabaseSoftwareImage",
+	}:
+		if err := (&controllersdatabase.DatabaseSoftwareImageReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DatabaseSoftwareImage"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_database_software_image"],
+			TypeName:         "oci_database_database_software_image",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DatabaseSoftwareImage")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DatabaseUpgrade",
+	}:
+		if err := (&controllersdatabase.DatabaseUpgradeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DatabaseUpgrade"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_database_upgrade"],
+			TypeName:         "oci_database_database_upgrade",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DatabaseUpgrade")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DbHome",
+	}:
+		if err := (&controllersdatabase.DbHomeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DbHome"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_db_home"],
+			TypeName:         "oci_database_db_home",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DbHome")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DbNodeConsoleConnection",
+	}:
+		if err := (&controllersdatabase.DbNodeConsoleConnectionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DbNodeConsoleConnection"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_db_node_console_connection"],
+			TypeName:         "oci_database_db_node_console_connection",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DbNodeConsoleConnection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DbSystem",
+	}:
+		if err := (&controllersdatabase.DbSystemReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DbSystem"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_db_system"],
+			TypeName:         "oci_database_db_system",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DbSystem")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExadataInfrastructure",
+	}:
+		if err := (&controllersdatabase.ExadataInfrastructureReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExadataInfrastructure"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_exadata_infrastructure"],
+			TypeName:         "oci_database_exadata_infrastructure",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExadataInfrastructure")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExadataInfrastructureStorage",
+	}:
+		if err := (&controllersdatabase.ExadataInfrastructureStorageReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExadataInfrastructureStorage"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_exadata_infrastructure_storage"],
+			TypeName:         "oci_database_exadata_infrastructure_storage",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExadataInfrastructureStorage")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExadataIormConfig",
+	}:
+		if err := (&controllersdatabase.ExadataIormConfigReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExadataIormConfig"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_exadata_iorm_config"],
+			TypeName:         "oci_database_exadata_iorm_config",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExadataIormConfig")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalContainerDatabase",
+	}:
+		if err := (&controllersdatabase.ExternalContainerDatabaseReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExternalContainerDatabase"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_external_container_database"],
+			TypeName:         "oci_database_external_container_database",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExternalContainerDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalContainerDatabaseManagement",
+	}:
+		if err := (&controllersdatabase.ExternalContainerDatabaseManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExternalContainerDatabaseManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_external_container_database_management"],
+			TypeName:         "oci_database_external_container_database_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExternalContainerDatabaseManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalDatabaseConnector",
+	}:
+		if err := (&controllersdatabase.ExternalDatabaseConnectorReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExternalDatabaseConnector"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_external_database_connector"],
+			TypeName:         "oci_database_external_database_connector",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExternalDatabaseConnector")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalNonContainerDatabase",
+	}:
+		if err := (&controllersdatabase.ExternalNonContainerDatabaseReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExternalNonContainerDatabase"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_external_non_container_database"],
+			TypeName:         "oci_database_external_non_container_database",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExternalNonContainerDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalNonContainerDatabaseManagement",
+	}:
+		if err := (&controllersdatabase.ExternalNonContainerDatabaseManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExternalNonContainerDatabaseManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_external_non_container_database_management"],
+			TypeName:         "oci_database_external_non_container_database_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExternalNonContainerDatabaseManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalNonContainerDatabaseOperationsInsightsManagement",
+	}:
+		if err := (&controllersdatabase.ExternalNonContainerDatabaseOperationsInsightsManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExternalNonContainerDatabaseOperationsInsightsManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_external_non_container_database_operations_insights_management"],
+			TypeName:         "oci_database_external_non_container_database_operations_insights_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExternalNonContainerDatabaseOperationsInsightsManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalPluggableDatabase",
+	}:
+		if err := (&controllersdatabase.ExternalPluggableDatabaseReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExternalPluggableDatabase"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_external_pluggable_database"],
+			TypeName:         "oci_database_external_pluggable_database",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExternalPluggableDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalPluggableDatabaseManagement",
+	}:
+		if err := (&controllersdatabase.ExternalPluggableDatabaseManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExternalPluggableDatabaseManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_external_pluggable_database_management"],
+			TypeName:         "oci_database_external_pluggable_database_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExternalPluggableDatabaseManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalPluggableDatabaseOperationsInsightsManagement",
+	}:
+		if err := (&controllersdatabase.ExternalPluggableDatabaseOperationsInsightsManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ExternalPluggableDatabaseOperationsInsightsManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_external_pluggable_database_operations_insights_management"],
+			TypeName:         "oci_database_external_pluggable_database_operations_insights_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ExternalPluggableDatabaseOperationsInsightsManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "KeyStore",
+	}:
+		if err := (&controllersdatabase.KeyStoreReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("KeyStore"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_key_store"],
+			TypeName:         "oci_database_key_store",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "KeyStore")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MaintenanceRun",
+	}:
+		if err := (&controllersdatabase.MaintenanceRunReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("MaintenanceRun"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_maintenance_run"],
+			TypeName:         "oci_database_maintenance_run",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "MaintenanceRun")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagementManagedDatabaseGroup",
+	}:
+		if err := (&controllersdatabase.ManagementManagedDatabaseGroupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ManagementManagedDatabaseGroup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_management_managed_database_group"],
+			TypeName:         "oci_database_management_managed_database_group",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ManagementManagedDatabaseGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagementManagedDatabasesChangeDatabaseParameter",
+	}:
+		if err := (&controllersdatabase.ManagementManagedDatabasesChangeDatabaseParameterReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ManagementManagedDatabasesChangeDatabaseParameter"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_management_managed_databases_change_database_parameter"],
+			TypeName:         "oci_database_management_managed_databases_change_database_parameter",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ManagementManagedDatabasesChangeDatabaseParameter")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagementManagedDatabasesResetDatabaseParameter",
+	}:
+		if err := (&controllersdatabase.ManagementManagedDatabasesResetDatabaseParameterReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ManagementManagedDatabasesResetDatabaseParameter"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_management_managed_databases_reset_database_parameter"],
+			TypeName:         "oci_database_management_managed_databases_reset_database_parameter",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ManagementManagedDatabasesResetDatabaseParameter")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Migration",
+	}:
+		if err := (&controllersdatabase.MigrationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Migration"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_migration"],
+			TypeName:         "oci_database_migration",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Migration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MigrationAgent",
+	}:
+		if err := (&controllersdatabase.MigrationAgentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("MigrationAgent"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_migration_agent"],
+			TypeName:         "oci_database_migration_agent",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "MigrationAgent")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MigrationConnection",
+	}:
+		if err := (&controllersdatabase.MigrationConnectionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("MigrationConnection"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_migration_connection"],
+			TypeName:         "oci_database_migration_connection",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "MigrationConnection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MigrationJob",
+	}:
+		if err := (&controllersdatabase.MigrationJobReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("MigrationJob"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_migration_job"],
+			TypeName:         "oci_database_migration_job",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "MigrationJob")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MigrationMigration",
+	}:
+		if err := (&controllersdatabase.MigrationMigrationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("MigrationMigration"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_migration_migration"],
+			TypeName:         "oci_database_migration_migration",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "MigrationMigration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PluggableDatabase",
+	}:
+		if err := (&controllersdatabase.PluggableDatabaseReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("PluggableDatabase"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_pluggable_database"],
+			TypeName:         "oci_database_pluggable_database",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "PluggableDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PluggableDatabasesLocalClone",
+	}:
+		if err := (&controllersdatabase.PluggableDatabasesLocalCloneReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("PluggableDatabasesLocalClone"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_pluggable_databases_local_clone"],
+			TypeName:         "oci_database_pluggable_databases_local_clone",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "PluggableDatabasesLocalClone")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PluggableDatabasesRemoteClone",
+	}:
+		if err := (&controllersdatabase.PluggableDatabasesRemoteCloneReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("PluggableDatabasesRemoteClone"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_pluggable_databases_remote_clone"],
+			TypeName:         "oci_database_pluggable_databases_remote_clone",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "PluggableDatabasesRemoteClone")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VmCluster",
+	}:
+		if err := (&controllersdatabase.VmClusterReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VmCluster"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_vm_cluster"],
+			TypeName:         "oci_database_vm_cluster",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VmCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VmClusterNetwork",
+	}:
+		if err := (&controllersdatabase.VmClusterNetworkReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VmClusterNetwork"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_database_vm_cluster_network"],
+			TypeName:         "oci_database_vm_cluster_network",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VmClusterNetwork")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Catalog",
+	}:
+		if err := (&controllersdatacatalog.CatalogReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Catalog"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datacatalog_catalog"],
+			TypeName:         "oci_datacatalog_catalog",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Catalog")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CatalogPrivateEndpoint",
+	}:
+		if err := (&controllersdatacatalog.CatalogPrivateEndpointReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CatalogPrivateEndpoint"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datacatalog_catalog_private_endpoint"],
+			TypeName:         "oci_datacatalog_catalog_private_endpoint",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CatalogPrivateEndpoint")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Connection",
+	}:
+		if err := (&controllersdatacatalog.ConnectionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Connection"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datacatalog_connection"],
+			TypeName:         "oci_datacatalog_connection",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Connection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DataAsset",
+	}:
+		if err := (&controllersdatacatalog.DataAssetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DataAsset"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datacatalog_data_asset"],
+			TypeName:         "oci_datacatalog_data_asset",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DataAsset")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Metastore",
+	}:
+		if err := (&controllersdatacatalog.MetastoreReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Metastore"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datacatalog_metastore"],
+			TypeName:         "oci_datacatalog_metastore",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Metastore")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dataflow.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Application",
+	}:
+		if err := (&controllersdataflow.ApplicationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Application"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dataflow_application"],
+			TypeName:         "oci_dataflow_application",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Application")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dataflow.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InvokeRun",
+	}:
+		if err := (&controllersdataflow.InvokeRunReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("InvokeRun"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dataflow_invoke_run"],
+			TypeName:         "oci_dataflow_invoke_run",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "InvokeRun")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dataflow.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PrivateEndpoint",
+	}:
+		if err := (&controllersdataflow.PrivateEndpointReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("PrivateEndpoint"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dataflow_private_endpoint"],
+			TypeName:         "oci_dataflow_private_endpoint",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "PrivateEndpoint")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dataintegration.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Workspace",
+	}:
+		if err := (&controllersdataintegration.WorkspaceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Workspace"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dataintegration_workspace"],
+			TypeName:         "oci_dataintegration_workspace",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Workspace")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Model",
+	}:
+		if err := (&controllersdatascience.ModelReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Model"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datascience_model"],
+			TypeName:         "oci_datascience_model",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Model")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ModelDeployment",
+	}:
+		if err := (&controllersdatascience.ModelDeploymentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ModelDeployment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datascience_model_deployment"],
+			TypeName:         "oci_datascience_model_deployment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ModelDeployment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ModelProvenance",
+	}:
+		if err := (&controllersdatascience.ModelProvenanceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ModelProvenance"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datascience_model_provenance"],
+			TypeName:         "oci_datascience_model_provenance",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ModelProvenance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NotebookSession",
+	}:
+		if err := (&controllersdatascience.NotebookSessionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("NotebookSession"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datascience_notebook_session"],
+			TypeName:         "oci_datascience_notebook_session",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "NotebookSession")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Project",
+	}:
+		if err := (&controllersdatascience.ProjectReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Project"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_datascience_project"],
+			TypeName:         "oci_datascience_project",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Project")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DeployArtifact",
+	}:
+		if err := (&controllersdevops.DeployArtifactReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DeployArtifact"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_devops_deploy_artifact"],
+			TypeName:         "oci_devops_deploy_artifact",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DeployArtifact")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DeployEnvironment",
+	}:
+		if err := (&controllersdevops.DeployEnvironmentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DeployEnvironment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_devops_deploy_environment"],
+			TypeName:         "oci_devops_deploy_environment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DeployEnvironment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DeployPipeline",
+	}:
+		if err := (&controllersdevops.DeployPipelineReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DeployPipeline"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_devops_deploy_pipeline"],
+			TypeName:         "oci_devops_deploy_pipeline",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DeployPipeline")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DeployStage",
+	}:
+		if err := (&controllersdevops.DeployStageReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DeployStage"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_devops_deploy_stage"],
+			TypeName:         "oci_devops_deploy_stage",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DeployStage")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Deployment",
+	}:
+		if err := (&controllersdevops.DeploymentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Deployment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_devops_deployment"],
+			TypeName:         "oci_devops_deployment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Deployment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Project",
+	}:
+		if err := (&controllersdevops.ProjectReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Project"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_devops_project"],
+			TypeName:         "oci_devops_project",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Project")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Record",
+	}:
+		if err := (&controllersdns.RecordReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Record"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dns_record"],
+			TypeName:         "oci_dns_record",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Record")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Resolver",
+	}:
+		if err := (&controllersdns.ResolverReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Resolver"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dns_resolver"],
+			TypeName:         "oci_dns_resolver",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Resolver")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ResolverEndpoint",
+	}:
+		if err := (&controllersdns.ResolverEndpointReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ResolverEndpoint"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dns_resolver_endpoint"],
+			TypeName:         "oci_dns_resolver_endpoint",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ResolverEndpoint")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Rrset",
+	}:
+		if err := (&controllersdns.RrsetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Rrset"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dns_rrset"],
+			TypeName:         "oci_dns_rrset",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Rrset")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SteeringPolicy",
+	}:
+		if err := (&controllersdns.SteeringPolicyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SteeringPolicy"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dns_steering_policy"],
+			TypeName:         "oci_dns_steering_policy",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SteeringPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SteeringPolicyAttachment",
+	}:
+		if err := (&controllersdns.SteeringPolicyAttachmentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SteeringPolicyAttachment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dns_steering_policy_attachment"],
+			TypeName:         "oci_dns_steering_policy_attachment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SteeringPolicyAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "TsigKey",
+	}:
+		if err := (&controllersdns.TsigKeyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("TsigKey"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dns_tsig_key"],
+			TypeName:         "oci_dns_tsig_key",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "TsigKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "View",
+	}:
+		if err := (&controllersdns.ViewReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("View"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dns_view"],
+			TypeName:         "oci_dns_view",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "View")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Zone",
+	}:
+		if err := (&controllersdns.ZoneReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Zone"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_dns_zone"],
+			TypeName:         "oci_dns_zone",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Zone")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "email.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Dkim",
+	}:
+		if err := (&controllersemail.DkimReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Dkim"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_email_dkim"],
+			TypeName:         "oci_email_dkim",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Dkim")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "email.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EmailDomain",
+	}:
+		if err := (&controllersemail.EmailDomainReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("EmailDomain"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_email_email_domain"],
+			TypeName:         "oci_email_email_domain",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "EmailDomain")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "email.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Sender",
+	}:
+		if err := (&controllersemail.SenderReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Sender"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_email_sender"],
+			TypeName:         "oci_email_sender",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Sender")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "email.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Suppression",
+	}:
+		if err := (&controllersemail.SuppressionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Suppression"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_email_suppression"],
+			TypeName:         "oci_email_suppression",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Suppression")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "events.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Rule",
+	}:
+		if err := (&controllersevents.RuleReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Rule"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_events_rule"],
+			TypeName:         "oci_events_rule",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Rule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageExport",
+	}:
+		if err := (&controllersfile.StorageExportReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("StorageExport"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_file_storage_export"],
+			TypeName:         "oci_file_storage_export",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "StorageExport")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageExportSet",
+	}:
+		if err := (&controllersfile.StorageExportSetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("StorageExportSet"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_file_storage_export_set"],
+			TypeName:         "oci_file_storage_export_set",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "StorageExportSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageFileSystem",
+	}:
+		if err := (&controllersfile.StorageFileSystemReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("StorageFileSystem"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_file_storage_file_system"],
+			TypeName:         "oci_file_storage_file_system",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "StorageFileSystem")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageMountTarget",
+	}:
+		if err := (&controllersfile.StorageMountTargetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("StorageMountTarget"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_file_storage_mount_target"],
+			TypeName:         "oci_file_storage_mount_target",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "StorageMountTarget")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageSnapshot",
+	}:
+		if err := (&controllersfile.StorageSnapshotReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("StorageSnapshot"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_file_storage_snapshot"],
+			TypeName:         "oci_file_storage_snapshot",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "StorageSnapshot")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "functions.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Application",
+	}:
+		if err := (&controllersfunctions.ApplicationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Application"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_functions_application"],
+			TypeName:         "oci_functions_application",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Application")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "functions.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Function",
+	}:
+		if err := (&controllersfunctions.FunctionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Function"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_functions_function"],
+			TypeName:         "oci_functions_function",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Function")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "functions.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InvokeFunction",
+	}:
+		if err := (&controllersfunctions.InvokeFunctionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("InvokeFunction"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_functions_invoke_function"],
+			TypeName:         "oci_functions_invoke_function",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "InvokeFunction")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "generic.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ArtifactsContentArtifactByPath",
+	}:
+		if err := (&controllersgeneric.ArtifactsContentArtifactByPathReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ArtifactsContentArtifactByPath"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_generic_artifacts_content_artifact_by_path"],
+			TypeName:         "oci_generic_artifacts_content_artifact_by_path",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ArtifactsContentArtifactByPath")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "golden.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GateDatabaseRegistration",
+	}:
+		if err := (&controllersgolden.GateDatabaseRegistrationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GateDatabaseRegistration"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_golden_gate_database_registration"],
+			TypeName:         "oci_golden_gate_database_registration",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GateDatabaseRegistration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "golden.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GateDeployment",
+	}:
+		if err := (&controllersgolden.GateDeploymentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GateDeployment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_golden_gate_deployment"],
+			TypeName:         "oci_golden_gate_deployment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GateDeployment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "golden.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GateDeploymentBackup",
+	}:
+		if err := (&controllersgolden.GateDeploymentBackupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GateDeploymentBackup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_golden_gate_deployment_backup"],
+			TypeName:         "oci_golden_gate_deployment_backup",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GateDeploymentBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "health.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ChecksHTTPMonitor",
+	}:
+		if err := (&controllershealth.ChecksHTTPMonitorReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ChecksHTTPMonitor"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_health_checks_http_monitor"],
+			TypeName:         "oci_health_checks_http_monitor",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ChecksHTTPMonitor")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "health.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ChecksHTTPProbe",
+	}:
+		if err := (&controllershealth.ChecksHTTPProbeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ChecksHTTPProbe"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_health_checks_http_probe"],
+			TypeName:         "oci_health_checks_http_probe",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ChecksHTTPProbe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "health.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ChecksPingMonitor",
+	}:
+		if err := (&controllershealth.ChecksPingMonitorReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ChecksPingMonitor"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_health_checks_ping_monitor"],
+			TypeName:         "oci_health_checks_ping_monitor",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ChecksPingMonitor")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "health.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ChecksPingProbe",
+	}:
+		if err := (&controllershealth.ChecksPingProbeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ChecksPingProbe"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_health_checks_ping_probe"],
+			TypeName:         "oci_health_checks_ping_probe",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ChecksPingProbe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ApiKey",
+	}:
+		if err := (&controllersidentity.ApiKeyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ApiKey"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_api_key"],
+			TypeName:         "oci_identity_api_key",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ApiKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AuthToken",
+	}:
+		if err := (&controllersidentity.AuthTokenReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AuthToken"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_auth_token"],
+			TypeName:         "oci_identity_auth_token",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AuthToken")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AuthenticationPolicy",
+	}:
+		if err := (&controllersidentity.AuthenticationPolicyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AuthenticationPolicy"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_authentication_policy"],
+			TypeName:         "oci_identity_authentication_policy",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AuthenticationPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Compartment",
+	}:
+		if err := (&controllersidentity.CompartmentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Compartment"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_compartment"],
+			TypeName:         "oci_identity_compartment",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Compartment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CustomerSecretKey",
+	}:
+		if err := (&controllersidentity.CustomerSecretKeyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CustomerSecretKey"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_customer_secret_key"],
+			TypeName:         "oci_identity_customer_secret_key",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CustomerSecretKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DynamicGroup",
+	}:
+		if err := (&controllersidentity.DynamicGroupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DynamicGroup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_dynamic_group"],
+			TypeName:         "oci_identity_dynamic_group",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DynamicGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Group",
+	}:
+		if err := (&controllersidentity.GroupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Group"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_group"],
+			TypeName:         "oci_identity_group",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Group")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "IdentityProvider",
+	}:
+		if err := (&controllersidentity.IdentityProviderReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("IdentityProvider"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_identity_provider"],
+			TypeName:         "oci_identity_identity_provider",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "IdentityProvider")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "IdpGroupMapping",
+	}:
+		if err := (&controllersidentity.IdpGroupMappingReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("IdpGroupMapping"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_idp_group_mapping"],
+			TypeName:         "oci_identity_idp_group_mapping",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "IdpGroupMapping")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NetworkSource",
+	}:
+		if err := (&controllersidentity.NetworkSourceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("NetworkSource"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_network_source"],
+			TypeName:         "oci_identity_network_source",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "NetworkSource")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Policy",
+	}:
+		if err := (&controllersidentity.PolicyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Policy"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_policy"],
+			TypeName:         "oci_identity_policy",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Policy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SmtpCredential",
+	}:
+		if err := (&controllersidentity.SmtpCredentialReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SmtpCredential"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_smtp_credential"],
+			TypeName:         "oci_identity_smtp_credential",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SmtpCredential")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SwiftPassword",
+	}:
+		if err := (&controllersidentity.SwiftPasswordReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SwiftPassword"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_swift_password"],
+			TypeName:         "oci_identity_swift_password",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SwiftPassword")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Tag",
+	}:
+		if err := (&controllersidentity.TagReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Tag"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_tag"],
+			TypeName:         "oci_identity_tag",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Tag")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "TagDefault",
+	}:
+		if err := (&controllersidentity.TagDefaultReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("TagDefault"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_tag_default"],
+			TypeName:         "oci_identity_tag_default",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "TagDefault")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "TagNamespace",
+	}:
+		if err := (&controllersidentity.TagNamespaceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("TagNamespace"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_tag_namespace"],
+			TypeName:         "oci_identity_tag_namespace",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "TagNamespace")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "UiPassword",
+	}:
+		if err := (&controllersidentity.UiPasswordReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("UiPassword"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_ui_password"],
+			TypeName:         "oci_identity_ui_password",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "UiPassword")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "User",
+	}:
+		if err := (&controllersidentity.UserReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("User"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_user"],
+			TypeName:         "oci_identity_user",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "User")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "UserCapabilitiesManagement",
+	}:
+		if err := (&controllersidentity.UserCapabilitiesManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("UserCapabilitiesManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_user_capabilities_management"],
+			TypeName:         "oci_identity_user_capabilities_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "UserCapabilitiesManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "UserGroupMembership",
+	}:
+		if err := (&controllersidentity.UserGroupMembershipReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("UserGroupMembership"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_identity_user_group_membership"],
+			TypeName:         "oci_identity_user_group_membership",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "UserGroupMembership")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "integration.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "IntegrationInstance",
+	}:
+		if err := (&controllersintegration.IntegrationInstanceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("IntegrationInstance"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_integration_integration_instance"],
+			TypeName:         "oci_integration_integration_instance",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "IntegrationInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "jms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Fleet",
+	}:
+		if err := (&controllersjms.FleetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Fleet"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_jms_fleet"],
+			TypeName:         "oci_jms_fleet",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Fleet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EncryptedData",
+	}:
+		if err := (&controllerskms.EncryptedDataReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("EncryptedData"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_kms_encrypted_data"],
+			TypeName:         "oci_kms_encrypted_data",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "EncryptedData")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GeneratedKey",
+	}:
+		if err := (&controllerskms.GeneratedKeyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("GeneratedKey"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_kms_generated_key"],
+			TypeName:         "oci_kms_generated_key",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "GeneratedKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Key",
+	}:
+		if err := (&controllerskms.KeyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Key"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_kms_key"],
+			TypeName:         "oci_kms_key",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Key")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "KeyVersion",
+	}:
+		if err := (&controllerskms.KeyVersionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("KeyVersion"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_kms_key_version"],
+			TypeName:         "oci_kms_key_version",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "KeyVersion")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Sign",
+	}:
+		if err := (&controllerskms.SignReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Sign"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_kms_sign"],
+			TypeName:         "oci_kms_sign",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Sign")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Vault",
+	}:
+		if err := (&controllerskms.VaultReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Vault"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_kms_vault"],
+			TypeName:         "oci_kms_vault",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Vault")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VaultReplication",
+	}:
+		if err := (&controllerskms.VaultReplicationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("VaultReplication"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_kms_vault_replication"],
+			TypeName:         "oci_kms_vault_replication",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "VaultReplication")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Verify",
+	}:
+		if err := (&controllerskms.VerifyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Verify"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_kms_verify"],
+			TypeName:         "oci_kms_verify",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Verify")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "limits.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Quota",
+	}:
+		if err := (&controllerslimits.QuotaReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Quota"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_limits_quota"],
+			TypeName:         "oci_limits_quota",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Quota")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Balancer",
+	}:
+		if err := (&controllersload.BalancerReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Balancer"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer"],
+			TypeName:         "oci_load_balancer",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Balancer")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerBackend",
+	}:
+		if err := (&controllersload.BalancerBackendReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerBackend"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_backend"],
+			TypeName:         "oci_load_balancer_backend",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerBackend")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerBackendSet",
+	}:
+		if err := (&controllersload.BalancerBackendSetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerBackendSet"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_backend_set"],
+			TypeName:         "oci_load_balancer_backend_set",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerBackendSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerBackendset",
+	}:
+		if err := (&controllersload.BalancerBackendsetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerBackendset"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_backendset"],
+			TypeName:         "oci_load_balancer_backendset",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerBackendset")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerCertificate",
+	}:
+		if err := (&controllersload.BalancerCertificateReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerCertificate"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_certificate"],
+			TypeName:         "oci_load_balancer_certificate",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerCertificate")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerHostname",
+	}:
+		if err := (&controllersload.BalancerHostnameReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerHostname"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_hostname"],
+			TypeName:         "oci_load_balancer_hostname",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerHostname")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerListener",
+	}:
+		if err := (&controllersload.BalancerListenerReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerListener"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_listener"],
+			TypeName:         "oci_load_balancer_listener",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerListener")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerLoadBalancer",
+	}:
+		if err := (&controllersload.BalancerLoadBalancerReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerLoadBalancer"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_load_balancer"],
+			TypeName:         "oci_load_balancer_load_balancer",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerLoadBalancer")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerLoadBalancerRoutingPolicy",
+	}:
+		if err := (&controllersload.BalancerLoadBalancerRoutingPolicyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerLoadBalancerRoutingPolicy"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_load_balancer_routing_policy"],
+			TypeName:         "oci_load_balancer_load_balancer_routing_policy",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerLoadBalancerRoutingPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerPathRouteSet",
+	}:
+		if err := (&controllersload.BalancerPathRouteSetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerPathRouteSet"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_path_route_set"],
+			TypeName:         "oci_load_balancer_path_route_set",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerPathRouteSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerRuleSet",
+	}:
+		if err := (&controllersload.BalancerRuleSetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerRuleSet"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_rule_set"],
+			TypeName:         "oci_load_balancer_rule_set",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerRuleSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerSslCipherSuite",
+	}:
+		if err := (&controllersload.BalancerSslCipherSuiteReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("BalancerSslCipherSuite"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_load_balancer_ssl_cipher_suite"],
+			TypeName:         "oci_load_balancer_ssl_cipher_suite",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "BalancerSslCipherSuite")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "log.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AnalyticsLogAnalyticsEntity",
+	}:
+		if err := (&controllerslog.AnalyticsLogAnalyticsEntityReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AnalyticsLogAnalyticsEntity"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_log_analytics_log_analytics_entity"],
+			TypeName:         "oci_log_analytics_log_analytics_entity",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsLogAnalyticsEntity")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "log.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AnalyticsLogAnalyticsLogGroup",
+	}:
+		if err := (&controllerslog.AnalyticsLogAnalyticsLogGroupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AnalyticsLogAnalyticsLogGroup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_log_analytics_log_analytics_log_group"],
+			TypeName:         "oci_log_analytics_log_analytics_log_group",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsLogAnalyticsLogGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "log.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AnalyticsNamespace",
+	}:
+		if err := (&controllerslog.AnalyticsNamespaceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AnalyticsNamespace"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_log_analytics_namespace"],
+			TypeName:         "oci_log_analytics_namespace",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsNamespace")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "logging.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Log",
+	}:
+		if err := (&controllerslogging.LogReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Log"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_logging_log"],
+			TypeName:         "oci_logging_log",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Log")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "logging.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LogGroup",
+	}:
+		if err := (&controllerslogging.LogGroupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("LogGroup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_logging_log_group"],
+			TypeName:         "oci_logging_log_group",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "LogGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "logging.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LogSavedSearch",
+	}:
+		if err := (&controllerslogging.LogSavedSearchReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("LogSavedSearch"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_logging_log_saved_search"],
+			TypeName:         "oci_logging_log_saved_search",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "LogSavedSearch")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "logging.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "UnifiedAgentConfiguration",
+	}:
+		if err := (&controllerslogging.UnifiedAgentConfigurationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("UnifiedAgentConfiguration"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_logging_unified_agent_configuration"],
+			TypeName:         "oci_logging_unified_agent_configuration",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "UnifiedAgentConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "management.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AgentManagementAgent",
+	}:
+		if err := (&controllersmanagement.AgentManagementAgentReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AgentManagementAgent"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_management_agent_management_agent"],
+			TypeName:         "oci_management_agent_management_agent",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AgentManagementAgent")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "management.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AgentManagementAgentInstallKey",
+	}:
+		if err := (&controllersmanagement.AgentManagementAgentInstallKeyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AgentManagementAgentInstallKey"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_management_agent_management_agent_install_key"],
+			TypeName:         "oci_management_agent_management_agent_install_key",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AgentManagementAgentInstallKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "management.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DashboardManagementDashboardsImport",
+	}:
+		if err := (&controllersmanagement.DashboardManagementDashboardsImportReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DashboardManagementDashboardsImport"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_management_dashboard_management_dashboards_import"],
+			TypeName:         "oci_management_dashboard_management_dashboards_import",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DashboardManagementDashboardsImport")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "marketplace.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AcceptedAgreement",
+	}:
+		if err := (&controllersmarketplace.AcceptedAgreementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AcceptedAgreement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_marketplace_accepted_agreement"],
+			TypeName:         "oci_marketplace_accepted_agreement",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AcceptedAgreement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "marketplace.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ListingPackageAgreement",
+	}:
+		if err := (&controllersmarketplace.ListingPackageAgreementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ListingPackageAgreement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_marketplace_listing_package_agreement"],
+			TypeName:         "oci_marketplace_listing_package_agreement",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ListingPackageAgreement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "marketplace.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Publication",
+	}:
+		if err := (&controllersmarketplace.PublicationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Publication"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_marketplace_publication"],
+			TypeName:         "oci_marketplace_publication",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Publication")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "metering.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputationCustomTable",
+	}:
+		if err := (&controllersmetering.ComputationCustomTableReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ComputationCustomTable"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_metering_computation_custom_table"],
+			TypeName:         "oci_metering_computation_custom_table",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ComputationCustomTable")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "metering.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputationQuery",
+	}:
+		if err := (&controllersmetering.ComputationQueryReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ComputationQuery"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_metering_computation_query"],
+			TypeName:         "oci_metering_computation_query",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ComputationQuery")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "metering.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputationUsage",
+	}:
+		if err := (&controllersmetering.ComputationUsageReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ComputationUsage"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_metering_computation_usage"],
+			TypeName:         "oci_metering_computation_usage",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ComputationUsage")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "monitoring.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Alarm",
+	}:
+		if err := (&controllersmonitoring.AlarmReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Alarm"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_monitoring_alarm"],
+			TypeName:         "oci_monitoring_alarm",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Alarm")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AnalyticsCluster",
+	}:
+		if err := (&controllersmysql.AnalyticsClusterReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AnalyticsCluster"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_mysql_analytics_cluster"],
+			TypeName:         "oci_mysql_analytics_cluster",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Channel",
+	}:
+		if err := (&controllersmysql.ChannelReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Channel"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_mysql_channel"],
+			TypeName:         "oci_mysql_channel",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Channel")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "HeatWaveCluster",
+	}:
+		if err := (&controllersmysql.HeatWaveClusterReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("HeatWaveCluster"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_mysql_heat_wave_cluster"],
+			TypeName:         "oci_mysql_heat_wave_cluster",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "HeatWaveCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MysqlBackup",
+	}:
+		if err := (&controllersmysql.MysqlBackupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("MysqlBackup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_mysql_mysql_backup"],
+			TypeName:         "oci_mysql_mysql_backup",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "MysqlBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MysqlDbSystem",
+	}:
+		if err := (&controllersmysql.MysqlDbSystemReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("MysqlDbSystem"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_mysql_mysql_db_system"],
+			TypeName:         "oci_mysql_mysql_db_system",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "MysqlDbSystem")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "network.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LoadBalancerBackend",
+	}:
+		if err := (&controllersnetwork.LoadBalancerBackendReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("LoadBalancerBackend"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_network_load_balancer_backend"],
+			TypeName:         "oci_network_load_balancer_backend",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerBackend")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "network.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LoadBalancerBackendSet",
+	}:
+		if err := (&controllersnetwork.LoadBalancerBackendSetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("LoadBalancerBackendSet"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_network_load_balancer_backend_set"],
+			TypeName:         "oci_network_load_balancer_backend_set",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerBackendSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "network.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LoadBalancerListener",
+	}:
+		if err := (&controllersnetwork.LoadBalancerListenerReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("LoadBalancerListener"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_network_load_balancer_listener"],
+			TypeName:         "oci_network_load_balancer_listener",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerListener")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "network.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LoadBalancerNetworkLoadBalancer",
+	}:
+		if err := (&controllersnetwork.LoadBalancerNetworkLoadBalancerReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("LoadBalancerNetworkLoadBalancer"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_network_load_balancer_network_load_balancer"],
+			TypeName:         "oci_network_load_balancer_network_load_balancer",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerNetworkLoadBalancer")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "nosql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Index",
+	}:
+		if err := (&controllersnosql.IndexReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Index"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_nosql_index"],
+			TypeName:         "oci_nosql_index",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Index")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "nosql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Table",
+	}:
+		if err := (&controllersnosql.TableReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Table"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_nosql_table"],
+			TypeName:         "oci_nosql_table",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Table")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Bucket",
+	}:
+		if err := (&controllersobjectstorage.BucketReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Bucket"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_objectstorage_bucket"],
+			TypeName:         "oci_objectstorage_bucket",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Bucket")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NamespaceMetadata",
+	}:
+		if err := (&controllersobjectstorage.NamespaceMetadataReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("NamespaceMetadata"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_objectstorage_namespace_metadata"],
+			TypeName:         "oci_objectstorage_namespace_metadata",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "NamespaceMetadata")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Object",
+	}:
+		if err := (&controllersobjectstorage.ObjectReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Object"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_objectstorage_object"],
+			TypeName:         "oci_objectstorage_object",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Object")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ObjectLifecyclePolicy",
+	}:
+		if err := (&controllersobjectstorage.ObjectLifecyclePolicyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ObjectLifecyclePolicy"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_objectstorage_object_lifecycle_policy"],
+			TypeName:         "oci_objectstorage_object_lifecycle_policy",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ObjectLifecyclePolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Preauthrequest",
+	}:
+		if err := (&controllersobjectstorage.PreauthrequestReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Preauthrequest"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_objectstorage_preauthrequest"],
+			TypeName:         "oci_objectstorage_preauthrequest",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Preauthrequest")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ReplicationPolicy",
+	}:
+		if err := (&controllersobjectstorage.ReplicationPolicyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ReplicationPolicy"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_objectstorage_replication_policy"],
+			TypeName:         "oci_objectstorage_replication_policy",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ReplicationPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "oce.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "OceInstance",
+	}:
+		if err := (&controllersoce.OceInstanceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("OceInstance"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_oce_oce_instance"],
+			TypeName:         "oci_oce_oce_instance",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "OceInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "ocvp.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EsxiHost",
+	}:
+		if err := (&controllersocvp.EsxiHostReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("EsxiHost"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_ocvp_esxi_host"],
+			TypeName:         "oci_ocvp_esxi_host",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "EsxiHost")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "ocvp.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Sddc",
+	}:
+		if err := (&controllersocvp.SddcReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Sddc"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_ocvp_sddc"],
+			TypeName:         "oci_ocvp_sddc",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Sddc")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "oda.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "OdaInstance",
+	}:
+		if err := (&controllersoda.OdaInstanceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("OdaInstance"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_oda_oda_instance"],
+			TypeName:         "oci_oda_oda_instance",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "OdaInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "ons.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NotificationTopic",
+	}:
+		if err := (&controllersons.NotificationTopicReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("NotificationTopic"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_ons_notification_topic"],
+			TypeName:         "oci_ons_notification_topic",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "NotificationTopic")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "ons.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Subscription",
+	}:
+		if err := (&controllersons.SubscriptionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Subscription"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_ons_subscription"],
+			TypeName:         "oci_ons_subscription",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Subscription")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "opsi.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DatabaseInsight",
+	}:
+		if err := (&controllersopsi.DatabaseInsightReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("DatabaseInsight"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_opsi_database_insight"],
+			TypeName:         "oci_opsi_database_insight",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "DatabaseInsight")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "opsi.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EnterpriseManagerBridge",
+	}:
+		if err := (&controllersopsi.EnterpriseManagerBridgeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("EnterpriseManagerBridge"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_opsi_enterprise_manager_bridge"],
+			TypeName:         "oci_opsi_enterprise_manager_bridge",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "EnterpriseManagerBridge")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "opsi.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "HostInsight",
+	}:
+		if err := (&controllersopsi.HostInsightReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("HostInsight"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_opsi_host_insight"],
+			TypeName:         "oci_opsi_host_insight",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "HostInsight")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "optimizer.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EnrollmentStatus",
+	}:
+		if err := (&controllersoptimizer.EnrollmentStatusReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("EnrollmentStatus"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_optimizer_enrollment_status"],
+			TypeName:         "oci_optimizer_enrollment_status",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "EnrollmentStatus")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "optimizer.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Profile",
+	}:
+		if err := (&controllersoptimizer.ProfileReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Profile"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_optimizer_profile"],
+			TypeName:         "oci_optimizer_profile",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Profile")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "optimizer.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Recommendation",
+	}:
+		if err := (&controllersoptimizer.RecommendationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Recommendation"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_optimizer_recommendation"],
+			TypeName:         "oci_optimizer_recommendation",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Recommendation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "optimizer.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ResourceAction",
+	}:
+		if err := (&controllersoptimizer.ResourceActionReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ResourceAction"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_optimizer_resource_action"],
+			TypeName:         "oci_optimizer_resource_action",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ResourceAction")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "osmanagement.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagedInstanceGroup",
+	}:
+		if err := (&controllersosmanagement.ManagedInstanceGroupReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ManagedInstanceGroup"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_osmanagement_managed_instance_group"],
+			TypeName:         "oci_osmanagement_managed_instance_group",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ManagedInstanceGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "osmanagement.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagedInstanceManagement",
+	}:
+		if err := (&controllersosmanagement.ManagedInstanceManagementReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ManagedInstanceManagement"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_osmanagement_managed_instance_management"],
+			TypeName:         "oci_osmanagement_managed_instance_management",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ManagedInstanceManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "osmanagement.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SoftwareSource",
+	}:
+		if err := (&controllersosmanagement.SoftwareSourceReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("SoftwareSource"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_osmanagement_software_source"],
+			TypeName:         "oci_osmanagement_software_source",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "SoftwareSource")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "sch.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ServiceConnector",
+	}:
+		if err := (&controllerssch.ServiceConnectorReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ServiceConnector"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_sch_service_connector"],
+			TypeName:         "oci_sch_service_connector",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ServiceConnector")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "service.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CatalogPrivateApplication",
+	}:
+		if err := (&controllersservice.CatalogPrivateApplicationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CatalogPrivateApplication"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_service_catalog_private_application"],
+			TypeName:         "oci_service_catalog_private_application",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CatalogPrivateApplication")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "service.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CatalogServiceCatalog",
+	}:
+		if err := (&controllersservice.CatalogServiceCatalogReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CatalogServiceCatalog"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_service_catalog_service_catalog"],
+			TypeName:         "oci_service_catalog_service_catalog",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CatalogServiceCatalog")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "service.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CatalogServiceCatalogAssociation",
+	}:
+		if err := (&controllersservice.CatalogServiceCatalogAssociationReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CatalogServiceCatalogAssociation"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_service_catalog_service_catalog_association"],
+			TypeName:         "oci_service_catalog_service_catalog_association",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CatalogServiceCatalogAssociation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "streaming.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ConnectHarness",
+	}:
+		if err := (&controllersstreaming.ConnectHarnessReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ConnectHarness"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_streaming_connect_harness"],
+			TypeName:         "oci_streaming_connect_harness",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ConnectHarness")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "streaming.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Stream",
+	}:
+		if err := (&controllersstreaming.StreamReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Stream"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_streaming_stream"],
+			TypeName:         "oci_streaming_stream",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Stream")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "streaming.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StreamPool",
+	}:
+		if err := (&controllersstreaming.StreamPoolReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("StreamPool"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_streaming_stream_pool"],
+			TypeName:         "oci_streaming_stream_pool",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "StreamPool")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "vulnerability.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ScanningHostScanRecipe",
+	}:
+		if err := (&controllersvulnerability.ScanningHostScanRecipeReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ScanningHostScanRecipe"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_vulnerability_scanning_host_scan_recipe"],
+			TypeName:         "oci_vulnerability_scanning_host_scan_recipe",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ScanningHostScanRecipe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "vulnerability.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ScanningHostScanTarget",
+	}:
+		if err := (&controllersvulnerability.ScanningHostScanTargetReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ScanningHostScanTarget"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_vulnerability_scanning_host_scan_target"],
+			TypeName:         "oci_vulnerability_scanning_host_scan_target",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ScanningHostScanTarget")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AddressList",
+	}:
+		if err := (&controllerswaas.AddressListReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("AddressList"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_waas_address_list"],
+			TypeName:         "oci_waas_address_list",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "AddressList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Certificate",
+	}:
+		if err := (&controllerswaas.CertificateReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("Certificate"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_waas_certificate"],
+			TypeName:         "oci_waas_certificate",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "Certificate")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CustomProtectionRule",
+	}:
+		if err := (&controllerswaas.CustomProtectionRuleReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("CustomProtectionRule"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_waas_custom_protection_rule"],
+			TypeName:         "oci_waas_custom_protection_rule",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "CustomProtectionRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "HttpRedirect",
+	}:
+		if err := (&controllerswaas.HttpRedirectReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("HttpRedirect"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_waas_http_redirect"],
+			TypeName:         "oci_waas_http_redirect",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "HttpRedirect")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ProtectionRule",
+	}:
+		if err := (&controllerswaas.ProtectionRuleReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("ProtectionRule"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_waas_protection_rule"],
+			TypeName:         "oci_waas_protection_rule",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "ProtectionRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PurgeCache",
+	}:
+		if err := (&controllerswaas.PurgeCacheReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("PurgeCache"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_waas_purge_cache"],
+			TypeName:         "oci_waas_purge_cache",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "PurgeCache")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "WaasPolicy",
+	}:
+		if err := (&controllerswaas.WaasPolicyReconciler{
+			Client:           mgr.GetClient(),
+			Log:              ctrl.Log.WithName("controllers").WithName("WaasPolicy"),
+			Scheme:           mgr.GetScheme(),
+			Gvk:              gvk,
+			Provider:         oci.Provider().(*tfschema.Provider),
+			Resource:         oci.Provider().(*tfschema.Provider).ResourcesMap["oci_waas_waas_policy"],
+			TypeName:         "oci_waas_waas_policy",
+			WatchOnlyDefault: watchOnlyDefault,
+		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+			setupLog.Error(err, "unable to create controller", "controller", "WaasPolicy")
 			return err
 		}
 
@@ -605,174 +5854,2757 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 func SetupWebhook(mgr manager.Manager, gvk schema.GroupVersionKind) error {
 	switch gvk {
 	case schema.GroupVersionKind{
-		Group:   "bgp.oci.kubeform.com",
+		Group:   "analytics.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Session",
+		Kind:    "AnalyticsInstance",
 	}:
-		if err := (&bgpv1alpha1.Session{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Session")
+		if err := (&analyticsv1alpha1.AnalyticsInstance{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AnalyticsInstance")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "connection.oci.kubeform.com",
+		Group:   "analytics.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Connection",
+		Kind:    "AnalyticsInstancePrivateAccessChannel",
 	}:
-		if err := (&connectionv1alpha1.Connection{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Connection")
+		if err := (&analyticsv1alpha1.AnalyticsInstancePrivateAccessChannel{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AnalyticsInstancePrivateAccessChannel")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "device.oci.kubeform.com",
+		Group:   "analytics.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Device",
+		Kind:    "AnalyticsInstanceVanityURL",
 	}:
-		if err := (&devicev1alpha1.Device{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Device")
+		if err := (&analyticsv1alpha1.AnalyticsInstanceVanityURL{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AnalyticsInstanceVanityURL")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "device.oci.kubeform.com",
+		Group:   "apigateway.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "NetworkType",
+		Kind:    "Api",
 	}:
-		if err := (&devicev1alpha1.NetworkType{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "NetworkType")
+		if err := (&apigatewayv1alpha1.Api{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Api")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "gateway.oci.kubeform.com",
+		Group:   "apigateway.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Certificate",
+	}:
+		if err := (&apigatewayv1alpha1.Certificate{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Certificate")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "apigateway.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Deployment",
+	}:
+		if err := (&apigatewayv1alpha1.Deployment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Deployment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "apigateway.oci.kubeform.com",
 		Version: "v1alpha1",
 		Kind:    "Gateway",
 	}:
-		if err := (&gatewayv1alpha1.Gateway{}).SetupWebhookWithManager(mgr); err != nil {
+		if err := (&apigatewayv1alpha1.Gateway{}).SetupWebhookWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create webhook", "webhook", "Gateway")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "ip.oci.kubeform.com",
+		Group:   "apm.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Attachment",
+		Kind:    "ApmDomain",
 	}:
-		if err := (&ipv1alpha1.Attachment{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Attachment")
+		if err := (&apmv1alpha1.ApmDomain{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ApmDomain")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "organization.oci.kubeform.com",
+		Group:   "apm.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Organization",
+		Kind:    "SyntheticsMonitor",
 	}:
-		if err := (&organizationv1alpha1.Organization{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Organization")
+		if err := (&apmv1alpha1.SyntheticsMonitor{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SyntheticsMonitor")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "port.oci.kubeform.com",
+		Group:   "apm.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "VlanAttachment",
+		Kind:    "SyntheticsScript",
 	}:
-		if err := (&portv1alpha1.VlanAttachment{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "VlanAttachment")
+		if err := (&apmv1alpha1.SyntheticsScript{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SyntheticsScript")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "project.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Project",
+		Kind:    "ContainerConfiguration",
 	}:
-		if err := (&projectv1alpha1.Project{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Project")
+		if err := (&artifactsv1alpha1.ContainerConfiguration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ContainerConfiguration")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "project.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "ApiKey",
+		Kind:    "ContainerImageSignature",
 	}:
-		if err := (&projectv1alpha1.ApiKey{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "ApiKey")
+		if err := (&artifactsv1alpha1.ContainerImageSignature{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ContainerImageSignature")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "project.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "SshKey",
+		Kind:    "ContainerRepository",
 	}:
-		if err := (&projectv1alpha1.SshKey{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "SshKey")
+		if err := (&artifactsv1alpha1.ContainerRepository{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ContainerRepository")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "reserved.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "IpBlock",
+		Kind:    "GenericArtifact",
 	}:
-		if err := (&reservedv1alpha1.IpBlock{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "IpBlock")
+		if err := (&artifactsv1alpha1.GenericArtifact{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GenericArtifact")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "spot.oci.kubeform.com",
+		Group:   "artifacts.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "MarketRequest",
+		Kind:    "Repository",
 	}:
-		if err := (&spotv1alpha1.MarketRequest{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "MarketRequest")
+		if err := (&artifactsv1alpha1.Repository{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Repository")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "ssh.oci.kubeform.com",
+		Group:   "audit.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Key",
+		Kind:    "Configuration",
 	}:
-		if err := (&sshv1alpha1.Key{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Key")
+		if err := (&auditv1alpha1.Configuration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Configuration")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "user.oci.kubeform.com",
+		Group:   "autoscaling.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "ApiKey",
+		Kind:    "AutoScalingConfiguration",
 	}:
-		if err := (&userv1alpha1.ApiKey{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "ApiKey")
+		if err := (&autoscalingv1alpha1.AutoScalingConfiguration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutoScalingConfiguration")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "virtual.oci.kubeform.com",
+		Group:   "bastion.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Circuit",
+		Kind:    "Bastion",
 	}:
-		if err := (&virtualv1alpha1.Circuit{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Circuit")
+		if err := (&bastionv1alpha1.Bastion{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Bastion")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "vlan.oci.kubeform.com",
+		Group:   "bastion.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Session",
+	}:
+		if err := (&bastionv1alpha1.Session{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Session")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "bds.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutoScalingConfiguration",
+	}:
+		if err := (&bdsv1alpha1.AutoScalingConfiguration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutoScalingConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "bds.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BdsInstance",
+	}:
+		if err := (&bdsv1alpha1.BdsInstance{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BdsInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "blockchain.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BlockchainPlatform",
+	}:
+		if err := (&blockchainv1alpha1.BlockchainPlatform{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BlockchainPlatform")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "blockchain.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Osn",
+	}:
+		if err := (&blockchainv1alpha1.Osn{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Osn")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "blockchain.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Peer",
+	}:
+		if err := (&blockchainv1alpha1.Peer{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Peer")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "budget.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AlertRule",
+	}:
+		if err := (&budgetv1alpha1.AlertRule{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AlertRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "budget.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Budget",
+	}:
+		if err := (&budgetv1alpha1.Budget{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Budget")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardCloudGuardConfiguration",
+	}:
+		if err := (&cloudv1alpha1.GuardCloudGuardConfiguration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GuardCloudGuardConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardDataMaskRule",
+	}:
+		if err := (&cloudv1alpha1.GuardDataMaskRule{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GuardDataMaskRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardDetectorRecipe",
+	}:
+		if err := (&cloudv1alpha1.GuardDetectorRecipe{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GuardDetectorRecipe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardManagedList",
+	}:
+		if err := (&cloudv1alpha1.GuardManagedList{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GuardManagedList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardResponderRecipe",
+	}:
+		if err := (&cloudv1alpha1.GuardResponderRecipe{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GuardResponderRecipe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "cloud.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GuardTarget",
+	}:
+		if err := (&cloudv1alpha1.GuardTarget{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GuardTarget")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "containerengine.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Cluster",
+	}:
+		if err := (&containerenginev1alpha1.Cluster{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Cluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "containerengine.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NodePool",
+	}:
+		if err := (&containerenginev1alpha1.NodePool{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "NodePool")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AppCatalogListingResourceVersionAgreement",
+	}:
+		if err := (&corev1alpha1.AppCatalogListingResourceVersionAgreement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AppCatalogListingResourceVersionAgreement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AppCatalogSubscription",
+	}:
+		if err := (&corev1alpha1.AppCatalogSubscription{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AppCatalogSubscription")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BootVolume",
+	}:
+		if err := (&corev1alpha1.BootVolume{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BootVolume")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BootVolumeBackup",
+	}:
+		if err := (&corev1alpha1.BootVolumeBackup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BootVolumeBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ClusterNetwork",
+	}:
+		if err := (&corev1alpha1.ClusterNetwork{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ClusterNetwork")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputeCapacityReservation",
+	}:
+		if err := (&corev1alpha1.ComputeCapacityReservation{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ComputeCapacityReservation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputeImageCapabilitySchema",
+	}:
+		if err := (&corev1alpha1.ComputeImageCapabilitySchema{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ComputeImageCapabilitySchema")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ConsoleHistory",
+	}:
+		if err := (&corev1alpha1.ConsoleHistory{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ConsoleHistory")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Cpe",
+	}:
+		if err := (&corev1alpha1.Cpe{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Cpe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CrossConnect",
+	}:
+		if err := (&corev1alpha1.CrossConnect{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CrossConnect")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CrossConnectGroup",
+	}:
+		if err := (&corev1alpha1.CrossConnectGroup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CrossConnectGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DedicatedVmHost",
+	}:
+		if err := (&corev1alpha1.DedicatedVmHost{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DedicatedVmHost")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DefaultDHCPOptions",
+	}:
+		if err := (&corev1alpha1.DefaultDHCPOptions{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DefaultDHCPOptions")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DefaultRouteTable",
+	}:
+		if err := (&corev1alpha1.DefaultRouteTable{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DefaultRouteTable")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DefaultSecurityList",
+	}:
+		if err := (&corev1alpha1.DefaultSecurityList{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DefaultSecurityList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DhcpOptions",
+	}:
+		if err := (&corev1alpha1.DhcpOptions{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DhcpOptions")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Drg",
+	}:
+		if err := (&corev1alpha1.Drg{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Drg")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgAttachment",
+	}:
+		if err := (&corev1alpha1.DrgAttachment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DrgAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgAttachmentManagement",
+	}:
+		if err := (&corev1alpha1.DrgAttachmentManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DrgAttachmentManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgAttachmentsList",
+	}:
+		if err := (&corev1alpha1.DrgAttachmentsList{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DrgAttachmentsList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgRouteDistribution",
+	}:
+		if err := (&corev1alpha1.DrgRouteDistribution{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DrgRouteDistribution")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgRouteDistributionStatement",
+	}:
+		if err := (&corev1alpha1.DrgRouteDistributionStatement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DrgRouteDistributionStatement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgRouteTable",
+	}:
+		if err := (&corev1alpha1.DrgRouteTable{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DrgRouteTable")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DrgRouteTableRouteRule",
+	}:
+		if err := (&corev1alpha1.DrgRouteTableRouteRule{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DrgRouteTableRouteRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Image",
+	}:
+		if err := (&corev1alpha1.Image{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Image")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Instance",
+	}:
+		if err := (&corev1alpha1.Instance{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Instance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InstanceConfiguration",
+	}:
+		if err := (&corev1alpha1.InstanceConfiguration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "InstanceConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InstanceConsoleConnection",
+	}:
+		if err := (&corev1alpha1.InstanceConsoleConnection{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "InstanceConsoleConnection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InstancePool",
+	}:
+		if err := (&corev1alpha1.InstancePool{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "InstancePool")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InstancePoolInstance",
+	}:
+		if err := (&corev1alpha1.InstancePoolInstance{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "InstancePoolInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InternetGateway",
+	}:
+		if err := (&corev1alpha1.InternetGateway{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "InternetGateway")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Ipsec",
+	}:
+		if err := (&corev1alpha1.Ipsec{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Ipsec")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "IpsecConnectionTunnelManagement",
+	}:
+		if err := (&corev1alpha1.IpsecConnectionTunnelManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "IpsecConnectionTunnelManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Ipv6",
+	}:
+		if err := (&corev1alpha1.Ipv6{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Ipv6")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ListingResourceVersionAgreement",
+	}:
+		if err := (&corev1alpha1.ListingResourceVersionAgreement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ListingResourceVersionAgreement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LocalPeeringGateway",
+	}:
+		if err := (&corev1alpha1.LocalPeeringGateway{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "LocalPeeringGateway")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NatGateway",
+	}:
+		if err := (&corev1alpha1.NatGateway{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "NatGateway")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NetworkSecurityGroup",
+	}:
+		if err := (&corev1alpha1.NetworkSecurityGroup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "NetworkSecurityGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NetworkSecurityGroupSecurityRule",
+	}:
+		if err := (&corev1alpha1.NetworkSecurityGroupSecurityRule{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "NetworkSecurityGroupSecurityRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PrivateIP",
+	}:
+		if err := (&corev1alpha1.PrivateIP{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PrivateIP")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PublicIP",
+	}:
+		if err := (&corev1alpha1.PublicIP{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PublicIP")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PublicIPPool",
+	}:
+		if err := (&corev1alpha1.PublicIPPool{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PublicIPPool")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PublicIPPoolCapacity",
+	}:
+		if err := (&corev1alpha1.PublicIPPoolCapacity{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PublicIPPoolCapacity")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "RemotePeeringConnection",
+	}:
+		if err := (&corev1alpha1.RemotePeeringConnection{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "RemotePeeringConnection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "RouteTable",
+	}:
+		if err := (&corev1alpha1.RouteTable{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "RouteTable")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "RouteTableAttachment",
+	}:
+		if err := (&corev1alpha1.RouteTableAttachment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "RouteTableAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SecurityList",
+	}:
+		if err := (&corev1alpha1.SecurityList{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SecurityList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ServiceGateway",
+	}:
+		if err := (&corev1alpha1.ServiceGateway{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ServiceGateway")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ShapeManagement",
+	}:
+		if err := (&corev1alpha1.ShapeManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ShapeManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Subnet",
+	}:
+		if err := (&corev1alpha1.Subnet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Subnet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Vcn",
+	}:
+		if err := (&corev1alpha1.Vcn{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Vcn")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VirtualCircuit",
+	}:
+		if err := (&corev1alpha1.VirtualCircuit{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VirtualCircuit")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VirtualNetwork",
+	}:
+		if err := (&corev1alpha1.VirtualNetwork{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VirtualNetwork")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
 		Version: "v1alpha1",
 		Kind:    "Vlan",
 	}:
-		if err := (&vlanv1alpha1.Vlan{}).SetupWebhookWithManager(mgr); err != nil {
+		if err := (&corev1alpha1.Vlan{}).SetupWebhookWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create webhook", "webhook", "Vlan")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "volume.oci.kubeform.com",
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VnicAttachment",
+	}:
+		if err := (&corev1alpha1.VnicAttachment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VnicAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
 		Version: "v1alpha1",
 		Kind:    "Volume",
 	}:
-		if err := (&volumev1alpha1.Volume{}).SetupWebhookWithManager(mgr); err != nil {
+		if err := (&corev1alpha1.Volume{}).SetupWebhookWithManager(mgr); err != nil {
 			setupLog.Error(err, "unable to create webhook", "webhook", "Volume")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "volume.oci.kubeform.com",
+		Group:   "core.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Attachment",
+		Kind:    "VolumeAttachment",
 	}:
-		if err := (&volumev1alpha1.Attachment{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Attachment")
+		if err := (&corev1alpha1.VolumeAttachment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VolumeAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeBackup",
+	}:
+		if err := (&corev1alpha1.VolumeBackup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VolumeBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeBackupPolicy",
+	}:
+		if err := (&corev1alpha1.VolumeBackupPolicy{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VolumeBackupPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeBackupPolicyAssignment",
+	}:
+		if err := (&corev1alpha1.VolumeBackupPolicyAssignment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VolumeBackupPolicyAssignment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeGroup",
+	}:
+		if err := (&corev1alpha1.VolumeGroup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VolumeGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "core.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VolumeGroupBackup",
+	}:
+		if err := (&corev1alpha1.VolumeGroupBackup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VolumeGroupBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "data.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SafeDataSafeConfiguration",
+	}:
+		if err := (&datav1alpha1.SafeDataSafeConfiguration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SafeDataSafeConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "data.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SafeDataSafePrivateEndpoint",
+	}:
+		if err := (&datav1alpha1.SafeDataSafePrivateEndpoint{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SafeDataSafePrivateEndpoint")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "data.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SafeOnPremConnector",
+	}:
+		if err := (&datav1alpha1.SafeOnPremConnector{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SafeOnPremConnector")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "data.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SafeTargetDatabase",
+	}:
+		if err := (&datav1alpha1.SafeTargetDatabase{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SafeTargetDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousContainerDatabase",
+	}:
+		if err := (&databasev1alpha1.AutonomousContainerDatabase{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutonomousContainerDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousContainerDatabaseDataguardAssociationOperation",
+	}:
+		if err := (&databasev1alpha1.AutonomousContainerDatabaseDataguardAssociationOperation{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutonomousContainerDatabaseDataguardAssociationOperation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabase",
+	}:
+		if err := (&databasev1alpha1.AutonomousDatabase{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutonomousDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabaseBackup",
+	}:
+		if err := (&databasev1alpha1.AutonomousDatabaseBackup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutonomousDatabaseBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabaseInstanceWalletManagement",
+	}:
+		if err := (&databasev1alpha1.AutonomousDatabaseInstanceWalletManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutonomousDatabaseInstanceWalletManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabaseRegionalWalletManagement",
+	}:
+		if err := (&databasev1alpha1.AutonomousDatabaseRegionalWalletManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutonomousDatabaseRegionalWalletManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousDatabaseWallet",
+	}:
+		if err := (&databasev1alpha1.AutonomousDatabaseWallet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutonomousDatabaseWallet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousExadataInfrastructure",
+	}:
+		if err := (&databasev1alpha1.AutonomousExadataInfrastructure{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutonomousExadataInfrastructure")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AutonomousVmCluster",
+	}:
+		if err := (&databasev1alpha1.AutonomousVmCluster{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AutonomousVmCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Backup",
+	}:
+		if err := (&databasev1alpha1.Backup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Backup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BackupDestination",
+	}:
+		if err := (&databasev1alpha1.BackupDestination{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BackupDestination")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CloudExadataInfrastructure",
+	}:
+		if err := (&databasev1alpha1.CloudExadataInfrastructure{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CloudExadataInfrastructure")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CloudVmCluster",
+	}:
+		if err := (&databasev1alpha1.CloudVmCluster{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CloudVmCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DataGuardAssociation",
+	}:
+		if err := (&databasev1alpha1.DataGuardAssociation{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DataGuardAssociation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Database",
+	}:
+		if err := (&databasev1alpha1.Database{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Database")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DatabaseSoftwareImage",
+	}:
+		if err := (&databasev1alpha1.DatabaseSoftwareImage{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DatabaseSoftwareImage")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DatabaseUpgrade",
+	}:
+		if err := (&databasev1alpha1.DatabaseUpgrade{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DatabaseUpgrade")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DbHome",
+	}:
+		if err := (&databasev1alpha1.DbHome{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DbHome")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DbNodeConsoleConnection",
+	}:
+		if err := (&databasev1alpha1.DbNodeConsoleConnection{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DbNodeConsoleConnection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DbSystem",
+	}:
+		if err := (&databasev1alpha1.DbSystem{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DbSystem")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExadataInfrastructure",
+	}:
+		if err := (&databasev1alpha1.ExadataInfrastructure{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExadataInfrastructure")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExadataInfrastructureStorage",
+	}:
+		if err := (&databasev1alpha1.ExadataInfrastructureStorage{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExadataInfrastructureStorage")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExadataIormConfig",
+	}:
+		if err := (&databasev1alpha1.ExadataIormConfig{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExadataIormConfig")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalContainerDatabase",
+	}:
+		if err := (&databasev1alpha1.ExternalContainerDatabase{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExternalContainerDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalContainerDatabaseManagement",
+	}:
+		if err := (&databasev1alpha1.ExternalContainerDatabaseManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExternalContainerDatabaseManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalDatabaseConnector",
+	}:
+		if err := (&databasev1alpha1.ExternalDatabaseConnector{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExternalDatabaseConnector")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalNonContainerDatabase",
+	}:
+		if err := (&databasev1alpha1.ExternalNonContainerDatabase{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExternalNonContainerDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalNonContainerDatabaseManagement",
+	}:
+		if err := (&databasev1alpha1.ExternalNonContainerDatabaseManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExternalNonContainerDatabaseManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalNonContainerDatabaseOperationsInsightsManagement",
+	}:
+		if err := (&databasev1alpha1.ExternalNonContainerDatabaseOperationsInsightsManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExternalNonContainerDatabaseOperationsInsightsManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalPluggableDatabase",
+	}:
+		if err := (&databasev1alpha1.ExternalPluggableDatabase{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExternalPluggableDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalPluggableDatabaseManagement",
+	}:
+		if err := (&databasev1alpha1.ExternalPluggableDatabaseManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExternalPluggableDatabaseManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ExternalPluggableDatabaseOperationsInsightsManagement",
+	}:
+		if err := (&databasev1alpha1.ExternalPluggableDatabaseOperationsInsightsManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ExternalPluggableDatabaseOperationsInsightsManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "KeyStore",
+	}:
+		if err := (&databasev1alpha1.KeyStore{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "KeyStore")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MaintenanceRun",
+	}:
+		if err := (&databasev1alpha1.MaintenanceRun{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "MaintenanceRun")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagementManagedDatabaseGroup",
+	}:
+		if err := (&databasev1alpha1.ManagementManagedDatabaseGroup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ManagementManagedDatabaseGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagementManagedDatabasesChangeDatabaseParameter",
+	}:
+		if err := (&databasev1alpha1.ManagementManagedDatabasesChangeDatabaseParameter{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ManagementManagedDatabasesChangeDatabaseParameter")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagementManagedDatabasesResetDatabaseParameter",
+	}:
+		if err := (&databasev1alpha1.ManagementManagedDatabasesResetDatabaseParameter{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ManagementManagedDatabasesResetDatabaseParameter")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Migration",
+	}:
+		if err := (&databasev1alpha1.Migration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Migration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MigrationAgent",
+	}:
+		if err := (&databasev1alpha1.MigrationAgent{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "MigrationAgent")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MigrationConnection",
+	}:
+		if err := (&databasev1alpha1.MigrationConnection{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "MigrationConnection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MigrationJob",
+	}:
+		if err := (&databasev1alpha1.MigrationJob{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "MigrationJob")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MigrationMigration",
+	}:
+		if err := (&databasev1alpha1.MigrationMigration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "MigrationMigration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PluggableDatabase",
+	}:
+		if err := (&databasev1alpha1.PluggableDatabase{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PluggableDatabase")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PluggableDatabasesLocalClone",
+	}:
+		if err := (&databasev1alpha1.PluggableDatabasesLocalClone{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PluggableDatabasesLocalClone")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PluggableDatabasesRemoteClone",
+	}:
+		if err := (&databasev1alpha1.PluggableDatabasesRemoteClone{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PluggableDatabasesRemoteClone")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VmCluster",
+	}:
+		if err := (&databasev1alpha1.VmCluster{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VmCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "database.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VmClusterNetwork",
+	}:
+		if err := (&databasev1alpha1.VmClusterNetwork{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VmClusterNetwork")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Catalog",
+	}:
+		if err := (&datacatalogv1alpha1.Catalog{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Catalog")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CatalogPrivateEndpoint",
+	}:
+		if err := (&datacatalogv1alpha1.CatalogPrivateEndpoint{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CatalogPrivateEndpoint")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Connection",
+	}:
+		if err := (&datacatalogv1alpha1.Connection{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Connection")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DataAsset",
+	}:
+		if err := (&datacatalogv1alpha1.DataAsset{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DataAsset")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datacatalog.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Metastore",
+	}:
+		if err := (&datacatalogv1alpha1.Metastore{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Metastore")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dataflow.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Application",
+	}:
+		if err := (&dataflowv1alpha1.Application{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Application")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dataflow.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InvokeRun",
+	}:
+		if err := (&dataflowv1alpha1.InvokeRun{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "InvokeRun")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dataflow.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PrivateEndpoint",
+	}:
+		if err := (&dataflowv1alpha1.PrivateEndpoint{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PrivateEndpoint")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dataintegration.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Workspace",
+	}:
+		if err := (&dataintegrationv1alpha1.Workspace{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Workspace")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Model",
+	}:
+		if err := (&datasciencev1alpha1.Model{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Model")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ModelDeployment",
+	}:
+		if err := (&datasciencev1alpha1.ModelDeployment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ModelDeployment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ModelProvenance",
+	}:
+		if err := (&datasciencev1alpha1.ModelProvenance{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ModelProvenance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NotebookSession",
+	}:
+		if err := (&datasciencev1alpha1.NotebookSession{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "NotebookSession")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "datascience.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Project",
+	}:
+		if err := (&datasciencev1alpha1.Project{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Project")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DeployArtifact",
+	}:
+		if err := (&devopsv1alpha1.DeployArtifact{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DeployArtifact")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DeployEnvironment",
+	}:
+		if err := (&devopsv1alpha1.DeployEnvironment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DeployEnvironment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DeployPipeline",
+	}:
+		if err := (&devopsv1alpha1.DeployPipeline{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DeployPipeline")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DeployStage",
+	}:
+		if err := (&devopsv1alpha1.DeployStage{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DeployStage")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Deployment",
+	}:
+		if err := (&devopsv1alpha1.Deployment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Deployment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "devops.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Project",
+	}:
+		if err := (&devopsv1alpha1.Project{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Project")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Record",
+	}:
+		if err := (&dnsv1alpha1.Record{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Record")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Resolver",
+	}:
+		if err := (&dnsv1alpha1.Resolver{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Resolver")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ResolverEndpoint",
+	}:
+		if err := (&dnsv1alpha1.ResolverEndpoint{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ResolverEndpoint")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Rrset",
+	}:
+		if err := (&dnsv1alpha1.Rrset{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Rrset")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SteeringPolicy",
+	}:
+		if err := (&dnsv1alpha1.SteeringPolicy{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SteeringPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SteeringPolicyAttachment",
+	}:
+		if err := (&dnsv1alpha1.SteeringPolicyAttachment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SteeringPolicyAttachment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "TsigKey",
+	}:
+		if err := (&dnsv1alpha1.TsigKey{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "TsigKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "View",
+	}:
+		if err := (&dnsv1alpha1.View{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "View")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "dns.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Zone",
+	}:
+		if err := (&dnsv1alpha1.Zone{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Zone")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "email.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Dkim",
+	}:
+		if err := (&emailv1alpha1.Dkim{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Dkim")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "email.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EmailDomain",
+	}:
+		if err := (&emailv1alpha1.EmailDomain{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "EmailDomain")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "email.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Sender",
+	}:
+		if err := (&emailv1alpha1.Sender{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Sender")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "email.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Suppression",
+	}:
+		if err := (&emailv1alpha1.Suppression{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Suppression")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "events.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Rule",
+	}:
+		if err := (&eventsv1alpha1.Rule{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Rule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageExport",
+	}:
+		if err := (&filev1alpha1.StorageExport{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "StorageExport")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageExportSet",
+	}:
+		if err := (&filev1alpha1.StorageExportSet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "StorageExportSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageFileSystem",
+	}:
+		if err := (&filev1alpha1.StorageFileSystem{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "StorageFileSystem")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageMountTarget",
+	}:
+		if err := (&filev1alpha1.StorageMountTarget{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "StorageMountTarget")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "file.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StorageSnapshot",
+	}:
+		if err := (&filev1alpha1.StorageSnapshot{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "StorageSnapshot")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "functions.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Application",
+	}:
+		if err := (&functionsv1alpha1.Application{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Application")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "functions.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Function",
+	}:
+		if err := (&functionsv1alpha1.Function{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Function")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "functions.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "InvokeFunction",
+	}:
+		if err := (&functionsv1alpha1.InvokeFunction{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "InvokeFunction")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "generic.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ArtifactsContentArtifactByPath",
+	}:
+		if err := (&genericv1alpha1.ArtifactsContentArtifactByPath{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ArtifactsContentArtifactByPath")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "golden.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GateDatabaseRegistration",
+	}:
+		if err := (&goldenv1alpha1.GateDatabaseRegistration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GateDatabaseRegistration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "golden.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GateDeployment",
+	}:
+		if err := (&goldenv1alpha1.GateDeployment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GateDeployment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "golden.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GateDeploymentBackup",
+	}:
+		if err := (&goldenv1alpha1.GateDeploymentBackup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GateDeploymentBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "health.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ChecksHTTPMonitor",
+	}:
+		if err := (&healthv1alpha1.ChecksHTTPMonitor{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ChecksHTTPMonitor")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "health.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ChecksHTTPProbe",
+	}:
+		if err := (&healthv1alpha1.ChecksHTTPProbe{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ChecksHTTPProbe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "health.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ChecksPingMonitor",
+	}:
+		if err := (&healthv1alpha1.ChecksPingMonitor{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ChecksPingMonitor")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "health.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ChecksPingProbe",
+	}:
+		if err := (&healthv1alpha1.ChecksPingProbe{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ChecksPingProbe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ApiKey",
+	}:
+		if err := (&identityv1alpha1.ApiKey{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ApiKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AuthToken",
+	}:
+		if err := (&identityv1alpha1.AuthToken{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AuthToken")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AuthenticationPolicy",
+	}:
+		if err := (&identityv1alpha1.AuthenticationPolicy{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AuthenticationPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Compartment",
+	}:
+		if err := (&identityv1alpha1.Compartment{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Compartment")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CustomerSecretKey",
+	}:
+		if err := (&identityv1alpha1.CustomerSecretKey{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CustomerSecretKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DynamicGroup",
+	}:
+		if err := (&identityv1alpha1.DynamicGroup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DynamicGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Group",
+	}:
+		if err := (&identityv1alpha1.Group{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Group")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "IdentityProvider",
+	}:
+		if err := (&identityv1alpha1.IdentityProvider{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "IdentityProvider")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "IdpGroupMapping",
+	}:
+		if err := (&identityv1alpha1.IdpGroupMapping{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "IdpGroupMapping")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NetworkSource",
+	}:
+		if err := (&identityv1alpha1.NetworkSource{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "NetworkSource")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Policy",
+	}:
+		if err := (&identityv1alpha1.Policy{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Policy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SmtpCredential",
+	}:
+		if err := (&identityv1alpha1.SmtpCredential{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SmtpCredential")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SwiftPassword",
+	}:
+		if err := (&identityv1alpha1.SwiftPassword{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SwiftPassword")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Tag",
+	}:
+		if err := (&identityv1alpha1.Tag{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Tag")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "TagDefault",
+	}:
+		if err := (&identityv1alpha1.TagDefault{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "TagDefault")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "TagNamespace",
+	}:
+		if err := (&identityv1alpha1.TagNamespace{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "TagNamespace")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "UiPassword",
+	}:
+		if err := (&identityv1alpha1.UiPassword{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "UiPassword")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "User",
+	}:
+		if err := (&identityv1alpha1.User{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "User")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "UserCapabilitiesManagement",
+	}:
+		if err := (&identityv1alpha1.UserCapabilitiesManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "UserCapabilitiesManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "identity.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "UserGroupMembership",
+	}:
+		if err := (&identityv1alpha1.UserGroupMembership{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "UserGroupMembership")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "integration.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "IntegrationInstance",
+	}:
+		if err := (&integrationv1alpha1.IntegrationInstance{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "IntegrationInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "jms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Fleet",
+	}:
+		if err := (&jmsv1alpha1.Fleet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Fleet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EncryptedData",
+	}:
+		if err := (&kmsv1alpha1.EncryptedData{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "EncryptedData")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "GeneratedKey",
+	}:
+		if err := (&kmsv1alpha1.GeneratedKey{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "GeneratedKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Key",
+	}:
+		if err := (&kmsv1alpha1.Key{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Key")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "KeyVersion",
+	}:
+		if err := (&kmsv1alpha1.KeyVersion{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "KeyVersion")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Sign",
+	}:
+		if err := (&kmsv1alpha1.Sign{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Sign")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Vault",
+	}:
+		if err := (&kmsv1alpha1.Vault{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Vault")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "VaultReplication",
+	}:
+		if err := (&kmsv1alpha1.VaultReplication{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "VaultReplication")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "kms.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Verify",
+	}:
+		if err := (&kmsv1alpha1.Verify{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Verify")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "limits.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Quota",
+	}:
+		if err := (&limitsv1alpha1.Quota{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Quota")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Balancer",
+	}:
+		if err := (&loadv1alpha1.Balancer{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Balancer")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerBackend",
+	}:
+		if err := (&loadv1alpha1.BalancerBackend{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerBackend")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerBackendSet",
+	}:
+		if err := (&loadv1alpha1.BalancerBackendSet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerBackendSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerBackendset",
+	}:
+		if err := (&loadv1alpha1.BalancerBackendset{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerBackendset")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerCertificate",
+	}:
+		if err := (&loadv1alpha1.BalancerCertificate{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerCertificate")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerHostname",
+	}:
+		if err := (&loadv1alpha1.BalancerHostname{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerHostname")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerListener",
+	}:
+		if err := (&loadv1alpha1.BalancerListener{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerListener")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerLoadBalancer",
+	}:
+		if err := (&loadv1alpha1.BalancerLoadBalancer{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerLoadBalancer")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerLoadBalancerRoutingPolicy",
+	}:
+		if err := (&loadv1alpha1.BalancerLoadBalancerRoutingPolicy{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerLoadBalancerRoutingPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerPathRouteSet",
+	}:
+		if err := (&loadv1alpha1.BalancerPathRouteSet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerPathRouteSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerRuleSet",
+	}:
+		if err := (&loadv1alpha1.BalancerRuleSet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerRuleSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "load.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "BalancerSslCipherSuite",
+	}:
+		if err := (&loadv1alpha1.BalancerSslCipherSuite{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerSslCipherSuite")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "log.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AnalyticsLogAnalyticsEntity",
+	}:
+		if err := (&logv1alpha1.AnalyticsLogAnalyticsEntity{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AnalyticsLogAnalyticsEntity")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "log.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AnalyticsLogAnalyticsLogGroup",
+	}:
+		if err := (&logv1alpha1.AnalyticsLogAnalyticsLogGroup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AnalyticsLogAnalyticsLogGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "log.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AnalyticsNamespace",
+	}:
+		if err := (&logv1alpha1.AnalyticsNamespace{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AnalyticsNamespace")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "logging.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Log",
+	}:
+		if err := (&loggingv1alpha1.Log{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Log")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "logging.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LogGroup",
+	}:
+		if err := (&loggingv1alpha1.LogGroup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "LogGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "logging.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LogSavedSearch",
+	}:
+		if err := (&loggingv1alpha1.LogSavedSearch{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "LogSavedSearch")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "logging.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "UnifiedAgentConfiguration",
+	}:
+		if err := (&loggingv1alpha1.UnifiedAgentConfiguration{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "UnifiedAgentConfiguration")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "management.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AgentManagementAgent",
+	}:
+		if err := (&managementv1alpha1.AgentManagementAgent{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AgentManagementAgent")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "management.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AgentManagementAgentInstallKey",
+	}:
+		if err := (&managementv1alpha1.AgentManagementAgentInstallKey{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AgentManagementAgentInstallKey")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "management.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DashboardManagementDashboardsImport",
+	}:
+		if err := (&managementv1alpha1.DashboardManagementDashboardsImport{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DashboardManagementDashboardsImport")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "marketplace.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AcceptedAgreement",
+	}:
+		if err := (&marketplacev1alpha1.AcceptedAgreement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AcceptedAgreement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "marketplace.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ListingPackageAgreement",
+	}:
+		if err := (&marketplacev1alpha1.ListingPackageAgreement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ListingPackageAgreement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "marketplace.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Publication",
+	}:
+		if err := (&marketplacev1alpha1.Publication{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Publication")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "metering.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputationCustomTable",
+	}:
+		if err := (&meteringv1alpha1.ComputationCustomTable{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ComputationCustomTable")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "metering.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputationQuery",
+	}:
+		if err := (&meteringv1alpha1.ComputationQuery{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ComputationQuery")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "metering.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ComputationUsage",
+	}:
+		if err := (&meteringv1alpha1.ComputationUsage{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ComputationUsage")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "monitoring.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Alarm",
+	}:
+		if err := (&monitoringv1alpha1.Alarm{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Alarm")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AnalyticsCluster",
+	}:
+		if err := (&mysqlv1alpha1.AnalyticsCluster{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AnalyticsCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Channel",
+	}:
+		if err := (&mysqlv1alpha1.Channel{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Channel")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "HeatWaveCluster",
+	}:
+		if err := (&mysqlv1alpha1.HeatWaveCluster{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "HeatWaveCluster")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MysqlBackup",
+	}:
+		if err := (&mysqlv1alpha1.MysqlBackup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "MysqlBackup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "mysql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "MysqlDbSystem",
+	}:
+		if err := (&mysqlv1alpha1.MysqlDbSystem{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "MysqlDbSystem")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "network.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LoadBalancerBackend",
+	}:
+		if err := (&networkv1alpha1.LoadBalancerBackend{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "LoadBalancerBackend")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "network.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LoadBalancerBackendSet",
+	}:
+		if err := (&networkv1alpha1.LoadBalancerBackendSet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "LoadBalancerBackendSet")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "network.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LoadBalancerListener",
+	}:
+		if err := (&networkv1alpha1.LoadBalancerListener{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "LoadBalancerListener")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "network.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "LoadBalancerNetworkLoadBalancer",
+	}:
+		if err := (&networkv1alpha1.LoadBalancerNetworkLoadBalancer{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "LoadBalancerNetworkLoadBalancer")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "nosql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Index",
+	}:
+		if err := (&nosqlv1alpha1.Index{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Index")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "nosql.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Table",
+	}:
+		if err := (&nosqlv1alpha1.Table{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Table")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Bucket",
+	}:
+		if err := (&objectstoragev1alpha1.Bucket{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Bucket")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NamespaceMetadata",
+	}:
+		if err := (&objectstoragev1alpha1.NamespaceMetadata{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "NamespaceMetadata")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Object",
+	}:
+		if err := (&objectstoragev1alpha1.Object{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Object")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ObjectLifecyclePolicy",
+	}:
+		if err := (&objectstoragev1alpha1.ObjectLifecyclePolicy{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ObjectLifecyclePolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Preauthrequest",
+	}:
+		if err := (&objectstoragev1alpha1.Preauthrequest{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Preauthrequest")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "objectstorage.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ReplicationPolicy",
+	}:
+		if err := (&objectstoragev1alpha1.ReplicationPolicy{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ReplicationPolicy")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "oce.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "OceInstance",
+	}:
+		if err := (&ocev1alpha1.OceInstance{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "OceInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "ocvp.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EsxiHost",
+	}:
+		if err := (&ocvpv1alpha1.EsxiHost{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "EsxiHost")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "ocvp.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Sddc",
+	}:
+		if err := (&ocvpv1alpha1.Sddc{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Sddc")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "oda.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "OdaInstance",
+	}:
+		if err := (&odav1alpha1.OdaInstance{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "OdaInstance")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "ons.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "NotificationTopic",
+	}:
+		if err := (&onsv1alpha1.NotificationTopic{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "NotificationTopic")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "ons.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Subscription",
+	}:
+		if err := (&onsv1alpha1.Subscription{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Subscription")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "opsi.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "DatabaseInsight",
+	}:
+		if err := (&opsiv1alpha1.DatabaseInsight{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "DatabaseInsight")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "opsi.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EnterpriseManagerBridge",
+	}:
+		if err := (&opsiv1alpha1.EnterpriseManagerBridge{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "EnterpriseManagerBridge")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "opsi.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "HostInsight",
+	}:
+		if err := (&opsiv1alpha1.HostInsight{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "HostInsight")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "optimizer.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "EnrollmentStatus",
+	}:
+		if err := (&optimizerv1alpha1.EnrollmentStatus{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "EnrollmentStatus")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "optimizer.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Profile",
+	}:
+		if err := (&optimizerv1alpha1.Profile{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Profile")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "optimizer.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Recommendation",
+	}:
+		if err := (&optimizerv1alpha1.Recommendation{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Recommendation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "optimizer.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ResourceAction",
+	}:
+		if err := (&optimizerv1alpha1.ResourceAction{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ResourceAction")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "osmanagement.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagedInstanceGroup",
+	}:
+		if err := (&osmanagementv1alpha1.ManagedInstanceGroup{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ManagedInstanceGroup")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "osmanagement.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ManagedInstanceManagement",
+	}:
+		if err := (&osmanagementv1alpha1.ManagedInstanceManagement{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ManagedInstanceManagement")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "osmanagement.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "SoftwareSource",
+	}:
+		if err := (&osmanagementv1alpha1.SoftwareSource{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SoftwareSource")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "sch.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ServiceConnector",
+	}:
+		if err := (&schv1alpha1.ServiceConnector{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ServiceConnector")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "service.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CatalogPrivateApplication",
+	}:
+		if err := (&servicev1alpha1.CatalogPrivateApplication{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CatalogPrivateApplication")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "service.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CatalogServiceCatalog",
+	}:
+		if err := (&servicev1alpha1.CatalogServiceCatalog{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CatalogServiceCatalog")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "service.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CatalogServiceCatalogAssociation",
+	}:
+		if err := (&servicev1alpha1.CatalogServiceCatalogAssociation{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CatalogServiceCatalogAssociation")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "streaming.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ConnectHarness",
+	}:
+		if err := (&streamingv1alpha1.ConnectHarness{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ConnectHarness")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "streaming.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Stream",
+	}:
+		if err := (&streamingv1alpha1.Stream{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Stream")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "streaming.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "StreamPool",
+	}:
+		if err := (&streamingv1alpha1.StreamPool{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "StreamPool")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "vulnerability.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ScanningHostScanRecipe",
+	}:
+		if err := (&vulnerabilityv1alpha1.ScanningHostScanRecipe{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ScanningHostScanRecipe")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "vulnerability.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ScanningHostScanTarget",
+	}:
+		if err := (&vulnerabilityv1alpha1.ScanningHostScanTarget{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ScanningHostScanTarget")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "AddressList",
+	}:
+		if err := (&waasv1alpha1.AddressList{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "AddressList")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "Certificate",
+	}:
+		if err := (&waasv1alpha1.Certificate{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Certificate")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "CustomProtectionRule",
+	}:
+		if err := (&waasv1alpha1.CustomProtectionRule{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "CustomProtectionRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "HttpRedirect",
+	}:
+		if err := (&waasv1alpha1.HttpRedirect{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "HttpRedirect")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "ProtectionRule",
+	}:
+		if err := (&waasv1alpha1.ProtectionRule{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "ProtectionRule")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "PurgeCache",
+	}:
+		if err := (&waasv1alpha1.PurgeCache{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PurgeCache")
+			return err
+		}
+	case schema.GroupVersionKind{
+		Group:   "waas.oci.kubeform.com",
+		Version: "v1alpha1",
+		Kind:    "WaasPolicy",
+	}:
+		if err := (&waasv1alpha1.WaasPolicy{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "WaasPolicy")
 			return err
 		}
 

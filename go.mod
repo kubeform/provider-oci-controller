@@ -13,7 +13,6 @@ require (
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 	github.com/imdario/mergo v0.3.12
 	github.com/json-iterator/go v1.1.11
-	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.1.3
 	github.com/terraform-providers/terraform-provider-oci v1.0.19-0.20210728215100-1834b1ae4672
 	github.com/zclconf/go-cty v1.8.4
@@ -29,7 +28,7 @@ require (
 	k8s.io/klog/v2 v2.8.0
 	kmodules.xyz/client-go v0.0.0-20210617233340-13d22e91512b
 	kubeform.dev/apimachinery v0.0.0-20210629153539-7bcd34a30eb5
-	kubeform.dev/provider-oci-api v0.0.0-20210801105855-b9e68b9da973
+	kubeform.dev/provider-oci-api v0.0.0-20210801130104-eac1052e3706
 	sigs.k8s.io/cli-utils v0.25.0
 	sigs.k8s.io/controller-runtime v0.9.0
 )

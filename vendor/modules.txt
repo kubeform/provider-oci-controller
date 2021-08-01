@@ -436,7 +436,6 @@ github.com/oracle/oci-go-sdk/v45/vulnerabilityscanning
 github.com/oracle/oci-go-sdk/v45/waas
 github.com/oracle/oci-go-sdk/v45/workrequests
 # github.com/pkg/errors v0.9.1
-## explicit
 github.com/pkg/errors
 # github.com/posener/complete v1.2.1
 github.com/posener/complete
@@ -1244,7 +1243,7 @@ kmodules.xyz/resource-metadata/pkg/graph
 # kubeform.dev/apimachinery v0.0.0-20210629153539-7bcd34a30eb5
 ## explicit
 kubeform.dev/apimachinery/api/v1alpha1
-# kubeform.dev/provider-oci-api v0.0.0-20210801105855-b9e68b9da973
+# kubeform.dev/provider-oci-api v0.0.0-20210801130104-eac1052e3706
 ## explicit
 kubeform.dev/provider-oci-api/api/provider
 kubeform.dev/provider-oci-api/apis/analytics

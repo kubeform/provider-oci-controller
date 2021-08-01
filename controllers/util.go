@@ -17,7 +17,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/imdario/mergo"
 	jsoniter "github.com/json-iterator/go"
-	errors2 "github.com/pkg/errors"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/msgpack"
 	corev1 "k8s.io/api/core/v1"
@@ -95,7 +94,7 @@ func reconcile(rClient client.Client, provider *tfschema.Provider, ctx context.C
 		return err
 	}
 
-	err := server.ValidateResourceTypeConfig(tName, initialState)
+	err = server.ValidateResourceTypeConfig(tName, initialState)
 	if err != nil {
 		return err
 	}
@@ -184,7 +183,7 @@ func reconcile(rClient client.Client, provider *tfschema.Provider, ctx context.C
 		if err != nil {
 			return err
 		}
-		err := destroyTheObject(rawStatus, res, server, tName)
+		err = destroyTheObject(rawStatus, res, server, tName)
 		if err != nil {
 			return err
 		}
@@ -352,22 +351,6 @@ func setNestedFieldNoCopy(obj map[string]interface{}, value interface{}, fields 
 
 func jsonPath(fields []string) string {
 	return "." + strings.Join(fields, ".")
-}
-
-func diagToError(d []*tfprotov5.Diagnostic) error {
-	var err error
-	var flag bool
-	for idx, key := range d {
-		if key.Severity.String() == "WARNING" || key.Summary == "Invalid or unknown key" || key.Summary == UpdateNotSupported {
-			continue
-		}
-		if !flag {
-			err = errors2.New("")
-			flag = true
-		}
-		err = errors2.Wrapf(err, "%s %d: %s", "Error", idx, key.Summary)
-	}
-	return err
 }
 
 func getCombineRawAndDeepCopyRawStatus(rawStatus map[string]interface{}, rawSpec map[string]interface{}) (map[string]interface{}, error) {
@@ -971,16 +954,6 @@ func HCL2ValueFromConfigValue(v interface{}) cty.Value {
 		// the above, so if we get here something has gone very wrong.
 		panic(fmt.Errorf("can't convert %#v to cty.Value", v))
 	}
-}
-
-func isUpdateSupported(diags []*tfprotov5.Diagnostic) bool {
-	for _, diag := range diags {
-		if diag.Summary == UpdateNotSupported {
-			return false
-		}
-	}
-
-	return true
 }
 
 // stripResourceModifiers takes a *schema.Resource and returns a deep copy with all

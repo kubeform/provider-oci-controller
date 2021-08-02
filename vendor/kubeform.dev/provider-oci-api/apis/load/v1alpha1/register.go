@@ -62,8 +62,6 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&BalancerBackendList{},
 		&BalancerBackendSet{},
 		&BalancerBackendSetList{},
-		&BalancerBackendset{},
-		&BalancerBackendsetList{},
 		&BalancerCertificate{},
 		&BalancerCertificateList{},
 		&BalancerHostname{},

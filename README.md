@@ -3,7 +3,7 @@
 
 # provider-oci-controller
 
-Kubeform controller for [Terraform Oci Provider](https://github.com/equinix/terraform-provider-metal)
+Kubeform controller for [Terraform Oracle Cloud Infrastructure Provider](https://github.com/terraform-providers/terraform-provider-oci)
 
 ## Installation
 

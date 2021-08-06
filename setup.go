@@ -73,7 +73,7 @@ import (
 	jmsv1alpha1 "kubeform.dev/provider-oci-api/apis/jms/v1alpha1"
 	kmsv1alpha1 "kubeform.dev/provider-oci-api/apis/kms/v1alpha1"
 	limitsv1alpha1 "kubeform.dev/provider-oci-api/apis/limits/v1alpha1"
-	loadv1alpha1 "kubeform.dev/provider-oci-api/apis/load/v1alpha1"
+	loadbalancerv1alpha1 "kubeform.dev/provider-oci-api/apis/loadbalancer/v1alpha1"
 	logv1alpha1 "kubeform.dev/provider-oci-api/apis/log/v1alpha1"
 	loggingv1alpha1 "kubeform.dev/provider-oci-api/apis/logging/v1alpha1"
 	managementv1alpha1 "kubeform.dev/provider-oci-api/apis/management/v1alpha1"
@@ -129,7 +129,7 @@ import (
 	controllersjms "kubeform.dev/provider-oci-controller/controllers/jms"
 	controllerskms "kubeform.dev/provider-oci-controller/controllers/kms"
 	controllerslimits "kubeform.dev/provider-oci-controller/controllers/limits"
-	controllersload "kubeform.dev/provider-oci-controller/controllers/load"
+	controllersloadbalancer "kubeform.dev/provider-oci-controller/controllers/loadbalancer"
 	controllerslog "kubeform.dev/provider-oci-controller/controllers/log"
 	controllerslogging "kubeform.dev/provider-oci-controller/controllers/logging"
 	controllersmanagement "kubeform.dev/provider-oci-controller/controllers/management"
@@ -4156,11 +4156,11 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 	case schema.GroupVersionKind{
 		Group:   "identity.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "TagNamespace",
+		Kind:    "Tagnamespace",
 	}:
-		if err := (&controllersidentity.TagNamespaceReconciler{
+		if err := (&controllersidentity.TagnamespaceReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("TagNamespace"),
+			Log:              ctrl.Log.WithName("controllers").WithName("Tagnamespace"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4168,7 +4168,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_identity_tag_namespace",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "TagNamespace")
+			setupLog.Error(err, "unable to create controller", "controller", "Tagnamespace")
 			return err
 		}
 	case schema.GroupVersionKind{
@@ -4442,31 +4442,13 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Balancer",
+		Kind:    "Backend",
 	}:
-		if err := (&controllersload.BalancerReconciler{
+		if err := (&controllersloadbalancer.BackendReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("Balancer"),
-			Scheme:           mgr.GetScheme(),
-			Gvk:              gvk,
-			Provider:         _provider,
-			Resource:         _provider.ResourcesMap["oci_load_balancer"],
-			TypeName:         "oci_load_balancer",
-			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "Balancer")
-			return err
-		}
-	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
-		Version: "v1alpha1",
-		Kind:    "BalancerBackend",
-	}:
-		if err := (&controllersload.BalancerBackendReconciler{
-			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerBackend"),
+			Log:              ctrl.Log.WithName("controllers").WithName("Backend"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4474,17 +4456,17 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_backend",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerBackend")
+			setupLog.Error(err, "unable to create controller", "controller", "Backend")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerBackendSet",
+		Kind:    "BackendSet",
 	}:
-		if err := (&controllersload.BalancerBackendSetReconciler{
+		if err := (&controllersloadbalancer.BackendSetReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerBackendSet"),
+			Log:              ctrl.Log.WithName("controllers").WithName("BackendSet"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4492,17 +4474,17 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_backend_set",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerBackendSet")
+			setupLog.Error(err, "unable to create controller", "controller", "BackendSet")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerCertificate",
+		Kind:    "Certificate",
 	}:
-		if err := (&controllersload.BalancerCertificateReconciler{
+		if err := (&controllersloadbalancer.CertificateReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerCertificate"),
+			Log:              ctrl.Log.WithName("controllers").WithName("Certificate"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4510,17 +4492,17 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_certificate",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerCertificate")
+			setupLog.Error(err, "unable to create controller", "controller", "Certificate")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerHostname",
+		Kind:    "Hostname",
 	}:
-		if err := (&controllersload.BalancerHostnameReconciler{
+		if err := (&controllersloadbalancer.HostnameReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerHostname"),
+			Log:              ctrl.Log.WithName("controllers").WithName("Hostname"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4528,17 +4510,17 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_hostname",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerHostname")
+			setupLog.Error(err, "unable to create controller", "controller", "Hostname")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerListener",
+		Kind:    "Listener",
 	}:
-		if err := (&controllersload.BalancerListenerReconciler{
+		if err := (&controllersloadbalancer.ListenerReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerListener"),
+			Log:              ctrl.Log.WithName("controllers").WithName("Listener"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4546,17 +4528,17 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_listener",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerListener")
+			setupLog.Error(err, "unable to create controller", "controller", "Listener")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerLoadBalancer",
+		Kind:    "LoadBalancer",
 	}:
-		if err := (&controllersload.BalancerLoadBalancerReconciler{
+		if err := (&controllersloadbalancer.LoadBalancerReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerLoadBalancer"),
+			Log:              ctrl.Log.WithName("controllers").WithName("LoadBalancer"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4564,17 +4546,17 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_load_balancer",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerLoadBalancer")
+			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancer")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerLoadBalancerRoutingPolicy",
+		Kind:    "LoadBalancerRoutingPolicy",
 	}:
-		if err := (&controllersload.BalancerLoadBalancerRoutingPolicyReconciler{
+		if err := (&controllersloadbalancer.LoadBalancerRoutingPolicyReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerLoadBalancerRoutingPolicy"),
+			Log:              ctrl.Log.WithName("controllers").WithName("LoadBalancerRoutingPolicy"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4582,17 +4564,17 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_load_balancer_routing_policy",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerLoadBalancerRoutingPolicy")
+			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerRoutingPolicy")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerPathRouteSet",
+		Kind:    "PathRouteSet",
 	}:
-		if err := (&controllersload.BalancerPathRouteSetReconciler{
+		if err := (&controllersloadbalancer.PathRouteSetReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerPathRouteSet"),
+			Log:              ctrl.Log.WithName("controllers").WithName("PathRouteSet"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4600,17 +4582,17 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_path_route_set",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerPathRouteSet")
+			setupLog.Error(err, "unable to create controller", "controller", "PathRouteSet")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerRuleSet",
+		Kind:    "RuleSet",
 	}:
-		if err := (&controllersload.BalancerRuleSetReconciler{
+		if err := (&controllersloadbalancer.RuleSetReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerRuleSet"),
+			Log:              ctrl.Log.WithName("controllers").WithName("RuleSet"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4618,17 +4600,17 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_rule_set",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerRuleSet")
+			setupLog.Error(err, "unable to create controller", "controller", "RuleSet")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerSslCipherSuite",
+		Kind:    "SslCipherSuite",
 	}:
-		if err := (&controllersload.BalancerSslCipherSuiteReconciler{
+		if err := (&controllersloadbalancer.SslCipherSuiteReconciler{
 			Client:           mgr.GetClient(),
-			Log:              ctrl.Log.WithName("controllers").WithName("BalancerSslCipherSuite"),
+			Log:              ctrl.Log.WithName("controllers").WithName("SslCipherSuite"),
 			Scheme:           mgr.GetScheme(),
 			Gvk:              gvk,
 			Provider:         _provider,
@@ -4636,7 +4618,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			TypeName:         "oci_load_balancer_ssl_cipher_suite",
 			WatchOnlyDefault: watchOnlyDefault,
 		}).SetupWithManager(ctx, mgr, auditor); err != nil {
-			setupLog.Error(err, "unable to create controller", "controller", "BalancerSslCipherSuite")
+			setupLog.Error(err, "unable to create controller", "controller", "SslCipherSuite")
 			return err
 		}
 	case schema.GroupVersionKind{
@@ -7748,10 +7730,10 @@ func SetupWebhook(mgr manager.Manager, gvk schema.GroupVersionKind) error {
 	case schema.GroupVersionKind{
 		Group:   "identity.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "TagNamespace",
+		Kind:    "Tagnamespace",
 	}:
-		if err := (&identityv1alpha1.TagNamespace{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "TagNamespace")
+		if err := (&identityv1alpha1.Tagnamespace{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Tagnamespace")
 			return err
 		}
 	case schema.GroupVersionKind{
@@ -7890,102 +7872,93 @@ func SetupWebhook(mgr manager.Manager, gvk schema.GroupVersionKind) error {
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "Balancer",
+		Kind:    "Backend",
 	}:
-		if err := (&loadv1alpha1.Balancer{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "Balancer")
+		if err := (&loadbalancerv1alpha1.Backend{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Backend")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerBackend",
+		Kind:    "BackendSet",
 	}:
-		if err := (&loadv1alpha1.BalancerBackend{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerBackend")
+		if err := (&loadbalancerv1alpha1.BackendSet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "BackendSet")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerBackendSet",
+		Kind:    "Certificate",
 	}:
-		if err := (&loadv1alpha1.BalancerBackendSet{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerBackendSet")
+		if err := (&loadbalancerv1alpha1.Certificate{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Certificate")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerCertificate",
+		Kind:    "Hostname",
 	}:
-		if err := (&loadv1alpha1.BalancerCertificate{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerCertificate")
+		if err := (&loadbalancerv1alpha1.Hostname{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Hostname")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerHostname",
+		Kind:    "Listener",
 	}:
-		if err := (&loadv1alpha1.BalancerHostname{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerHostname")
+		if err := (&loadbalancerv1alpha1.Listener{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "Listener")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerListener",
+		Kind:    "LoadBalancer",
 	}:
-		if err := (&loadv1alpha1.BalancerListener{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerListener")
+		if err := (&loadbalancerv1alpha1.LoadBalancer{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "LoadBalancer")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerLoadBalancer",
+		Kind:    "LoadBalancerRoutingPolicy",
 	}:
-		if err := (&loadv1alpha1.BalancerLoadBalancer{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerLoadBalancer")
+		if err := (&loadbalancerv1alpha1.LoadBalancerRoutingPolicy{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "LoadBalancerRoutingPolicy")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerLoadBalancerRoutingPolicy",
+		Kind:    "PathRouteSet",
 	}:
-		if err := (&loadv1alpha1.BalancerLoadBalancerRoutingPolicy{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerLoadBalancerRoutingPolicy")
+		if err := (&loadbalancerv1alpha1.PathRouteSet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "PathRouteSet")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerPathRouteSet",
+		Kind:    "RuleSet",
 	}:
-		if err := (&loadv1alpha1.BalancerPathRouteSet{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerPathRouteSet")
+		if err := (&loadbalancerv1alpha1.RuleSet{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "RuleSet")
 			return err
 		}
 	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
+		Group:   "loadbalancer.oci.kubeform.com",
 		Version: "v1alpha1",
-		Kind:    "BalancerRuleSet",
+		Kind:    "SslCipherSuite",
 	}:
-		if err := (&loadv1alpha1.BalancerRuleSet{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerRuleSet")
-			return err
-		}
-	case schema.GroupVersionKind{
-		Group:   "load.oci.kubeform.com",
-		Version: "v1alpha1",
-		Kind:    "BalancerSslCipherSuite",
-	}:
-		if err := (&loadv1alpha1.BalancerSslCipherSuite{}).SetupWebhookWithManager(mgr); err != nil {
-			setupLog.Error(err, "unable to create webhook", "webhook", "BalancerSslCipherSuite")
+		if err := (&loadbalancerv1alpha1.SslCipherSuite{}).SetupWebhookWithManager(mgr); err != nil {
+			setupLog.Error(err, "unable to create webhook", "webhook", "SslCipherSuite")
 			return err
 		}
 	case schema.GroupVersionKind{

@@ -1239,7 +1239,7 @@ kmodules.xyz/resource-metadata/pkg/graph
 # kubeform.dev/apimachinery v0.0.0-20210629153539-7bcd34a30eb5
 ## explicit
 kubeform.dev/apimachinery/api/v1alpha1
-# kubeform.dev/provider-oci-api v0.0.0-20210802154652-eabe448842d3
+# kubeform.dev/provider-oci-api v0.0.0-20210806103739-ca156615bbb5
 ## explicit
 kubeform.dev/provider-oci-api/api/provider
 kubeform.dev/provider-oci-api/apis/analytics
@@ -1308,8 +1308,8 @@ kubeform.dev/provider-oci-api/apis/kms
 kubeform.dev/provider-oci-api/apis/kms/v1alpha1
 kubeform.dev/provider-oci-api/apis/limits
 kubeform.dev/provider-oci-api/apis/limits/v1alpha1
-kubeform.dev/provider-oci-api/apis/load
-kubeform.dev/provider-oci-api/apis/load/v1alpha1
+kubeform.dev/provider-oci-api/apis/loadbalancer
+kubeform.dev/provider-oci-api/apis/loadbalancer/v1alpha1
 kubeform.dev/provider-oci-api/apis/log
 kubeform.dev/provider-oci-api/apis/log/v1alpha1
 kubeform.dev/provider-oci-api/apis/logging

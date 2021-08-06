@@ -52,7 +52,7 @@ import (
 	jmsv1alpha1 "kubeform.dev/provider-oci-api/apis/jms/v1alpha1"
 	kmsv1alpha1 "kubeform.dev/provider-oci-api/apis/kms/v1alpha1"
 	limitsv1alpha1 "kubeform.dev/provider-oci-api/apis/limits/v1alpha1"
-	loadv1alpha1 "kubeform.dev/provider-oci-api/apis/load/v1alpha1"
+	loadbalancerv1alpha1 "kubeform.dev/provider-oci-api/apis/loadbalancer/v1alpha1"
 	logv1alpha1 "kubeform.dev/provider-oci-api/apis/log/v1alpha1"
 	loggingv1alpha1 "kubeform.dev/provider-oci-api/apis/logging/v1alpha1"
 	managementv1alpha1 "kubeform.dev/provider-oci-api/apis/management/v1alpha1"
@@ -120,7 +120,7 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	jmsv1alpha1.AddToScheme,
 	kmsv1alpha1.AddToScheme,
 	limitsv1alpha1.AddToScheme,
-	loadv1alpha1.AddToScheme,
+	loadbalancerv1alpha1.AddToScheme,
 	logv1alpha1.AddToScheme,
 	loggingv1alpha1.AddToScheme,
 	managementv1alpha1.AddToScheme,

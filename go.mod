@@ -16,15 +16,15 @@ require (
 	go.bytebuilders.dev/license-verifier v0.9.2
 	go.bytebuilders.dev/license-verifier/kubernetes v0.9.2
 	gomodules.xyz/logs v0.0.3
-	gomodules.xyz/x v0.0.5
+	gomodules.xyz/x v0.0.7
 	k8s.io/api v0.21.1
 	k8s.io/apiextensions-apiserver v0.21.1
 	k8s.io/apimachinery v0.21.1
 	k8s.io/client-go v0.21.1
 	k8s.io/klog/v2 v2.8.0
-	kmodules.xyz/client-go v0.0.0-20210617233340-13d22e91512b
-	kubeform.dev/apimachinery v0.0.0-20210629153539-7bcd34a30eb5
-	kubeform.dev/provider-oci-api v0.0.0-20210806103739-ca156615bbb5
+	kmodules.xyz/client-go v0.0.0-20210822203828-5e9cebbf1dfa
+	kubeform.dev/apimachinery v0.0.0-20210824104859-ba5604d5a1cc
+	kubeform.dev/provider-oci-api v0.0.0-20210824201042-3ba797b0ce2f
 	sigs.k8s.io/cli-utils v0.25.0
 	sigs.k8s.io/controller-runtime v0.9.0
 )

@@ -20,9 +20,12 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	base "kubeform.dev/apimachinery/api/v1alpha1"
+	"kubeform.dev/apimachinery/pkg/util"
 
+	jsoniter "github.com/json-iterator/go"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
@@ -38,6 +41,30 @@ func (r *Instance) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 var _ webhook.Validator = &Instance{}
 
+var instanceForceNewList = map[string]bool{
+	"/availability_domain":                                  true,
+	"/create_vnic_details/*/assign_private_dns_record":      true,
+	"/create_vnic_details/*/private_ip":                     true,
+	"/create_vnic_details/*/subnet_id":                      true,
+	"/create_vnic_details/*/vlan_id":                        true,
+	"/dedicated_vm_host_id":                                 true,
+	"/hostname_label":                                       true,
+	"/image":                                                true,
+	"/ipxe_script":                                          true,
+	"/is_pv_encryption_in_transit_enabled":                  true,
+	"/launch_options/*/firmware":                            true,
+	"/launch_options/*/is_consistent_volume_naming_enabled": true,
+	"/launch_options/*/remote_data_volume_type":             true,
+	"/platform_config/*/numa_nodes_per_socket":              true,
+	"/platform_config/*/type":                               true,
+	"/preemptible_instance_config/*/preemption_action/*/preserve_boot_volume": true,
+	"/preemptible_instance_config/*/preemption_action/*/type":                 true,
+	"/source_details/*/kms_key_id":                                            true,
+	"/source_details/*/source_id":                                             true,
+	"/source_details/*/source_type":                                           true,
+	"/subnet_id":                                                              true,
+}
+
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
 func (r *Instance) ValidateCreate() error {
 	return nil
@@ -45,6 +72,53 @@ func (r *Instance) ValidateCreate() error {
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (r *Instance) ValidateUpdate(old runtime.Object) error {
+	if r.Spec.Resource.ID == "" {
+		return nil
+	}
+	newObj := r.Spec.Resource
+	res := old.(*Instance)
+	oldObj := res.Spec.Resource
+
+	jsnitr := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		TagKey:                 "tf",
+		ValidateJsonRawMessage: true,
+		TypeEncoders:           GetEncoder(),
+		TypeDecoders:           GetDecoder(),
+	}.Froze()
+
+	byteNew, err := jsnitr.Marshal(newObj)
+	if err != nil {
+		return err
+	}
+	tempNew := make(map[string]interface{})
+	err = jsnitr.Unmarshal(byteNew, &tempNew)
+	if err != nil {
+		return err
+	}
+
+	byteOld, err := jsnitr.Marshal(oldObj)
+	if err != nil {
+		return err
+	}
+	tempOld := make(map[string]interface{})
+	err = jsnitr.Unmarshal(byteOld, &tempOld)
+	if err != nil {
+		return err
+	}
+
+	for key := range instanceForceNewList {
+		keySplit := strings.Split(key, "/*")
+		length := len(keySplit)
+		checkIfAnyDif := false
+		util.CheckIfAnyDifference("", keySplit, 0, length, &checkIfAnyDif, tempOld, tempOld, tempNew)
+		util.CheckIfAnyDifference("", keySplit, 0, length, &checkIfAnyDif, tempNew, tempOld, tempNew)
+
+		if checkIfAnyDif && r.Spec.UpdatePolicy == base.UpdatePolicyDoNotDestroy {
+			return fmt.Errorf(`instance "%v/%v" immutable field can't be updated. To update, change spec.updatePolicy to Destroy`, r.Namespace, r.Name)
+		}
+	}
 	return nil
 }
 

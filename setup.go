@@ -163,7 +163,7 @@ var runningControllers = struct {
 	mp map[schema.GroupVersionKind]bool
 }{mp: make(map[schema.GroupVersionKind]bool)}
 
-func watchCRD(ctx context.Context, crdClient *clientset.Clientset, vwcClient *admissionregistrationv1.AdmissionregistrationV1Client, stopCh <-chan struct{}, mgr manager.Manager, auditor *auditlib.EventPublisher, watchOnlyDefault bool) error {
+func watchCRD(ctx context.Context, crdClient *clientset.Clientset, vwcClient *admissionregistrationv1.AdmissionregistrationV1Client, stopCh <-chan struct{}, mgr manager.Manager, auditor *auditlib.EventPublisher, restrictToNamespace string) error {
 	informerFactory := informers.NewSharedInformerFactory(crdClient, time.Second*30)
 	i := informerFactory.Apiextensions().V1().CustomResourceDefinitions().Informer()
 	l := informerFactory.Apiextensions().V1().CustomResourceDefinitions().Lister()
@@ -229,7 +229,7 @@ func watchCRD(ctx context.Context, crdClient *clientset.Clientset, vwcClient *ad
 						}
 					}
 
-					err = SetupManager(ctx, mgr, gvk, auditor, watchOnlyDefault)
+					err = SetupManager(ctx, mgr, gvk, auditor, restrictToNamespace)
 					if err != nil {
 						setupLog.Error(err, "unable to start manager")
 						os.Exit(1)
@@ -288,6 +288,7 @@ func updateVWC(vwcClient *admissionregistrationv1.AdmissionregistrationV1Client,
 		{
 			Operations: []arv1.OperationType{
 				arv1.Delete,
+				arv1.Update,
 			},
 			Rule: arv1.Rule{
 				APIGroups:   []string{strings.ToLower(gvk.Group)},
@@ -335,7 +336,7 @@ func updateVWC(vwcClient *admissionregistrationv1.AdmissionregistrationV1Client,
 	return nil
 }
 
-func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVersionKind, auditor *auditlib.EventPublisher, watchOnlyDefault bool) error {
+func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVersionKind, auditor *auditlib.EventPublisher, restrictToNamespace string) error {
 	switch gvk {
 	case schema.GroupVersionKind{
 		Group:   "analytics.oci.kubeform.com",
@@ -351,7 +352,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_analytics_analytics_instance"],
 			TypeName:         "oci_analytics_analytics_instance",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsInstance")
 			return err
 		}
@@ -369,7 +370,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_analytics_analytics_instance_private_access_channel"],
 			TypeName:         "oci_analytics_analytics_instance_private_access_channel",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsInstancePrivateAccessChannel")
 			return err
 		}
@@ -387,7 +388,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_analytics_analytics_instance_vanity_url"],
 			TypeName:         "oci_analytics_analytics_instance_vanity_url",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsInstanceVanityURL")
 			return err
 		}
@@ -405,7 +406,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_apigateway_api"],
 			TypeName:         "oci_apigateway_api",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Api")
 			return err
 		}
@@ -423,7 +424,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_apigateway_certificate"],
 			TypeName:         "oci_apigateway_certificate",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Certificate")
 			return err
 		}
@@ -441,7 +442,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_apigateway_deployment"],
 			TypeName:         "oci_apigateway_deployment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Deployment")
 			return err
 		}
@@ -459,7 +460,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_apigateway_gateway"],
 			TypeName:         "oci_apigateway_gateway",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Gateway")
 			return err
 		}
@@ -477,7 +478,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_apm_apm_domain"],
 			TypeName:         "oci_apm_apm_domain",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ApmDomain")
 			return err
 		}
@@ -495,7 +496,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_apm_synthetics_monitor"],
 			TypeName:         "oci_apm_synthetics_monitor",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SyntheticsMonitor")
 			return err
 		}
@@ -513,7 +514,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_apm_synthetics_script"],
 			TypeName:         "oci_apm_synthetics_script",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SyntheticsScript")
 			return err
 		}
@@ -531,7 +532,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_artifacts_container_configuration"],
 			TypeName:         "oci_artifacts_container_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ContainerConfiguration")
 			return err
 		}
@@ -549,7 +550,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_artifacts_container_image_signature"],
 			TypeName:         "oci_artifacts_container_image_signature",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ContainerImageSignature")
 			return err
 		}
@@ -567,7 +568,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_artifacts_container_repository"],
 			TypeName:         "oci_artifacts_container_repository",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ContainerRepository")
 			return err
 		}
@@ -585,7 +586,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_artifacts_generic_artifact"],
 			TypeName:         "oci_artifacts_generic_artifact",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GenericArtifact")
 			return err
 		}
@@ -603,7 +604,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_artifacts_repository"],
 			TypeName:         "oci_artifacts_repository",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Repository")
 			return err
 		}
@@ -621,7 +622,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_audit_configuration"],
 			TypeName:         "oci_audit_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Configuration")
 			return err
 		}
@@ -639,7 +640,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_autoscaling_auto_scaling_configuration"],
 			TypeName:         "oci_autoscaling_auto_scaling_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutoScalingConfiguration")
 			return err
 		}
@@ -657,7 +658,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_bastion_bastion"],
 			TypeName:         "oci_bastion_bastion",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Bastion")
 			return err
 		}
@@ -675,7 +676,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_bastion_session"],
 			TypeName:         "oci_bastion_session",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Session")
 			return err
 		}
@@ -693,7 +694,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_bds_auto_scaling_configuration"],
 			TypeName:         "oci_bds_auto_scaling_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutoScalingConfiguration")
 			return err
 		}
@@ -711,7 +712,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_bds_bds_instance"],
 			TypeName:         "oci_bds_bds_instance",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "BdsInstance")
 			return err
 		}
@@ -729,7 +730,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_blockchain_blockchain_platform"],
 			TypeName:         "oci_blockchain_blockchain_platform",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "BlockchainPlatform")
 			return err
 		}
@@ -747,7 +748,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_blockchain_osn"],
 			TypeName:         "oci_blockchain_osn",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Osn")
 			return err
 		}
@@ -765,7 +766,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_blockchain_peer"],
 			TypeName:         "oci_blockchain_peer",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Peer")
 			return err
 		}
@@ -783,7 +784,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_budget_alert_rule"],
 			TypeName:         "oci_budget_alert_rule",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AlertRule")
 			return err
 		}
@@ -801,7 +802,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_budget_budget"],
 			TypeName:         "oci_budget_budget",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Budget")
 			return err
 		}
@@ -819,7 +820,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_cloud_guard_cloud_guard_configuration"],
 			TypeName:         "oci_cloud_guard_cloud_guard_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GuardCloudGuardConfiguration")
 			return err
 		}
@@ -837,7 +838,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_cloud_guard_data_mask_rule"],
 			TypeName:         "oci_cloud_guard_data_mask_rule",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GuardDataMaskRule")
 			return err
 		}
@@ -855,7 +856,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_cloud_guard_detector_recipe"],
 			TypeName:         "oci_cloud_guard_detector_recipe",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GuardDetectorRecipe")
 			return err
 		}
@@ -873,7 +874,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_cloud_guard_managed_list"],
 			TypeName:         "oci_cloud_guard_managed_list",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GuardManagedList")
 			return err
 		}
@@ -891,7 +892,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_cloud_guard_responder_recipe"],
 			TypeName:         "oci_cloud_guard_responder_recipe",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GuardResponderRecipe")
 			return err
 		}
@@ -909,7 +910,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_cloud_guard_target"],
 			TypeName:         "oci_cloud_guard_target",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GuardTarget")
 			return err
 		}
@@ -927,7 +928,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_containerengine_cluster"],
 			TypeName:         "oci_containerengine_cluster",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Cluster")
 			return err
 		}
@@ -945,7 +946,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_containerengine_node_pool"],
 			TypeName:         "oci_containerengine_node_pool",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "NodePool")
 			return err
 		}
@@ -963,7 +964,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_app_catalog_listing_resource_version_agreement"],
 			TypeName:         "oci_core_app_catalog_listing_resource_version_agreement",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AppCatalogListingResourceVersionAgreement")
 			return err
 		}
@@ -981,7 +982,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_app_catalog_subscription"],
 			TypeName:         "oci_core_app_catalog_subscription",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AppCatalogSubscription")
 			return err
 		}
@@ -999,7 +1000,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_boot_volume"],
 			TypeName:         "oci_core_boot_volume",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "BootVolume")
 			return err
 		}
@@ -1017,7 +1018,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_boot_volume_backup"],
 			TypeName:         "oci_core_boot_volume_backup",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "BootVolumeBackup")
 			return err
 		}
@@ -1035,7 +1036,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_cluster_network"],
 			TypeName:         "oci_core_cluster_network",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ClusterNetwork")
 			return err
 		}
@@ -1053,7 +1054,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_compute_capacity_reservation"],
 			TypeName:         "oci_core_compute_capacity_reservation",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ComputeCapacityReservation")
 			return err
 		}
@@ -1071,7 +1072,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_compute_image_capability_schema"],
 			TypeName:         "oci_core_compute_image_capability_schema",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ComputeImageCapabilitySchema")
 			return err
 		}
@@ -1089,7 +1090,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_console_history"],
 			TypeName:         "oci_core_console_history",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ConsoleHistory")
 			return err
 		}
@@ -1107,7 +1108,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_cpe"],
 			TypeName:         "oci_core_cpe",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Cpe")
 			return err
 		}
@@ -1125,7 +1126,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_cross_connect"],
 			TypeName:         "oci_core_cross_connect",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CrossConnect")
 			return err
 		}
@@ -1143,7 +1144,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_cross_connect_group"],
 			TypeName:         "oci_core_cross_connect_group",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CrossConnectGroup")
 			return err
 		}
@@ -1161,7 +1162,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_dedicated_vm_host"],
 			TypeName:         "oci_core_dedicated_vm_host",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DedicatedVmHost")
 			return err
 		}
@@ -1179,7 +1180,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_default_dhcp_options"],
 			TypeName:         "oci_core_default_dhcp_options",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DefaultDHCPOptions")
 			return err
 		}
@@ -1197,7 +1198,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_default_route_table"],
 			TypeName:         "oci_core_default_route_table",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DefaultRouteTable")
 			return err
 		}
@@ -1215,7 +1216,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_default_security_list"],
 			TypeName:         "oci_core_default_security_list",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DefaultSecurityList")
 			return err
 		}
@@ -1233,7 +1234,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_dhcp_options"],
 			TypeName:         "oci_core_dhcp_options",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DhcpOptions")
 			return err
 		}
@@ -1251,7 +1252,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_drg"],
 			TypeName:         "oci_core_drg",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Drg")
 			return err
 		}
@@ -1269,7 +1270,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_drg_attachment"],
 			TypeName:         "oci_core_drg_attachment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DrgAttachment")
 			return err
 		}
@@ -1287,7 +1288,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_drg_attachment_management"],
 			TypeName:         "oci_core_drg_attachment_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DrgAttachmentManagement")
 			return err
 		}
@@ -1305,7 +1306,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_drg_attachments_list"],
 			TypeName:         "oci_core_drg_attachments_list",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DrgAttachmentsList")
 			return err
 		}
@@ -1323,7 +1324,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_drg_route_distribution"],
 			TypeName:         "oci_core_drg_route_distribution",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DrgRouteDistribution")
 			return err
 		}
@@ -1341,7 +1342,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_drg_route_distribution_statement"],
 			TypeName:         "oci_core_drg_route_distribution_statement",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DrgRouteDistributionStatement")
 			return err
 		}
@@ -1359,7 +1360,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_drg_route_table"],
 			TypeName:         "oci_core_drg_route_table",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DrgRouteTable")
 			return err
 		}
@@ -1377,7 +1378,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_drg_route_table_route_rule"],
 			TypeName:         "oci_core_drg_route_table_route_rule",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DrgRouteTableRouteRule")
 			return err
 		}
@@ -1395,7 +1396,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_image"],
 			TypeName:         "oci_core_image",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Image")
 			return err
 		}
@@ -1413,7 +1414,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_instance"],
 			TypeName:         "oci_core_instance",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Instance")
 			return err
 		}
@@ -1431,7 +1432,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_instance_configuration"],
 			TypeName:         "oci_core_instance_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "InstanceConfiguration")
 			return err
 		}
@@ -1449,7 +1450,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_instance_console_connection"],
 			TypeName:         "oci_core_instance_console_connection",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "InstanceConsoleConnection")
 			return err
 		}
@@ -1467,7 +1468,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_instance_pool"],
 			TypeName:         "oci_core_instance_pool",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "InstancePool")
 			return err
 		}
@@ -1485,7 +1486,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_instance_pool_instance"],
 			TypeName:         "oci_core_instance_pool_instance",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "InstancePoolInstance")
 			return err
 		}
@@ -1503,7 +1504,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_internet_gateway"],
 			TypeName:         "oci_core_internet_gateway",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "InternetGateway")
 			return err
 		}
@@ -1521,7 +1522,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_ipsec"],
 			TypeName:         "oci_core_ipsec",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Ipsec")
 			return err
 		}
@@ -1539,7 +1540,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_ipsec_connection_tunnel_management"],
 			TypeName:         "oci_core_ipsec_connection_tunnel_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "IpsecConnectionTunnelManagement")
 			return err
 		}
@@ -1557,7 +1558,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_ipv6"],
 			TypeName:         "oci_core_ipv6",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Ipv6")
 			return err
 		}
@@ -1575,7 +1576,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_listing_resource_version_agreement"],
 			TypeName:         "oci_core_listing_resource_version_agreement",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ListingResourceVersionAgreement")
 			return err
 		}
@@ -1593,7 +1594,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_local_peering_gateway"],
 			TypeName:         "oci_core_local_peering_gateway",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "LocalPeeringGateway")
 			return err
 		}
@@ -1611,7 +1612,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_nat_gateway"],
 			TypeName:         "oci_core_nat_gateway",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "NatGateway")
 			return err
 		}
@@ -1629,7 +1630,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_network_security_group"],
 			TypeName:         "oci_core_network_security_group",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "NetworkSecurityGroup")
 			return err
 		}
@@ -1647,7 +1648,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_network_security_group_security_rule"],
 			TypeName:         "oci_core_network_security_group_security_rule",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "NetworkSecurityGroupSecurityRule")
 			return err
 		}
@@ -1665,7 +1666,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_private_ip"],
 			TypeName:         "oci_core_private_ip",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PrivateIP")
 			return err
 		}
@@ -1683,7 +1684,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_public_ip"],
 			TypeName:         "oci_core_public_ip",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PublicIP")
 			return err
 		}
@@ -1701,7 +1702,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_public_ip_pool"],
 			TypeName:         "oci_core_public_ip_pool",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PublicIPPool")
 			return err
 		}
@@ -1719,7 +1720,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_public_ip_pool_capacity"],
 			TypeName:         "oci_core_public_ip_pool_capacity",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PublicIPPoolCapacity")
 			return err
 		}
@@ -1737,7 +1738,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_remote_peering_connection"],
 			TypeName:         "oci_core_remote_peering_connection",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "RemotePeeringConnection")
 			return err
 		}
@@ -1755,7 +1756,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_route_table"],
 			TypeName:         "oci_core_route_table",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "RouteTable")
 			return err
 		}
@@ -1773,7 +1774,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_route_table_attachment"],
 			TypeName:         "oci_core_route_table_attachment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "RouteTableAttachment")
 			return err
 		}
@@ -1791,7 +1792,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_security_list"],
 			TypeName:         "oci_core_security_list",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SecurityList")
 			return err
 		}
@@ -1809,7 +1810,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_service_gateway"],
 			TypeName:         "oci_core_service_gateway",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ServiceGateway")
 			return err
 		}
@@ -1827,7 +1828,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_shape_management"],
 			TypeName:         "oci_core_shape_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ShapeManagement")
 			return err
 		}
@@ -1845,7 +1846,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_subnet"],
 			TypeName:         "oci_core_subnet",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Subnet")
 			return err
 		}
@@ -1863,7 +1864,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_vcn"],
 			TypeName:         "oci_core_vcn",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Vcn")
 			return err
 		}
@@ -1881,7 +1882,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_virtual_circuit"],
 			TypeName:         "oci_core_virtual_circuit",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VirtualCircuit")
 			return err
 		}
@@ -1899,7 +1900,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_virtual_network"],
 			TypeName:         "oci_core_virtual_network",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VirtualNetwork")
 			return err
 		}
@@ -1917,7 +1918,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_vlan"],
 			TypeName:         "oci_core_vlan",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Vlan")
 			return err
 		}
@@ -1935,7 +1936,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_vnic_attachment"],
 			TypeName:         "oci_core_vnic_attachment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VnicAttachment")
 			return err
 		}
@@ -1953,7 +1954,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_volume"],
 			TypeName:         "oci_core_volume",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Volume")
 			return err
 		}
@@ -1971,7 +1972,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_volume_attachment"],
 			TypeName:         "oci_core_volume_attachment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeAttachment")
 			return err
 		}
@@ -1989,7 +1990,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_volume_backup"],
 			TypeName:         "oci_core_volume_backup",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeBackup")
 			return err
 		}
@@ -2007,7 +2008,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_volume_backup_policy"],
 			TypeName:         "oci_core_volume_backup_policy",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeBackupPolicy")
 			return err
 		}
@@ -2025,7 +2026,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_volume_backup_policy_assignment"],
 			TypeName:         "oci_core_volume_backup_policy_assignment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeBackupPolicyAssignment")
 			return err
 		}
@@ -2043,7 +2044,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_volume_group"],
 			TypeName:         "oci_core_volume_group",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeGroup")
 			return err
 		}
@@ -2061,7 +2062,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_core_volume_group_backup"],
 			TypeName:         "oci_core_volume_group_backup",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VolumeGroupBackup")
 			return err
 		}
@@ -2079,7 +2080,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_data_safe_data_safe_configuration"],
 			TypeName:         "oci_data_safe_data_safe_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SafeDataSafeConfiguration")
 			return err
 		}
@@ -2097,7 +2098,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_data_safe_data_safe_private_endpoint"],
 			TypeName:         "oci_data_safe_data_safe_private_endpoint",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SafeDataSafePrivateEndpoint")
 			return err
 		}
@@ -2115,7 +2116,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_data_safe_on_prem_connector"],
 			TypeName:         "oci_data_safe_on_prem_connector",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SafeOnPremConnector")
 			return err
 		}
@@ -2133,7 +2134,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_data_safe_target_database"],
 			TypeName:         "oci_data_safe_target_database",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SafeTargetDatabase")
 			return err
 		}
@@ -2151,7 +2152,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_autonomous_container_database"],
 			TypeName:         "oci_database_autonomous_container_database",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutonomousContainerDatabase")
 			return err
 		}
@@ -2169,7 +2170,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_autonomous_container_database_dataguard_association_operation"],
 			TypeName:         "oci_database_autonomous_container_database_dataguard_association_operation",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutonomousContainerDatabaseDataguardAssociationOperation")
 			return err
 		}
@@ -2187,7 +2188,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_autonomous_database"],
 			TypeName:         "oci_database_autonomous_database",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabase")
 			return err
 		}
@@ -2205,7 +2206,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_autonomous_database_backup"],
 			TypeName:         "oci_database_autonomous_database_backup",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabaseBackup")
 			return err
 		}
@@ -2223,7 +2224,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_autonomous_database_instance_wallet_management"],
 			TypeName:         "oci_database_autonomous_database_instance_wallet_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabaseInstanceWalletManagement")
 			return err
 		}
@@ -2241,7 +2242,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_autonomous_database_regional_wallet_management"],
 			TypeName:         "oci_database_autonomous_database_regional_wallet_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabaseRegionalWalletManagement")
 			return err
 		}
@@ -2259,7 +2260,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_autonomous_database_wallet"],
 			TypeName:         "oci_database_autonomous_database_wallet",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutonomousDatabaseWallet")
 			return err
 		}
@@ -2277,7 +2278,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_autonomous_exadata_infrastructure"],
 			TypeName:         "oci_database_autonomous_exadata_infrastructure",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutonomousExadataInfrastructure")
 			return err
 		}
@@ -2295,7 +2296,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_autonomous_vm_cluster"],
 			TypeName:         "oci_database_autonomous_vm_cluster",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AutonomousVmCluster")
 			return err
 		}
@@ -2313,7 +2314,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_backup"],
 			TypeName:         "oci_database_backup",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Backup")
 			return err
 		}
@@ -2331,7 +2332,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_backup_destination"],
 			TypeName:         "oci_database_backup_destination",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "BackupDestination")
 			return err
 		}
@@ -2349,7 +2350,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_cloud_exadata_infrastructure"],
 			TypeName:         "oci_database_cloud_exadata_infrastructure",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CloudExadataInfrastructure")
 			return err
 		}
@@ -2367,7 +2368,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_cloud_vm_cluster"],
 			TypeName:         "oci_database_cloud_vm_cluster",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CloudVmCluster")
 			return err
 		}
@@ -2385,7 +2386,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_data_guard_association"],
 			TypeName:         "oci_database_data_guard_association",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DataGuardAssociation")
 			return err
 		}
@@ -2403,7 +2404,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_database"],
 			TypeName:         "oci_database_database",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Database")
 			return err
 		}
@@ -2421,7 +2422,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_database_software_image"],
 			TypeName:         "oci_database_database_software_image",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DatabaseSoftwareImage")
 			return err
 		}
@@ -2439,7 +2440,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_database_upgrade"],
 			TypeName:         "oci_database_database_upgrade",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DatabaseUpgrade")
 			return err
 		}
@@ -2457,7 +2458,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_db_home"],
 			TypeName:         "oci_database_db_home",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DbHome")
 			return err
 		}
@@ -2475,7 +2476,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_db_node_console_connection"],
 			TypeName:         "oci_database_db_node_console_connection",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DbNodeConsoleConnection")
 			return err
 		}
@@ -2493,7 +2494,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_db_system"],
 			TypeName:         "oci_database_db_system",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DbSystem")
 			return err
 		}
@@ -2511,7 +2512,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_exadata_infrastructure"],
 			TypeName:         "oci_database_exadata_infrastructure",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExadataInfrastructure")
 			return err
 		}
@@ -2529,7 +2530,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_exadata_infrastructure_storage"],
 			TypeName:         "oci_database_exadata_infrastructure_storage",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExadataInfrastructureStorage")
 			return err
 		}
@@ -2547,7 +2548,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_exadata_iorm_config"],
 			TypeName:         "oci_database_exadata_iorm_config",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExadataIormConfig")
 			return err
 		}
@@ -2565,7 +2566,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_external_container_database"],
 			TypeName:         "oci_database_external_container_database",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExternalContainerDatabase")
 			return err
 		}
@@ -2583,7 +2584,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_external_container_database_management"],
 			TypeName:         "oci_database_external_container_database_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExternalContainerDatabaseManagement")
 			return err
 		}
@@ -2601,7 +2602,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_external_database_connector"],
 			TypeName:         "oci_database_external_database_connector",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExternalDatabaseConnector")
 			return err
 		}
@@ -2619,7 +2620,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_external_non_container_database"],
 			TypeName:         "oci_database_external_non_container_database",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExternalNonContainerDatabase")
 			return err
 		}
@@ -2637,7 +2638,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_external_non_container_database_management"],
 			TypeName:         "oci_database_external_non_container_database_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExternalNonContainerDatabaseManagement")
 			return err
 		}
@@ -2655,7 +2656,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_external_non_container_database_operations_insights_management"],
 			TypeName:         "oci_database_external_non_container_database_operations_insights_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExternalNonContainerDatabaseOperationsInsightsManagement")
 			return err
 		}
@@ -2673,7 +2674,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_external_pluggable_database"],
 			TypeName:         "oci_database_external_pluggable_database",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExternalPluggableDatabase")
 			return err
 		}
@@ -2691,7 +2692,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_external_pluggable_database_management"],
 			TypeName:         "oci_database_external_pluggable_database_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExternalPluggableDatabaseManagement")
 			return err
 		}
@@ -2709,7 +2710,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_external_pluggable_database_operations_insights_management"],
 			TypeName:         "oci_database_external_pluggable_database_operations_insights_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ExternalPluggableDatabaseOperationsInsightsManagement")
 			return err
 		}
@@ -2727,7 +2728,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_key_store"],
 			TypeName:         "oci_database_key_store",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "KeyStore")
 			return err
 		}
@@ -2745,7 +2746,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_maintenance_run"],
 			TypeName:         "oci_database_maintenance_run",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "MaintenanceRun")
 			return err
 		}
@@ -2763,7 +2764,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_management_managed_database_group"],
 			TypeName:         "oci_database_management_managed_database_group",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ManagementManagedDatabaseGroup")
 			return err
 		}
@@ -2781,7 +2782,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_management_managed_databases_change_database_parameter"],
 			TypeName:         "oci_database_management_managed_databases_change_database_parameter",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ManagementManagedDatabasesChangeDatabaseParameter")
 			return err
 		}
@@ -2799,7 +2800,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_management_managed_databases_reset_database_parameter"],
 			TypeName:         "oci_database_management_managed_databases_reset_database_parameter",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ManagementManagedDatabasesResetDatabaseParameter")
 			return err
 		}
@@ -2817,7 +2818,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_migration"],
 			TypeName:         "oci_database_migration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Migration")
 			return err
 		}
@@ -2835,7 +2836,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_migration_agent"],
 			TypeName:         "oci_database_migration_agent",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "MigrationAgent")
 			return err
 		}
@@ -2853,7 +2854,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_migration_connection"],
 			TypeName:         "oci_database_migration_connection",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "MigrationConnection")
 			return err
 		}
@@ -2871,7 +2872,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_migration_job"],
 			TypeName:         "oci_database_migration_job",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "MigrationJob")
 			return err
 		}
@@ -2889,7 +2890,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_migration_migration"],
 			TypeName:         "oci_database_migration_migration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "MigrationMigration")
 			return err
 		}
@@ -2907,7 +2908,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_pluggable_database"],
 			TypeName:         "oci_database_pluggable_database",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PluggableDatabase")
 			return err
 		}
@@ -2925,7 +2926,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_pluggable_databases_local_clone"],
 			TypeName:         "oci_database_pluggable_databases_local_clone",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PluggableDatabasesLocalClone")
 			return err
 		}
@@ -2943,7 +2944,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_pluggable_databases_remote_clone"],
 			TypeName:         "oci_database_pluggable_databases_remote_clone",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PluggableDatabasesRemoteClone")
 			return err
 		}
@@ -2961,7 +2962,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_vm_cluster"],
 			TypeName:         "oci_database_vm_cluster",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VmCluster")
 			return err
 		}
@@ -2979,7 +2980,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_database_vm_cluster_network"],
 			TypeName:         "oci_database_vm_cluster_network",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VmClusterNetwork")
 			return err
 		}
@@ -2997,7 +2998,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datacatalog_catalog"],
 			TypeName:         "oci_datacatalog_catalog",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Catalog")
 			return err
 		}
@@ -3015,7 +3016,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datacatalog_catalog_private_endpoint"],
 			TypeName:         "oci_datacatalog_catalog_private_endpoint",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CatalogPrivateEndpoint")
 			return err
 		}
@@ -3033,7 +3034,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datacatalog_connection"],
 			TypeName:         "oci_datacatalog_connection",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Connection")
 			return err
 		}
@@ -3051,7 +3052,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datacatalog_data_asset"],
 			TypeName:         "oci_datacatalog_data_asset",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DataAsset")
 			return err
 		}
@@ -3069,7 +3070,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datacatalog_metastore"],
 			TypeName:         "oci_datacatalog_metastore",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Metastore")
 			return err
 		}
@@ -3087,7 +3088,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dataflow_application"],
 			TypeName:         "oci_dataflow_application",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Application")
 			return err
 		}
@@ -3105,7 +3106,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dataflow_invoke_run"],
 			TypeName:         "oci_dataflow_invoke_run",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "InvokeRun")
 			return err
 		}
@@ -3123,7 +3124,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dataflow_private_endpoint"],
 			TypeName:         "oci_dataflow_private_endpoint",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PrivateEndpoint")
 			return err
 		}
@@ -3141,7 +3142,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dataintegration_workspace"],
 			TypeName:         "oci_dataintegration_workspace",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Workspace")
 			return err
 		}
@@ -3159,7 +3160,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datascience_model"],
 			TypeName:         "oci_datascience_model",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Model")
 			return err
 		}
@@ -3177,7 +3178,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datascience_model_deployment"],
 			TypeName:         "oci_datascience_model_deployment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ModelDeployment")
 			return err
 		}
@@ -3195,7 +3196,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datascience_model_provenance"],
 			TypeName:         "oci_datascience_model_provenance",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ModelProvenance")
 			return err
 		}
@@ -3213,7 +3214,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datascience_notebook_session"],
 			TypeName:         "oci_datascience_notebook_session",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "NotebookSession")
 			return err
 		}
@@ -3231,7 +3232,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_datascience_project"],
 			TypeName:         "oci_datascience_project",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Project")
 			return err
 		}
@@ -3249,7 +3250,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_devops_deploy_artifact"],
 			TypeName:         "oci_devops_deploy_artifact",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DeployArtifact")
 			return err
 		}
@@ -3267,7 +3268,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_devops_deploy_environment"],
 			TypeName:         "oci_devops_deploy_environment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DeployEnvironment")
 			return err
 		}
@@ -3285,7 +3286,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_devops_deploy_pipeline"],
 			TypeName:         "oci_devops_deploy_pipeline",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DeployPipeline")
 			return err
 		}
@@ -3303,7 +3304,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_devops_deploy_stage"],
 			TypeName:         "oci_devops_deploy_stage",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DeployStage")
 			return err
 		}
@@ -3321,7 +3322,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_devops_deployment"],
 			TypeName:         "oci_devops_deployment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Deployment")
 			return err
 		}
@@ -3339,7 +3340,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_devops_project"],
 			TypeName:         "oci_devops_project",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Project")
 			return err
 		}
@@ -3357,7 +3358,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dns_record"],
 			TypeName:         "oci_dns_record",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Record")
 			return err
 		}
@@ -3375,7 +3376,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dns_resolver"],
 			TypeName:         "oci_dns_resolver",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Resolver")
 			return err
 		}
@@ -3393,7 +3394,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dns_resolver_endpoint"],
 			TypeName:         "oci_dns_resolver_endpoint",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ResolverEndpoint")
 			return err
 		}
@@ -3411,7 +3412,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dns_rrset"],
 			TypeName:         "oci_dns_rrset",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Rrset")
 			return err
 		}
@@ -3429,7 +3430,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dns_steering_policy"],
 			TypeName:         "oci_dns_steering_policy",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SteeringPolicy")
 			return err
 		}
@@ -3447,7 +3448,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dns_steering_policy_attachment"],
 			TypeName:         "oci_dns_steering_policy_attachment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SteeringPolicyAttachment")
 			return err
 		}
@@ -3465,7 +3466,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dns_tsig_key"],
 			TypeName:         "oci_dns_tsig_key",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "TsigKey")
 			return err
 		}
@@ -3483,7 +3484,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dns_view"],
 			TypeName:         "oci_dns_view",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "View")
 			return err
 		}
@@ -3501,7 +3502,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_dns_zone"],
 			TypeName:         "oci_dns_zone",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Zone")
 			return err
 		}
@@ -3519,7 +3520,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_email_dkim"],
 			TypeName:         "oci_email_dkim",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Dkim")
 			return err
 		}
@@ -3537,7 +3538,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_email_email_domain"],
 			TypeName:         "oci_email_email_domain",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "EmailDomain")
 			return err
 		}
@@ -3555,7 +3556,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_email_sender"],
 			TypeName:         "oci_email_sender",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Sender")
 			return err
 		}
@@ -3573,7 +3574,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_email_suppression"],
 			TypeName:         "oci_email_suppression",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Suppression")
 			return err
 		}
@@ -3591,7 +3592,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_events_rule"],
 			TypeName:         "oci_events_rule",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Rule")
 			return err
 		}
@@ -3609,7 +3610,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_file_storage_export"],
 			TypeName:         "oci_file_storage_export",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "StorageExport")
 			return err
 		}
@@ -3627,7 +3628,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_file_storage_export_set"],
 			TypeName:         "oci_file_storage_export_set",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "StorageExportSet")
 			return err
 		}
@@ -3645,7 +3646,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_file_storage_file_system"],
 			TypeName:         "oci_file_storage_file_system",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "StorageFileSystem")
 			return err
 		}
@@ -3663,7 +3664,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_file_storage_mount_target"],
 			TypeName:         "oci_file_storage_mount_target",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "StorageMountTarget")
 			return err
 		}
@@ -3681,7 +3682,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_file_storage_snapshot"],
 			TypeName:         "oci_file_storage_snapshot",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "StorageSnapshot")
 			return err
 		}
@@ -3699,7 +3700,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_functions_application"],
 			TypeName:         "oci_functions_application",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Application")
 			return err
 		}
@@ -3717,7 +3718,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_functions_function"],
 			TypeName:         "oci_functions_function",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Function")
 			return err
 		}
@@ -3735,7 +3736,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_functions_invoke_function"],
 			TypeName:         "oci_functions_invoke_function",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "InvokeFunction")
 			return err
 		}
@@ -3753,7 +3754,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_generic_artifacts_content_artifact_by_path"],
 			TypeName:         "oci_generic_artifacts_content_artifact_by_path",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ArtifactsContentArtifactByPath")
 			return err
 		}
@@ -3771,7 +3772,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_golden_gate_database_registration"],
 			TypeName:         "oci_golden_gate_database_registration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GateDatabaseRegistration")
 			return err
 		}
@@ -3789,7 +3790,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_golden_gate_deployment"],
 			TypeName:         "oci_golden_gate_deployment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GateDeployment")
 			return err
 		}
@@ -3807,7 +3808,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_golden_gate_deployment_backup"],
 			TypeName:         "oci_golden_gate_deployment_backup",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GateDeploymentBackup")
 			return err
 		}
@@ -3825,7 +3826,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_health_checks_http_monitor"],
 			TypeName:         "oci_health_checks_http_monitor",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ChecksHTTPMonitor")
 			return err
 		}
@@ -3843,7 +3844,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_health_checks_http_probe"],
 			TypeName:         "oci_health_checks_http_probe",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ChecksHTTPProbe")
 			return err
 		}
@@ -3861,7 +3862,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_health_checks_ping_monitor"],
 			TypeName:         "oci_health_checks_ping_monitor",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ChecksPingMonitor")
 			return err
 		}
@@ -3879,7 +3880,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_health_checks_ping_probe"],
 			TypeName:         "oci_health_checks_ping_probe",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ChecksPingProbe")
 			return err
 		}
@@ -3897,7 +3898,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_api_key"],
 			TypeName:         "oci_identity_api_key",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ApiKey")
 			return err
 		}
@@ -3915,7 +3916,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_auth_token"],
 			TypeName:         "oci_identity_auth_token",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AuthToken")
 			return err
 		}
@@ -3933,7 +3934,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_authentication_policy"],
 			TypeName:         "oci_identity_authentication_policy",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AuthenticationPolicy")
 			return err
 		}
@@ -3951,7 +3952,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_compartment"],
 			TypeName:         "oci_identity_compartment",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Compartment")
 			return err
 		}
@@ -3969,7 +3970,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_customer_secret_key"],
 			TypeName:         "oci_identity_customer_secret_key",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CustomerSecretKey")
 			return err
 		}
@@ -3987,7 +3988,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_dynamic_group"],
 			TypeName:         "oci_identity_dynamic_group",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DynamicGroup")
 			return err
 		}
@@ -4005,7 +4006,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_group"],
 			TypeName:         "oci_identity_group",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Group")
 			return err
 		}
@@ -4023,7 +4024,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_identity_provider"],
 			TypeName:         "oci_identity_identity_provider",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "IdentityProvider")
 			return err
 		}
@@ -4041,7 +4042,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_idp_group_mapping"],
 			TypeName:         "oci_identity_idp_group_mapping",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "IdpGroupMapping")
 			return err
 		}
@@ -4059,7 +4060,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_network_source"],
 			TypeName:         "oci_identity_network_source",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "NetworkSource")
 			return err
 		}
@@ -4077,7 +4078,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_policy"],
 			TypeName:         "oci_identity_policy",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Policy")
 			return err
 		}
@@ -4095,7 +4096,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_smtp_credential"],
 			TypeName:         "oci_identity_smtp_credential",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SmtpCredential")
 			return err
 		}
@@ -4113,7 +4114,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_swift_password"],
 			TypeName:         "oci_identity_swift_password",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SwiftPassword")
 			return err
 		}
@@ -4131,7 +4132,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_tag"],
 			TypeName:         "oci_identity_tag",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Tag")
 			return err
 		}
@@ -4149,7 +4150,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_tag_default"],
 			TypeName:         "oci_identity_tag_default",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "TagDefault")
 			return err
 		}
@@ -4167,7 +4168,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_tag_namespace"],
 			TypeName:         "oci_identity_tag_namespace",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Tagnamespace")
 			return err
 		}
@@ -4185,7 +4186,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_ui_password"],
 			TypeName:         "oci_identity_ui_password",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "UiPassword")
 			return err
 		}
@@ -4203,7 +4204,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_user"],
 			TypeName:         "oci_identity_user",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "User")
 			return err
 		}
@@ -4221,7 +4222,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_user_capabilities_management"],
 			TypeName:         "oci_identity_user_capabilities_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "UserCapabilitiesManagement")
 			return err
 		}
@@ -4239,7 +4240,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_identity_user_group_membership"],
 			TypeName:         "oci_identity_user_group_membership",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "UserGroupMembership")
 			return err
 		}
@@ -4257,7 +4258,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_integration_integration_instance"],
 			TypeName:         "oci_integration_integration_instance",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "IntegrationInstance")
 			return err
 		}
@@ -4275,7 +4276,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_jms_fleet"],
 			TypeName:         "oci_jms_fleet",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Fleet")
 			return err
 		}
@@ -4293,7 +4294,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_kms_encrypted_data"],
 			TypeName:         "oci_kms_encrypted_data",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "EncryptedData")
 			return err
 		}
@@ -4311,7 +4312,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_kms_generated_key"],
 			TypeName:         "oci_kms_generated_key",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "GeneratedKey")
 			return err
 		}
@@ -4329,7 +4330,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_kms_key"],
 			TypeName:         "oci_kms_key",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Key")
 			return err
 		}
@@ -4347,7 +4348,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_kms_key_version"],
 			TypeName:         "oci_kms_key_version",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "KeyVersion")
 			return err
 		}
@@ -4365,7 +4366,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_kms_sign"],
 			TypeName:         "oci_kms_sign",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Sign")
 			return err
 		}
@@ -4383,7 +4384,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_kms_vault"],
 			TypeName:         "oci_kms_vault",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Vault")
 			return err
 		}
@@ -4401,7 +4402,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_kms_vault_replication"],
 			TypeName:         "oci_kms_vault_replication",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "VaultReplication")
 			return err
 		}
@@ -4419,7 +4420,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_kms_verify"],
 			TypeName:         "oci_kms_verify",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Verify")
 			return err
 		}
@@ -4437,7 +4438,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_limits_quota"],
 			TypeName:         "oci_limits_quota",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Quota")
 			return err
 		}
@@ -4455,7 +4456,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_backend"],
 			TypeName:         "oci_load_balancer_backend",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Backend")
 			return err
 		}
@@ -4473,7 +4474,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_backend_set"],
 			TypeName:         "oci_load_balancer_backend_set",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "BackendSet")
 			return err
 		}
@@ -4491,7 +4492,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_certificate"],
 			TypeName:         "oci_load_balancer_certificate",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Certificate")
 			return err
 		}
@@ -4509,7 +4510,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_hostname"],
 			TypeName:         "oci_load_balancer_hostname",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Hostname")
 			return err
 		}
@@ -4527,7 +4528,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_listener"],
 			TypeName:         "oci_load_balancer_listener",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Listener")
 			return err
 		}
@@ -4545,7 +4546,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_load_balancer"],
 			TypeName:         "oci_load_balancer_load_balancer",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancer")
 			return err
 		}
@@ -4563,7 +4564,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_load_balancer_routing_policy"],
 			TypeName:         "oci_load_balancer_load_balancer_routing_policy",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerRoutingPolicy")
 			return err
 		}
@@ -4581,7 +4582,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_path_route_set"],
 			TypeName:         "oci_load_balancer_path_route_set",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PathRouteSet")
 			return err
 		}
@@ -4599,7 +4600,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_rule_set"],
 			TypeName:         "oci_load_balancer_rule_set",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "RuleSet")
 			return err
 		}
@@ -4617,7 +4618,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_load_balancer_ssl_cipher_suite"],
 			TypeName:         "oci_load_balancer_ssl_cipher_suite",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SslCipherSuite")
 			return err
 		}
@@ -4635,7 +4636,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_log_analytics_log_analytics_entity"],
 			TypeName:         "oci_log_analytics_log_analytics_entity",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsLogAnalyticsEntity")
 			return err
 		}
@@ -4653,7 +4654,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_log_analytics_log_analytics_log_group"],
 			TypeName:         "oci_log_analytics_log_analytics_log_group",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsLogAnalyticsLogGroup")
 			return err
 		}
@@ -4671,7 +4672,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_log_analytics_namespace"],
 			TypeName:         "oci_log_analytics_namespace",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsNamespace")
 			return err
 		}
@@ -4689,7 +4690,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_logging_log"],
 			TypeName:         "oci_logging_log",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Log")
 			return err
 		}
@@ -4707,7 +4708,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_logging_log_group"],
 			TypeName:         "oci_logging_log_group",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "LogGroup")
 			return err
 		}
@@ -4725,7 +4726,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_logging_log_saved_search"],
 			TypeName:         "oci_logging_log_saved_search",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "LogSavedSearch")
 			return err
 		}
@@ -4743,7 +4744,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_logging_unified_agent_configuration"],
 			TypeName:         "oci_logging_unified_agent_configuration",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "UnifiedAgentConfiguration")
 			return err
 		}
@@ -4761,7 +4762,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_management_agent_management_agent"],
 			TypeName:         "oci_management_agent_management_agent",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AgentManagementAgent")
 			return err
 		}
@@ -4779,7 +4780,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_management_agent_management_agent_install_key"],
 			TypeName:         "oci_management_agent_management_agent_install_key",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AgentManagementAgentInstallKey")
 			return err
 		}
@@ -4797,7 +4798,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_management_dashboard_management_dashboards_import"],
 			TypeName:         "oci_management_dashboard_management_dashboards_import",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DashboardManagementDashboardsImport")
 			return err
 		}
@@ -4815,7 +4816,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_marketplace_accepted_agreement"],
 			TypeName:         "oci_marketplace_accepted_agreement",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AcceptedAgreement")
 			return err
 		}
@@ -4833,7 +4834,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_marketplace_listing_package_agreement"],
 			TypeName:         "oci_marketplace_listing_package_agreement",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ListingPackageAgreement")
 			return err
 		}
@@ -4851,7 +4852,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_marketplace_publication"],
 			TypeName:         "oci_marketplace_publication",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Publication")
 			return err
 		}
@@ -4869,7 +4870,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_metering_computation_custom_table"],
 			TypeName:         "oci_metering_computation_custom_table",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ComputationCustomTable")
 			return err
 		}
@@ -4887,7 +4888,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_metering_computation_query"],
 			TypeName:         "oci_metering_computation_query",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ComputationQuery")
 			return err
 		}
@@ -4905,7 +4906,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_metering_computation_usage"],
 			TypeName:         "oci_metering_computation_usage",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ComputationUsage")
 			return err
 		}
@@ -4923,7 +4924,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_monitoring_alarm"],
 			TypeName:         "oci_monitoring_alarm",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Alarm")
 			return err
 		}
@@ -4941,7 +4942,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_mysql_analytics_cluster"],
 			TypeName:         "oci_mysql_analytics_cluster",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AnalyticsCluster")
 			return err
 		}
@@ -4959,7 +4960,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_mysql_channel"],
 			TypeName:         "oci_mysql_channel",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Channel")
 			return err
 		}
@@ -4977,7 +4978,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_mysql_heat_wave_cluster"],
 			TypeName:         "oci_mysql_heat_wave_cluster",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "HeatWaveCluster")
 			return err
 		}
@@ -4995,7 +4996,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_mysql_mysql_backup"],
 			TypeName:         "oci_mysql_mysql_backup",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "MysqlBackup")
 			return err
 		}
@@ -5013,7 +5014,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_mysql_mysql_db_system"],
 			TypeName:         "oci_mysql_mysql_db_system",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "MysqlDbSystem")
 			return err
 		}
@@ -5031,7 +5032,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_network_load_balancer_backend"],
 			TypeName:         "oci_network_load_balancer_backend",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerBackend")
 			return err
 		}
@@ -5049,7 +5050,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_network_load_balancer_backend_set"],
 			TypeName:         "oci_network_load_balancer_backend_set",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerBackendSet")
 			return err
 		}
@@ -5067,7 +5068,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_network_load_balancer_listener"],
 			TypeName:         "oci_network_load_balancer_listener",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerListener")
 			return err
 		}
@@ -5085,7 +5086,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_network_load_balancer_network_load_balancer"],
 			TypeName:         "oci_network_load_balancer_network_load_balancer",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "LoadBalancerNetworkLoadBalancer")
 			return err
 		}
@@ -5103,7 +5104,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_nosql_index"],
 			TypeName:         "oci_nosql_index",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Index")
 			return err
 		}
@@ -5121,7 +5122,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_nosql_table"],
 			TypeName:         "oci_nosql_table",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Table")
 			return err
 		}
@@ -5139,7 +5140,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_objectstorage_bucket"],
 			TypeName:         "oci_objectstorage_bucket",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Bucket")
 			return err
 		}
@@ -5157,7 +5158,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_objectstorage_namespace_metadata"],
 			TypeName:         "oci_objectstorage_namespace_metadata",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "NamespaceMetadata")
 			return err
 		}
@@ -5175,7 +5176,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_objectstorage_object"],
 			TypeName:         "oci_objectstorage_object",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Object")
 			return err
 		}
@@ -5193,7 +5194,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_objectstorage_object_lifecycle_policy"],
 			TypeName:         "oci_objectstorage_object_lifecycle_policy",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ObjectLifecyclePolicy")
 			return err
 		}
@@ -5211,7 +5212,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_objectstorage_preauthrequest"],
 			TypeName:         "oci_objectstorage_preauthrequest",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Preauthrequest")
 			return err
 		}
@@ -5229,7 +5230,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_objectstorage_replication_policy"],
 			TypeName:         "oci_objectstorage_replication_policy",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ReplicationPolicy")
 			return err
 		}
@@ -5247,7 +5248,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_oce_oce_instance"],
 			TypeName:         "oci_oce_oce_instance",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "OceInstance")
 			return err
 		}
@@ -5265,7 +5266,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_ocvp_esxi_host"],
 			TypeName:         "oci_ocvp_esxi_host",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "EsxiHost")
 			return err
 		}
@@ -5283,7 +5284,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_ocvp_sddc"],
 			TypeName:         "oci_ocvp_sddc",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Sddc")
 			return err
 		}
@@ -5301,7 +5302,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_oda_oda_instance"],
 			TypeName:         "oci_oda_oda_instance",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "OdaInstance")
 			return err
 		}
@@ -5319,7 +5320,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_ons_notification_topic"],
 			TypeName:         "oci_ons_notification_topic",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "NotificationTopic")
 			return err
 		}
@@ -5337,7 +5338,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_ons_subscription"],
 			TypeName:         "oci_ons_subscription",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Subscription")
 			return err
 		}
@@ -5355,7 +5356,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_opsi_database_insight"],
 			TypeName:         "oci_opsi_database_insight",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "DatabaseInsight")
 			return err
 		}
@@ -5373,7 +5374,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_opsi_enterprise_manager_bridge"],
 			TypeName:         "oci_opsi_enterprise_manager_bridge",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "EnterpriseManagerBridge")
 			return err
 		}
@@ -5391,7 +5392,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_opsi_host_insight"],
 			TypeName:         "oci_opsi_host_insight",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "HostInsight")
 			return err
 		}
@@ -5409,7 +5410,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_optimizer_enrollment_status"],
 			TypeName:         "oci_optimizer_enrollment_status",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "EnrollmentStatus")
 			return err
 		}
@@ -5427,7 +5428,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_optimizer_profile"],
 			TypeName:         "oci_optimizer_profile",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Profile")
 			return err
 		}
@@ -5445,7 +5446,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_optimizer_recommendation"],
 			TypeName:         "oci_optimizer_recommendation",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Recommendation")
 			return err
 		}
@@ -5463,7 +5464,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_optimizer_resource_action"],
 			TypeName:         "oci_optimizer_resource_action",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ResourceAction")
 			return err
 		}
@@ -5481,7 +5482,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_osmanagement_managed_instance_group"],
 			TypeName:         "oci_osmanagement_managed_instance_group",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ManagedInstanceGroup")
 			return err
 		}
@@ -5499,7 +5500,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_osmanagement_managed_instance_management"],
 			TypeName:         "oci_osmanagement_managed_instance_management",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ManagedInstanceManagement")
 			return err
 		}
@@ -5517,7 +5518,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_osmanagement_software_source"],
 			TypeName:         "oci_osmanagement_software_source",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "SoftwareSource")
 			return err
 		}
@@ -5535,7 +5536,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_sch_service_connector"],
 			TypeName:         "oci_sch_service_connector",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ServiceConnector")
 			return err
 		}
@@ -5553,7 +5554,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_service_catalog_private_application"],
 			TypeName:         "oci_service_catalog_private_application",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CatalogPrivateApplication")
 			return err
 		}
@@ -5571,7 +5572,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_service_catalog_service_catalog"],
 			TypeName:         "oci_service_catalog_service_catalog",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CatalogServiceCatalog")
 			return err
 		}
@@ -5589,7 +5590,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_service_catalog_service_catalog_association"],
 			TypeName:         "oci_service_catalog_service_catalog_association",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CatalogServiceCatalogAssociation")
 			return err
 		}
@@ -5607,7 +5608,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_streaming_connect_harness"],
 			TypeName:         "oci_streaming_connect_harness",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ConnectHarness")
 			return err
 		}
@@ -5625,7 +5626,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_streaming_stream"],
 			TypeName:         "oci_streaming_stream",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Stream")
 			return err
 		}
@@ -5643,7 +5644,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_streaming_stream_pool"],
 			TypeName:         "oci_streaming_stream_pool",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "StreamPool")
 			return err
 		}
@@ -5661,7 +5662,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_vulnerability_scanning_host_scan_recipe"],
 			TypeName:         "oci_vulnerability_scanning_host_scan_recipe",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ScanningHostScanRecipe")
 			return err
 		}
@@ -5679,7 +5680,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_vulnerability_scanning_host_scan_target"],
 			TypeName:         "oci_vulnerability_scanning_host_scan_target",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ScanningHostScanTarget")
 			return err
 		}
@@ -5697,7 +5698,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_waas_address_list"],
 			TypeName:         "oci_waas_address_list",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "AddressList")
 			return err
 		}
@@ -5715,7 +5716,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_waas_certificate"],
 			TypeName:         "oci_waas_certificate",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "Certificate")
 			return err
 		}
@@ -5733,7 +5734,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_waas_custom_protection_rule"],
 			TypeName:         "oci_waas_custom_protection_rule",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "CustomProtectionRule")
 			return err
 		}
@@ -5751,7 +5752,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_waas_http_redirect"],
 			TypeName:         "oci_waas_http_redirect",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "HttpRedirect")
 			return err
 		}
@@ -5769,7 +5770,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_waas_protection_rule"],
 			TypeName:         "oci_waas_protection_rule",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "ProtectionRule")
 			return err
 		}
@@ -5787,7 +5788,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_waas_purge_cache"],
 			TypeName:         "oci_waas_purge_cache",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "PurgeCache")
 			return err
 		}
@@ -5805,7 +5806,7 @@ func SetupManager(ctx context.Context, mgr manager.Manager, gvk schema.GroupVers
 			Resource:         _provider.ResourcesMap["oci_waas_waas_policy"],
 			TypeName:         "oci_waas_waas_policy",
 			WatchOnlyDefault: watchOnlyDefault,
-		}).SetupWithManager(ctx, mgr, auditor); err != nil {
+		}).SetupWithManager(ctx, mgr, auditor, restrictToNamespace); err != nil {
 			setupLog.Error(err, "unable to create controller", "controller", "WaasPolicy")
 			return err
 		}

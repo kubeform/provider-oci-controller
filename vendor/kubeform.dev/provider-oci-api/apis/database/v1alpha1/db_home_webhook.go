@@ -20,9 +20,12 @@ package v1alpha1
 
 import (
 	"fmt"
+	"strings"
 
 	base "kubeform.dev/apimachinery/api/v1alpha1"
+	"kubeform.dev/apimachinery/pkg/util"
 
+	jsoniter "github.com/json-iterator/go"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
@@ -38,6 +41,29 @@ func (r *DbHome) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 var _ webhook.Validator = &DbHome{}
 
+var dbhomeForceNewList = map[string]bool{
+	"/database/*/backup_id":                                            true,
+	"/database/*/character_set":                                        true,
+	"/database/*/database_id":                                          true,
+	"/database/*/database_software_image_id":                           true,
+	"/database/*/db_backup_config/*/backup_destination_details/*/id":   true,
+	"/database/*/db_backup_config/*/backup_destination_details/*/type": true,
+	"/database/*/db_name":                                              true,
+	"/database/*/db_workload":                                          true,
+	"/database/*/ncharacter_set":                                       true,
+	"/database/*/pdb_name":                                             true,
+	"/database/*/time_stamp_for_point_in_time_recovery":                true,
+	"/database_software_image_id":                                      true,
+	"/db_system_id":                                                    true,
+	"/db_version":                                                      true,
+	"/display_name":                                                    true,
+	"/is_desupported_version":                                          true,
+	"/kms_key_id":                                                      true,
+	"/kms_key_version_id":                                              true,
+	"/source":                                                          true,
+	"/vm_cluster_id":                                                   true,
+}
+
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
 func (r *DbHome) ValidateCreate() error {
 	return nil
@@ -45,6 +71,53 @@ func (r *DbHome) ValidateCreate() error {
 
 // ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
 func (r *DbHome) ValidateUpdate(old runtime.Object) error {
+	if r.Spec.Resource.ID == "" {
+		return nil
+	}
+	newObj := r.Spec.Resource
+	res := old.(*DbHome)
+	oldObj := res.Spec.Resource
+
+	jsnitr := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		TagKey:                 "tf",
+		ValidateJsonRawMessage: true,
+		TypeEncoders:           GetEncoder(),
+		TypeDecoders:           GetDecoder(),
+	}.Froze()
+
+	byteNew, err := jsnitr.Marshal(newObj)
+	if err != nil {
+		return err
+	}
+	tempNew := make(map[string]interface{})
+	err = jsnitr.Unmarshal(byteNew, &tempNew)
+	if err != nil {
+		return err
+	}
+
+	byteOld, err := jsnitr.Marshal(oldObj)
+	if err != nil {
+		return err
+	}
+	tempOld := make(map[string]interface{})
+	err = jsnitr.Unmarshal(byteOld, &tempOld)
+	if err != nil {
+		return err
+	}
+
+	for key := range dbhomeForceNewList {
+		keySplit := strings.Split(key, "/*")
+		length := len(keySplit)
+		checkIfAnyDif := false
+		util.CheckIfAnyDifference("", keySplit, 0, length, &checkIfAnyDif, tempOld, tempOld, tempNew)
+		util.CheckIfAnyDifference("", keySplit, 0, length, &checkIfAnyDif, tempNew, tempOld, tempNew)
+
+		if checkIfAnyDif && r.Spec.UpdatePolicy == base.UpdatePolicyDoNotDestroy {
+			return fmt.Errorf(`dbhome "%v/%v" immutable field can't be updated. To update, change spec.updatePolicy to Destroy`, r.Namespace, r.Name)
+		}
+	}
 	return nil
 }
 

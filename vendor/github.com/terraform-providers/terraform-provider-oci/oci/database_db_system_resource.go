@@ -10,11 +10,13 @@ import (
 	"strings"
 	"time"
 
+	oci_work_requests "github.com/oracle/oci-go-sdk/v50/workrequests"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -27,9 +29,9 @@ func DatabaseDbSystemResource() *schema.Resource {
 			State: schema.ImportStatePassthrough,
 		},
 		Timeouts: &schema.ResourceTimeout{
-			Create: getTimeoutDuration("0h"),
-			Update: getTimeoutDuration("2h"),
-			Delete: getTimeoutDuration("2h"),
+			Create: GetTimeoutDuration("2h"),
+			Update: GetTimeoutDuration("2h"),
+			Delete: GetTimeoutDuration("2h"),
 		},
 		Create: createDatabaseDbSystem,
 		Read:   readDatabaseDbSystem,
@@ -212,7 +214,7 @@ func DatabaseDbSystemResource() *schema.Resource {
 										Optional:         true,
 										Computed:         true,
 										ForceNew:         true,
-										DiffSuppressFunc: timeDiffSuppressFunction,
+										DiffSuppressFunc: TimeDiffSuppressFunction,
 									},
 
 									// Computed
@@ -348,7 +350,7 @@ func DatabaseDbSystemResource() *schema.Resource {
 			"ssh_public_keys": {
 				Type:     schema.TypeSet,
 				Required: true,
-				Set:      literalTypeHashCodeForSets,
+				Set:      LiteralTypeHashCodeForSets,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -363,7 +365,7 @@ func DatabaseDbSystemResource() *schema.Resource {
 			"backup_network_nsg_ids": {
 				Type:     schema.TypeSet,
 				Optional: true,
-				Set:      literalTypeHashCodeForSets,
+				Set:      LiteralTypeHashCodeForSets,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -578,7 +580,7 @@ func DatabaseDbSystemResource() *schema.Resource {
 			"nsg_ids": {
 				Type:     schema.TypeSet,
 				Optional: true,
-				Set:      literalTypeHashCodeForSets,
+				Set:      LiteralTypeHashCodeForSets,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -827,6 +829,7 @@ func createDatabaseDbSystem(d *schema.ResourceData, m interface{}) error {
 	sync := &DatabaseDbSystemResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return CreateDBSystemResource(d, sync)
 }
@@ -835,6 +838,7 @@ func readDatabaseDbSystem(d *schema.ResourceData, m interface{}) error {
 	sync := &DatabaseDbSystemResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return ReadResource(sync)
 }
@@ -843,6 +847,7 @@ func updateDatabaseDbSystem(d *schema.ResourceData, m interface{}) error {
 	sync := &DatabaseDbSystemResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return UpdateResource(d, sync)
 }
@@ -851,6 +856,7 @@ func deleteDatabaseDbSystem(d *schema.ResourceData, m interface{}) error {
 	sync := &DatabaseDbSystemResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 	sync.DisableNotFoundRetries = true
 
 	return DeleteResource(d, sync)
@@ -859,6 +865,7 @@ func deleteDatabaseDbSystem(d *schema.ResourceData, m interface{}) error {
 type DatabaseDbSystemResourceCrud struct {
 	BaseCrud
 	Client                 *oci_database.DatabaseClient
+	WorkRequestClient      *oci_work_requests.WorkRequestClient
 	Res                    *oci_database.DbSystem
 	DbHome                 *oci_database.DbHome
 	Database               *oci_database.Database
@@ -922,7 +929,7 @@ func (s *DatabaseDbSystemResourceCrud) Create() error {
 		return err
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.LaunchDbSystem(context.Background(), request)
 	if err != nil {
@@ -930,6 +937,14 @@ func (s *DatabaseDbSystemResourceCrud) Create() error {
 	}
 
 	s.Res = &response.DbSystem
+
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeCreated, s.D.Timeout(schema.TimeoutCreate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
+	}
 
 	err = s.getDbHomeInfo()
 	if err != nil {
@@ -945,7 +960,7 @@ func (s *DatabaseDbSystemResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.DbSystemId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.GetDbSystem(context.Background(), request)
 	if err != nil {
@@ -1010,7 +1025,7 @@ func (s *DatabaseDbSystemResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if licenseModel, ok := s.D.GetOkExists("license_model"); ok && s.D.HasChange("license_model") {
@@ -1063,29 +1078,38 @@ func (s *DatabaseDbSystemResourceCrud) Update() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.UpdateDbSystem(context.Background(), request)
 	if err != nil {
 		return err
 	}
 
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
+	}
+
 	s.Res = &response.DbSystem
 
+	// Check lifecycle state of db system
 	getDbSystemResponse, err := waitForDbSystemIfItIsUpdating(s.Res.Id, s.Client, s.D.Timeout(schema.TimeoutUpdate))
 	if err != nil {
 		err = s.SetData()
 		if err != nil {
 			log.Printf("[ERROR] error setting data after polling error on the dbSystem: %v", err)
 		}
-		return fmt.Errorf("[ERROR] unable to get dbSystem after the update: %v", err)
+		return fmt.Errorf("[ERROR] unable to get dbSystem after the Update: %v", err)
 	}
 
 	s.Res = &getDbSystemResponse.DbSystem
 
 	err = s.SetData()
 	if err != nil {
-		return fmt.Errorf("[ERROR] error setting data after dbsystem update but before database update: %v", err)
+		return fmt.Errorf("[ERROR] error setting data after dbsystem update but before database Update: %v", err)
 	}
 
 	return s.UpdateDatabaseOperation()
@@ -1097,7 +1121,7 @@ func (s *DatabaseDbSystemResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.DbSystemId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.TerminateDbSystem(context.Background(), request)
 	return err
@@ -1122,7 +1146,7 @@ func (s *DatabaseDbSystemResourceCrud) SetData() error {
 		for _, item := range s.Res.BackupNetworkNsgIds {
 			backupNetworkNsgIds = append(backupNetworkNsgIds, item)
 		}
-		s.D.Set("backup_network_nsg_ids", schema.NewSet(literalTypeHashCodeForSets, backupNetworkNsgIds))
+		s.D.Set("backup_network_nsg_ids", schema.NewSet(LiteralTypeHashCodeForSets, backupNetworkNsgIds))
 	}
 
 	if s.Res.BackupSubnetId != nil {
@@ -1226,7 +1250,7 @@ func (s *DatabaseDbSystemResourceCrud) SetData() error {
 		for _, item := range s.Res.NsgIds {
 			nsgIds = append(nsgIds, item)
 		}
-		s.D.Set("nsg_ids", schema.NewSet(literalTypeHashCodeForSets, nsgIds))
+		s.D.Set("nsg_ids", schema.NewSet(LiteralTypeHashCodeForSets, nsgIds))
 	}
 
 	if s.Res.PointInTimeDataDiskCloneTimestamp != nil {
@@ -1263,7 +1287,7 @@ func (s *DatabaseDbSystemResourceCrud) SetData() error {
 	for _, item := range s.Res.SshPublicKeys {
 		sshPublicKeys = append(sshPublicKeys, item)
 	}
-	s.D.Set("ssh_public_keys", schema.NewSet(literalTypeHashCodeForSets, sshPublicKeys))
+	s.D.Set("ssh_public_keys", schema.NewSet(LiteralTypeHashCodeForSets, sshPublicKeys))
 
 	s.D.Set("state", s.Res.LifecycleState)
 
@@ -1354,7 +1378,7 @@ func (s *DatabaseDbSystemResourceCrud) mapToCreateDatabaseDetails(fieldKeyFormat
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if ncharacterSet, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "ncharacter_set")); ok {
@@ -1575,7 +1599,7 @@ func (s *DatabaseDbSystemResourceCrud) mapToCreateDatabaseFromDbSystemDetails(fi
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	return result, nil
@@ -1651,7 +1675,7 @@ func (s *DatabaseDbSystemResourceCrud) mapToCreateDbHomeDetails(fieldKeyFormat s
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	return result, nil
@@ -1699,6 +1723,11 @@ func (s *DatabaseDbSystemResourceCrud) mapToCreateDbHomeFromBackupDetails(fieldK
 		}
 	}
 
+	if databaseSoftwareImageId, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "database_software_image_id")); ok {
+		tmp := databaseSoftwareImageId.(string)
+		result.DatabaseSoftwareImageId = &tmp
+	}
+
 	if displayName, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "display_name")); ok {
 		tmp := displayName.(string)
 		result.DisplayName = &tmp
@@ -1712,6 +1741,10 @@ func CreateDbHomeFromBackupDetailsToMap(obj *oci_database.CreateDbHomeFromBackup
 
 	if obj.Database != nil {
 		result["database"] = []interface{}{CreateDatabaseFromBackupDetailsToMap(obj.Database)}
+	}
+
+	if obj.DatabaseSoftwareImageId != nil {
+		result["database_software_image_id"] = string(*obj.DatabaseSoftwareImageId)
 	}
 
 	if obj.DisplayName != nil {
@@ -1749,7 +1782,7 @@ func (s *DatabaseDbSystemResourceCrud) mapToCreateDbHomeFromDbSystemDetails(fiel
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	return result, nil
@@ -2119,7 +2152,7 @@ func (s *DatabaseDbSystemResourceCrud) populateTopLevelPolymorphicLaunchDbSystem
 			}
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		if hostname, ok := s.D.GetOkExists("hostname"); ok {
 			tmp := hostname.(string)
@@ -2287,7 +2320,7 @@ func (s *DatabaseDbSystemResourceCrud) populateTopLevelPolymorphicLaunchDbSystem
 			}
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		if hostname, ok := s.D.GetOkExists("hostname"); ok {
 			tmp := hostname.(string)
@@ -2453,7 +2486,7 @@ func (s *DatabaseDbSystemResourceCrud) populateTopLevelPolymorphicLaunchDbSystem
 			}
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		if hostname, ok := s.D.GetOkExists("hostname"); ok {
 			tmp := hostname.(string)
@@ -2621,7 +2654,7 @@ func (s *DatabaseDbSystemResourceCrud) populateTopLevelPolymorphicLaunchDbSystem
 			}
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		if hostname, ok := s.D.GetOkExists("hostname"); ok {
 			tmp := hostname.(string)
@@ -2714,12 +2747,17 @@ func (s *DatabaseDbSystemResourceCrud) updateCompartment(compartment interface{}
 	idTmp := s.D.Id()
 	changeCompartmentRequest.DbSystemId = &idTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.ChangeDbSystemCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }
 
@@ -2789,7 +2827,7 @@ func (s *DatabaseDbSystemResourceCrud) getDbHomeInfo() error {
 			listDbHomeRequest.DbSystemId = s.Res.Id
 			listDbHomeRequest.SortBy = oci_database.ListDbHomesSortByTimecreated
 			listDbHomeRequest.SortOrder = oci_database.ListDbHomesSortOrderAsc
-			listDbHomeRequest.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+			listDbHomeRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 			listDbHomeResponse, err := s.Client.ListDbHomes(context.Background(), listDbHomeRequest)
 			if err != nil {
 				return err
@@ -2809,7 +2847,7 @@ func (s *DatabaseDbSystemResourceCrud) getDbHomeInfo() error {
 	}
 	getDbHomeRequest := oci_database.GetDbHomeRequest{}
 	getDbHomeRequest.DbHomeId = dbHomeId
-	getDbHomeRequest.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	getDbHomeRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 	getDbHomeResponse, err := s.Client.GetDbHome(context.Background(), getDbHomeRequest)
 	if err != nil {
 		return err
@@ -2831,7 +2869,7 @@ func (s *DatabaseDbSystemResourceCrud) getDbHomeInfo() error {
 			listDatabasesRequest.DbHomeId = getDbHomeResponse.DbHome.Id
 			listDatabasesRequest.SortBy = oci_database.ListDatabasesSortByTimecreated
 			listDatabasesRequest.SortOrder = oci_database.ListDatabasesSortOrderAsc
-			listDatabasesRequest.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+			listDatabasesRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 			listDatabasesResponse, err := s.Client.ListDatabases(context.Background(), listDatabasesRequest)
 			if err != nil {
 				return err
@@ -2849,7 +2887,7 @@ func (s *DatabaseDbSystemResourceCrud) getDbHomeInfo() error {
 
 	getDatabaseRequest := oci_database.GetDatabaseRequest{}
 	getDatabaseRequest.DatabaseId = databaseId
-	getDatabaseRequest.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	getDatabaseRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 	getDatabaseResponse, err := s.Client.GetDatabase(context.Background(), getDatabaseRequest)
 	if err != nil {
 		return err
@@ -2904,10 +2942,18 @@ func (s *DatabaseDbSystemResourceCrud) UpdateDatabaseOperation() error {
 		return err
 	}
 
-	updateDatabaseRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	updateDatabaseRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 	updateDatabaseResponse, err := s.Client.UpdateDatabase(context.Background(), updateDatabaseRequest)
 	if err != nil {
 		return err
+	}
+
+	workId := updateDatabaseResponse.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
 	}
 
 	getDatabaseRequest := oci_database.GetDatabaseRequest{}
@@ -2922,7 +2968,7 @@ func (s *DatabaseDbSystemResourceCrud) UpdateDatabaseOperation() error {
 		if err != nil {
 			log.Printf("[ERROR] error setting data after polling error on database: %v", err)
 		}
-		return fmt.Errorf("[ERROR] unable to get database after the update: %v", err)
+		return fmt.Errorf("[ERROR] unable to get database after the Update: %v", err)
 	}
 
 	s.Database = &getDatabaseResponse.Database
@@ -2935,11 +2981,19 @@ func (s *DatabaseDbSystemResourceCrud) sendUpdateForLicenseModel(dbSystemId stri
 	request.LicenseModel = oci_database.UpdateDbSystemDetailsLicenseModelEnum(licenseModel.(string))
 
 	request.DbSystemId = &dbSystemId
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.UpdateDbSystem(context.Background(), request)
 	if err != nil {
 		return err
+	}
+
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
 	}
 
 	s.Res = &response.DbSystem
@@ -2950,7 +3004,7 @@ func (s *DatabaseDbSystemResourceCrud) sendUpdateForLicenseModel(dbSystemId stri
 		if err != nil {
 			log.Printf("[ERROR] error setting data after polling error on the dbSystem: %v", err)
 		}
-		return fmt.Errorf("[ERROR] unable to get dbSystem after the update: %v", err)
+		return fmt.Errorf("[ERROR] unable to get dbSystem after the Update: %v", err)
 	}
 
 	s.Res = &getDbSystemResponse.DbSystem
@@ -2981,7 +3035,7 @@ func (s *DatabaseDbSystemResourceCrud) mapToUpdateDatabaseDetails(fieldKeyFormat
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if adminPassword, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "admin_password")); ok && s.D.HasChange(fmt.Sprintf(fieldKeyFormat, "admin_password")) {

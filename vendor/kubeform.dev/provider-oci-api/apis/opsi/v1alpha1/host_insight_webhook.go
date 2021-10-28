@@ -42,7 +42,11 @@ func (r *HostInsight) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &HostInsight{}
 
 var hostinsightForceNewList = map[string]bool{
-	"/management_agent_id": true,
+	"/enterprise_manager_bridge_id":         true,
+	"/enterprise_manager_entity_identifier": true,
+	"/enterprise_manager_identifier":        true,
+	"/exadata_insight_id":                   true,
+	"/management_agent_id":                  true,
 }
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type

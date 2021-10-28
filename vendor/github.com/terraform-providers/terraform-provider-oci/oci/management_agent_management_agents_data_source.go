@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_management_agent "github.com/oracle/oci-go-sdk/v45/managementagent"
+	oci_management_agent "github.com/oracle/oci-go-sdk/v50/managementagent"
 )
 
 func init() {
@@ -18,7 +18,11 @@ func ManagementAgentManagementAgentsDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readManagementAgentManagementAgents,
 		Schema: map[string]*schema.Schema{
-			"filter": dataSourceFiltersSchema(),
+			"filter": DataSourceFiltersSchema(),
+			"availability_status": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 			"compartment_id": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -27,21 +31,42 @@ func ManagementAgentManagementAgentsDataSource() *schema.Resource {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"platform_type": {
+			"host_id": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
-			"plugin_name": {
+			"install_type": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+			"is_customer_deployed": {
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+			"platform_type": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+			"plugin_name": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 			},
 			"state": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
 			"version": {
-				Type:     schema.TypeString,
+				Type:     schema.TypeList,
 				Optional: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 			},
 			"management_agents": {
 				Type:     schema.TypeList,
@@ -73,6 +98,10 @@ func (s *ManagementAgentManagementAgentsDataSourceCrud) VoidState() {
 func (s *ManagementAgentManagementAgentsDataSourceCrud) Get() error {
 	request := oci_management_agent.ListManagementAgentsRequest{}
 
+	if availabilityStatus, ok := s.D.GetOkExists("availability_status"); ok {
+		request.AvailabilityStatus = oci_management_agent.ListManagementAgentsAvailabilityStatusEnum(availabilityStatus.(string))
+	}
+
 	if compartmentId, ok := s.D.GetOkExists("compartment_id"); ok {
 		tmp := compartmentId.(string)
 		request.CompartmentId = &tmp
@@ -83,13 +112,44 @@ func (s *ManagementAgentManagementAgentsDataSourceCrud) Get() error {
 		request.DisplayName = &tmp
 	}
 
+	if hostId, ok := s.D.GetOkExists("host_id"); ok {
+		tmp := hostId.(string)
+		request.HostId = &tmp
+	}
+
+	if installType, ok := s.D.GetOkExists("install_type"); ok {
+		request.InstallType = oci_management_agent.ListManagementAgentsInstallTypeEnum(installType.(string))
+	}
+
+	if isCustomerDeployed, ok := s.D.GetOkExists("is_customer_deployed"); ok {
+		tmp := isCustomerDeployed.(bool)
+		request.IsCustomerDeployed = &tmp
+	}
+
 	if platformType, ok := s.D.GetOkExists("platform_type"); ok {
-		request.PlatformType = oci_management_agent.ListManagementAgentsPlatformTypeEnum(platformType.(string))
+		interfaces := platformType.([]interface{})
+		tmp := make([]oci_management_agent.PlatformTypesEnum, len(interfaces))
+		for i := range interfaces {
+			if interfaces[i] != nil {
+				tmp[i] = oci_management_agent.PlatformTypesEnum(interfaces[i].(string))
+			}
+		}
+		if len(tmp) != 0 || s.D.HasChange("platform_type") {
+			request.PlatformType = tmp
+		}
 	}
 
 	if pluginName, ok := s.D.GetOkExists("plugin_name"); ok {
-		tmp := pluginName.(string)
-		request.PluginName = &tmp
+		interfaces := pluginName.([]interface{})
+		tmp := make([]string, len(interfaces))
+		for i := range interfaces {
+			if interfaces[i] != nil {
+				tmp[i] = interfaces[i].(string)
+			}
+		}
+		if len(tmp) != 0 || s.D.HasChange("plugin_name") {
+			request.PluginName = tmp
+		}
 	}
 
 	if state, ok := s.D.GetOkExists("state"); ok {
@@ -97,11 +157,19 @@ func (s *ManagementAgentManagementAgentsDataSourceCrud) Get() error {
 	}
 
 	if version, ok := s.D.GetOkExists("version"); ok {
-		tmp := version.(string)
-		request.Version = &tmp
+		interfaces := version.([]interface{})
+		tmp := make([]string, len(interfaces))
+		for i := range interfaces {
+			if interfaces[i] != nil {
+				tmp[i] = interfaces[i].(string)
+			}
+		}
+		if len(tmp) != 0 || s.D.HasChange("version") {
+			request.Version = tmp
+		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "management_agent")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "management_agent")
 
 	response, err := s.Client.ListManagementAgents(context.Background(), request)
 	if err != nil {
@@ -153,6 +221,10 @@ func (s *ManagementAgentManagementAgentsDataSourceCrud) SetData() error {
 			managementAgent["host"] = *r.Host
 		}
 
+		if r.HostId != nil {
+			managementAgent["host_id"] = *r.HostId
+		}
+
 		if r.Id != nil {
 			managementAgent["id"] = *r.Id
 		}
@@ -161,8 +233,14 @@ func (s *ManagementAgentManagementAgentsDataSourceCrud) SetData() error {
 			managementAgent["install_key_id"] = *r.InstallKeyId
 		}
 
+		managementAgent["install_type"] = r.InstallType
+
 		if r.IsAgentAutoUpgradable != nil {
 			managementAgent["is_agent_auto_upgradable"] = *r.IsAgentAutoUpgradable
+		}
+
+		if r.IsCustomerDeployed != nil {
+			managementAgent["is_customer_deployed"] = *r.IsCustomerDeployed
 		}
 
 		if r.LifecycleDetails != nil {
@@ -185,6 +263,10 @@ func (s *ManagementAgentManagementAgentsDataSourceCrud) SetData() error {
 		}
 		managementAgent["plugin_list"] = pluginList
 
+		if r.ResourceArtifactVersion != nil {
+			managementAgent["resource_artifact_version"] = *r.ResourceArtifactVersion
+		}
+
 		managementAgent["state"] = r.LifecycleState
 
 		if r.TimeCreated != nil {
@@ -193,6 +275,10 @@ func (s *ManagementAgentManagementAgentsDataSourceCrud) SetData() error {
 
 		if r.TimeLastHeartbeat != nil {
 			managementAgent["time_last_heartbeat"] = r.TimeLastHeartbeat.String()
+		}
+
+		if r.TimeUpdated != nil {
+			managementAgent["time_updated"] = r.TimeUpdated.String()
 		}
 
 		if r.Version != nil {

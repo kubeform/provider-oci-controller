@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_opsi "github.com/oracle/oci-go-sdk/v45/opsi"
+	oci_opsi "github.com/oracle/oci-go-sdk/v50/opsi"
 )
 
 func init() {
@@ -18,7 +18,7 @@ func OpsiDatabaseInsightsDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readOpsiDatabaseInsights,
 		Schema: map[string]*schema.Schema{
-			"filter": dataSourceFiltersSchema(),
+			"filter": DataSourceFiltersSchema(),
 			"compartment_id": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -49,6 +49,10 @@ func OpsiDatabaseInsightsDataSource() *schema.Resource {
 				},
 			},
 			"id": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"exadata_insight_id": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -141,6 +145,11 @@ func (s *OpsiDatabaseInsightsDataSourceCrud) Get() error {
 		request.EnterpriseManagerBridgeId = &tmp
 	}
 
+	if exadataInsightId, ok := s.D.GetOkExists("exadata_insight_id"); ok {
+		tmp := exadataInsightId.(string)
+		request.ExadataInsightId = &tmp
+	}
+
 	if fields, ok := s.D.GetOkExists("fields"); ok {
 		interfaces := fields.([]interface{})
 		tmp := make([]oci_opsi.ListDatabaseInsightsFieldsEnum, len(interfaces))
@@ -184,7 +193,7 @@ func (s *OpsiDatabaseInsightsDataSourceCrud) Get() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "opsi")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "opsi")
 
 	response, err := s.Client.ListDatabaseInsights(context.Background(), request)
 	if err != nil {

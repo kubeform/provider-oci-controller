@@ -901,6 +901,11 @@ func (in *ObjectSpecResource) DeepCopyInto(out *ObjectSpecResource) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.OpcSseKmsKeyID != nil {
+		in, out := &in.OpcSseKmsKeyID, &out.OpcSseKmsKeyID
+		*out = new(string)
+		**out = **in
+	}
 	if in.Source != nil {
 		in, out := &in.Source, &out.Source
 		*out = new(string)

@@ -11,7 +11,8 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_core "github.com/oracle/oci-go-sdk/v45/core"
+	oci_core "github.com/oracle/oci-go-sdk/v50/core"
+	oci_work_requests "github.com/oracle/oci-go-sdk/v50/workrequests"
 )
 
 func init() {
@@ -51,16 +52,16 @@ func CoreVolumeBackupResource() *schema.Resource {
 							Required: true,
 							ForceNew: true,
 						},
-						// Optional
-						"kms_key_id": {
-							Type:     schema.TypeString,
-							Optional: true,
-							ForceNew: true,
-						},
 						// Required
 						"volume_backup_id": {
 							Type:     schema.TypeString,
 							Required: true,
+							ForceNew: true,
+						},
+						// Optional
+						"kms_key_id": {
+							Type:     schema.TypeString,
+							Optional: true,
 							ForceNew: true,
 						},
 					},
@@ -158,6 +159,8 @@ func createCoreVolumeBackup(d *schema.ResourceData, m interface{}) error {
 	sync := &CoreVolumeBackupResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).blockstorageClient()
+	sync.workRequestClient = m.(*OracleClients).workRequestClient
+
 	compartment, ok := sync.D.GetOkExists("compartment_id")
 
 	err := CreateResource(d, sync)
@@ -174,11 +177,11 @@ func createCoreVolumeBackup(d *schema.ResourceData, m interface{}) error {
 		sync.Res.CompartmentId = &tmp
 		err := sync.Get()
 		if err != nil {
-			log.Printf("error doing a Get() after compartment update: %v", err)
+			log.Printf("error doing a Get() after compartment Update: %v", err)
 		}
 		err = sync.SetData()
 		if err != nil {
-			log.Printf("error doing a SetData() after compartment update: %v", err)
+			log.Printf("error doing a SetData() after compartment Update: %v", err)
 		}
 	}
 	return nil
@@ -188,6 +191,7 @@ func readCoreVolumeBackup(d *schema.ResourceData, m interface{}) error {
 	sync := &CoreVolumeBackupResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).blockstorageClient()
+	sync.workRequestClient = m.(*OracleClients).workRequestClient
 
 	return ReadResource(sync)
 }
@@ -196,6 +200,7 @@ func updateCoreVolumeBackup(d *schema.ResourceData, m interface{}) error {
 	sync := &CoreVolumeBackupResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).blockstorageClient()
+	sync.workRequestClient = m.(*OracleClients).workRequestClient
 
 	return UpdateResource(d, sync)
 }
@@ -204,6 +209,7 @@ func deleteCoreVolumeBackup(d *schema.ResourceData, m interface{}) error {
 	sync := &CoreVolumeBackupResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).blockstorageClient()
+	sync.workRequestClient = m.(*OracleClients).workRequestClient
 	sync.DisableNotFoundRetries = true
 
 	return DeleteResource(d, sync)
@@ -213,6 +219,7 @@ type CoreVolumeBackupResourceCrud struct {
 	BaseCrud
 	Client                 *oci_core.BlockstorageClient
 	SourceRegionClient     *oci_core.BlockstorageClient
+	workRequestClient      *oci_work_requests.WorkRequestClient
 	Res                    *oci_core.VolumeBackup
 	DisableNotFoundRetries bool
 }
@@ -311,7 +318,23 @@ func (s *CoreVolumeBackupResourceCrud) createVolumeBackupCopy() error {
 		return err
 	}
 
+	workRequestId := response.OpcWorkRequestId
+
 	s.Res = &response.VolumeBackup
+
+	if workRequestId != nil {
+		_, err := WaitForWorkRequestWithErrorHandling(s.workRequestClient, workRequestId, "volumeBackup", oci_work_requests.WorkRequestResourceActionTypeCreated, s.D.Timeout(schema.TimeoutCreate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
+	}
+
+	s.D.SetId(*s.Res.Id)
+	err = WaitForResourceCondition(s, func() bool { return s.Res.LifecycleState == oci_core.VolumeBackupLifecycleStateAvailable }, s.D.Timeout(schema.TimeoutCreate))
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -332,7 +355,7 @@ func (s *CoreVolumeBackupResourceCrud) CreateVolumeBackup() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if type_, ok := s.D.GetOkExists("type"); ok {
@@ -344,7 +367,7 @@ func (s *CoreVolumeBackupResourceCrud) CreateVolumeBackup() error {
 		request.VolumeId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.CreateVolumeBackup(context.Background(), request)
 	if err != nil {
@@ -361,7 +384,7 @@ func (s *CoreVolumeBackupResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.VolumeBackupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.GetVolumeBackup(context.Background(), request)
 	if err != nil {
@@ -398,13 +421,13 @@ func (s *CoreVolumeBackupResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	tmp := s.D.Id()
 	request.VolumeBackupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.UpdateVolumeBackup(context.Background(), request)
 	if err != nil {
@@ -421,7 +444,7 @@ func (s *CoreVolumeBackupResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.VolumeBackupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	_, err := s.Client.DeleteVolumeBackup(context.Background(), request)
 	return err
@@ -504,11 +527,16 @@ func (s *CoreVolumeBackupResourceCrud) updateCompartment(compartment interface{}
 	idTmp := s.D.Id()
 	changeCompartmentRequest.VolumeBackupId = &idTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	_, err := s.Client.ChangeVolumeBackupCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }

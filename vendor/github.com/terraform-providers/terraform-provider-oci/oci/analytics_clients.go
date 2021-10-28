@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_analytics "github.com/oracle/oci-go-sdk/v45/analytics"
+	oci_analytics "github.com/oracle/oci-go-sdk/v50/analytics"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_analytics.AnalyticsClient", &OracleClient{initClientFn: initAnalyticsAnalyticsClient})
+	RegisterOracleClient("oci_analytics.AnalyticsClient", &OracleClient{InitClientFn: initAnalyticsAnalyticsClient})
 }
 
 func initAnalyticsAnalyticsClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

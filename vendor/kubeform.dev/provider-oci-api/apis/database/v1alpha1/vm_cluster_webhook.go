@@ -42,6 +42,7 @@ func (r *VmCluster) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &VmCluster{}
 
 var vmclusterForceNewList = map[string]bool{
+	"/db_servers":                  true,
 	"/display_name":                true,
 	"/exadata_infrastructure_id":   true,
 	"/gi_version":                  true,

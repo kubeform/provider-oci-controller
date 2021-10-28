@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func (s *DatabaseDatabaseDataSourceCrud) Get() error {
 		request.DatabaseId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 
 	response, err := s.Client.GetDatabase(context.Background(), request)
 	if err != nil {
@@ -79,6 +79,12 @@ func (s *DatabaseDatabaseDataSourceCrud) SetData() error {
 		s.D.Set("connection_strings", []interface{}{DatabaseConnectionStringsToMap(s.Res.ConnectionStrings)})
 	} else {
 		s.D.Set("connection_strings", nil)
+	}
+
+	if s.Res.DatabaseManagementConfig != nil {
+		s.D.Set("database_management_config", []interface{}{CloudDatabaseManagementConfigToMap(s.Res.DatabaseManagementConfig)})
+	} else {
+		s.D.Set("database_management_config", nil)
 	}
 
 	if s.Res.DatabaseSoftwareImageId != nil {
@@ -117,6 +123,10 @@ func (s *DatabaseDatabaseDataSourceCrud) SetData() error {
 
 	s.D.Set("freeform_tags", s.Res.FreeformTags)
 
+	if s.Res.IsCdb != nil {
+		s.D.Set("is_cdb", *s.Res.IsCdb)
+	}
+
 	if s.Res.KmsKeyId != nil {
 		s.D.Set("kms_key_id", *s.Res.KmsKeyId)
 	}
@@ -135,6 +145,10 @@ func (s *DatabaseDatabaseDataSourceCrud) SetData() error {
 
 	if s.Res.PdbName != nil {
 		s.D.Set("pdb_name", *s.Res.PdbName)
+	}
+
+	if s.Res.SidPrefix != nil {
+		s.D.Set("sid_prefix", *s.Res.SidPrefix)
 	}
 
 	if s.Res.SourceDatabasePointInTimeRecoveryTimestamp != nil {

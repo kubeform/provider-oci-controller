@@ -65,7 +65,8 @@ type ArtifactsContentArtifactByPathSpecResource struct {
 	ArtifactPath *string `json:"artifactPath" tf:"artifact_path"`
 	// +optional
 	CompartmentID *string `json:"compartmentID,omitempty" tf:"compartment_id"`
-	Content       *string `json:"content" tf:"content"`
+	// +optional
+	Content *string `json:"content,omitempty" tf:"content"`
 	// +optional
 	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
 	// +optional
@@ -76,7 +77,9 @@ type ArtifactsContentArtifactByPathSpecResource struct {
 	// +optional
 	Sha256 *string `json:"sha256,omitempty" tf:"sha256"`
 	// +optional
-	SizeInBytes *int64 `json:"sizeInBytes,omitempty" tf:"size_in_bytes"`
+	SizeInBytes *string `json:"sizeInBytes,omitempty" tf:"size_in_bytes"`
+	// +optional
+	Source *string `json:"source,omitempty" tf:"source"`
 	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional

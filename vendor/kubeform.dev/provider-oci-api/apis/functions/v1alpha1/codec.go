@@ -27,15 +27,17 @@ import (
 
 func GetEncoder() map[string]jsoniter.ValEncoder {
 	return map[string]jsoniter.ValEncoder{
-		jsoniter.MustGetKind(reflect2.TypeOf(ApplicationSpecTraceConfig{}).Type1()): ApplicationSpecTraceConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(FunctionSpecTraceConfig{}).Type1()):    FunctionSpecTraceConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ApplicationSpecImagePolicyConfig{}).Type1()): ApplicationSpecImagePolicyConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ApplicationSpecTraceConfig{}).Type1()):       ApplicationSpecTraceConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(FunctionSpecTraceConfig{}).Type1()):          FunctionSpecTraceConfigCodec{},
 	}
 }
 
 func GetDecoder() map[string]jsoniter.ValDecoder {
 	return map[string]jsoniter.ValDecoder{
-		jsoniter.MustGetKind(reflect2.TypeOf(ApplicationSpecTraceConfig{}).Type1()): ApplicationSpecTraceConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(FunctionSpecTraceConfig{}).Type1()):    FunctionSpecTraceConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ApplicationSpecImagePolicyConfig{}).Type1()): ApplicationSpecImagePolicyConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ApplicationSpecTraceConfig{}).Type1()):       ApplicationSpecTraceConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(FunctionSpecTraceConfig{}).Type1()):          FunctionSpecTraceConfigCodec{},
 	}
 }
 
@@ -49,6 +51,85 @@ func getDecodersWithout(typ string) map[string]jsoniter.ValDecoder {
 	origMap := GetDecoder()
 	delete(origMap, typ)
 	return origMap
+}
+
+// +k8s:deepcopy-gen=false
+type ApplicationSpecImagePolicyConfigCodec struct {
+}
+
+func (ApplicationSpecImagePolicyConfigCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ApplicationSpecImagePolicyConfig)(ptr) == nil
+}
+
+func (ApplicationSpecImagePolicyConfigCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ApplicationSpecImagePolicyConfig)(ptr)
+	var objs []ApplicationSpecImagePolicyConfig
+	if obj != nil {
+		objs = []ApplicationSpecImagePolicyConfig{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ApplicationSpecImagePolicyConfig{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ApplicationSpecImagePolicyConfigCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ApplicationSpecImagePolicyConfig)(ptr) = ApplicationSpecImagePolicyConfig{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ApplicationSpecImagePolicyConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ApplicationSpecImagePolicyConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ApplicationSpecImagePolicyConfig)(ptr) = objs[0]
+			} else {
+				*(*ApplicationSpecImagePolicyConfig)(ptr) = ApplicationSpecImagePolicyConfig{}
+			}
+		} else {
+			*(*ApplicationSpecImagePolicyConfig)(ptr) = ApplicationSpecImagePolicyConfig{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ApplicationSpecImagePolicyConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ApplicationSpecImagePolicyConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ApplicationSpecImagePolicyConfig)(ptr) = obj
+		} else {
+			*(*ApplicationSpecImagePolicyConfig)(ptr) = ApplicationSpecImagePolicyConfig{}
+		}
+	default:
+		iter.ReportError("decode ApplicationSpecImagePolicyConfig", "unexpected JSON type")
+	}
 }
 
 // +k8s:deepcopy-gen=false

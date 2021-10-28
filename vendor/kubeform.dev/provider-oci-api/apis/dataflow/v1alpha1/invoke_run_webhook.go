@@ -52,6 +52,7 @@ var invokerunForceNewList = map[string]bool{
 	"/execute":              true,
 	"/executor_shape":       true,
 	"/logs_bucket_uri":      true,
+	"/metastore_id":         true,
 	"/num_executors":        true,
 	"/parameters/*/name":    true,
 	"/parameters/*/value":   true,

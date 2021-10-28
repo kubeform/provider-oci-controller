@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_dataflow "github.com/oracle/oci-go-sdk/v45/dataflow"
+	oci_dataflow "github.com/oracle/oci-go-sdk/v50/dataflow"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_dataflow.DataFlowClient", &OracleClient{initClientFn: initDataflowDataFlowClient})
+	RegisterOracleClient("oci_dataflow.DataFlowClient", &OracleClient{InitClientFn: initDataflowDataFlowClient})
 }
 
 func initDataflowDataFlowClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

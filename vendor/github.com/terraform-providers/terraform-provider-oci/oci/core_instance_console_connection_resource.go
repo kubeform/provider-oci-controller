@@ -8,7 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_core "github.com/oracle/oci-go-sdk/v45/core"
+	oci_core "github.com/oracle/oci-go-sdk/v50/core"
 )
 
 func init() {
@@ -63,6 +63,10 @@ func CoreInstanceConsoleConnectionResource() *schema.Resource {
 				Computed: true,
 			},
 			"fingerprint": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"service_host_key_fingerprint": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -158,7 +162,7 @@ func (s *CoreInstanceConsoleConnectionResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if instanceId, ok := s.D.GetOkExists("instance_id"); ok {
@@ -171,7 +175,7 @@ func (s *CoreInstanceConsoleConnectionResourceCrud) Create() error {
 		request.PublicKey = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.CreateInstanceConsoleConnection(context.Background(), request)
 	if err != nil {
@@ -188,7 +192,7 @@ func (s *CoreInstanceConsoleConnectionResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.InstanceConsoleConnectionId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.GetInstanceConsoleConnection(context.Background(), request)
 	if err != nil {
@@ -211,13 +215,13 @@ func (s *CoreInstanceConsoleConnectionResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	tmp := s.D.Id()
 	request.InstanceConsoleConnectionId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.UpdateInstanceConsoleConnection(context.Background(), request)
 	if err != nil {
@@ -234,7 +238,7 @@ func (s *CoreInstanceConsoleConnectionResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.InstanceConsoleConnectionId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	_, err := s.Client.DeleteInstanceConsoleConnection(context.Background(), request)
 	return err
@@ -265,6 +269,10 @@ func (s *CoreInstanceConsoleConnectionResourceCrud) SetData() error {
 
 	if s.Res.InstanceId != nil {
 		s.D.Set("instance_id", *s.Res.InstanceId)
+	}
+
+	if s.Res.ServiceHostKeyFingerprint != nil {
+		s.D.Set("service_host_key_fingerprint", *s.Res.ServiceHostKeyFingerprint)
 	}
 
 	s.D.Set("state", s.Res.LifecycleState)

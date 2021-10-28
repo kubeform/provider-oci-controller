@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_audit "github.com/oracle/oci-go-sdk/v45/audit"
+	oci_audit "github.com/oracle/oci-go-sdk/v50/audit"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_audit.AuditClient", &OracleClient{initClientFn: initAuditAuditClient})
+	RegisterOracleClient("oci_audit.AuditClient", &OracleClient{InitClientFn: initAuditAuditClient})
 }
 
 func initAuditAuditClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

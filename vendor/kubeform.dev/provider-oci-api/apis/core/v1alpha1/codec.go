@@ -96,6 +96,7 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(VolumeSpecSourceDetails{}).Type1()):                                                                        VolumeSpecSourceDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(VolumeBackupSpecSourceDetails{}).Type1()):                                                                  VolumeBackupSpecSourceDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(VolumeGroupSpecSourceDetails{}).Type1()):                                                                   VolumeGroupSpecSourceDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(VolumeGroupBackupSpecSourceDetails{}).Type1()):                                                             VolumeGroupBackupSpecSourceDetailsCodec{},
 	}
 }
 
@@ -170,6 +171,7 @@ func GetDecoder() map[string]jsoniter.ValDecoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(VolumeSpecSourceDetails{}).Type1()):                                                                        VolumeSpecSourceDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(VolumeBackupSpecSourceDetails{}).Type1()):                                                                  VolumeBackupSpecSourceDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(VolumeGroupSpecSourceDetails{}).Type1()):                                                                   VolumeGroupSpecSourceDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(VolumeGroupBackupSpecSourceDetails{}).Type1()):                                                             VolumeGroupBackupSpecSourceDetailsCodec{},
 	}
 }
 
@@ -5633,5 +5635,84 @@ func (VolumeGroupSpecSourceDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsonit
 		}
 	default:
 		iter.ReportError("decode VolumeGroupSpecSourceDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type VolumeGroupBackupSpecSourceDetailsCodec struct {
+}
+
+func (VolumeGroupBackupSpecSourceDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*VolumeGroupBackupSpecSourceDetails)(ptr) == nil
+}
+
+func (VolumeGroupBackupSpecSourceDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*VolumeGroupBackupSpecSourceDetails)(ptr)
+	var objs []VolumeGroupBackupSpecSourceDetails
+	if obj != nil {
+		objs = []VolumeGroupBackupSpecSourceDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VolumeGroupBackupSpecSourceDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (VolumeGroupBackupSpecSourceDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*VolumeGroupBackupSpecSourceDetails)(ptr) = VolumeGroupBackupSpecSourceDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []VolumeGroupBackupSpecSourceDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VolumeGroupBackupSpecSourceDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*VolumeGroupBackupSpecSourceDetails)(ptr) = objs[0]
+			} else {
+				*(*VolumeGroupBackupSpecSourceDetails)(ptr) = VolumeGroupBackupSpecSourceDetails{}
+			}
+		} else {
+			*(*VolumeGroupBackupSpecSourceDetails)(ptr) = VolumeGroupBackupSpecSourceDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj VolumeGroupBackupSpecSourceDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VolumeGroupBackupSpecSourceDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*VolumeGroupBackupSpecSourceDetails)(ptr) = obj
+		} else {
+			*(*VolumeGroupBackupSpecSourceDetails)(ptr) = VolumeGroupBackupSpecSourceDetails{}
+		}
+	default:
+		iter.ReportError("decode VolumeGroupBackupSpecSourceDetails", "unexpected JSON type")
 	}
 }

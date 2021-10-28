@@ -15,8 +15,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
-	oci_devops "github.com/oracle/oci-go-sdk/v45/devops"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
+	oci_devops "github.com/oracle/oci-go-sdk/v50/devops"
 )
 
 func init() {
@@ -320,8 +320,8 @@ func DevopsDeployStageResource() *schema.Resource {
 				Type:             schema.TypeString,
 				Optional:         true,
 				Computed:         true,
-				ValidateFunc:     validateInt64TypeString,
-				DiffSuppressFunc: int64StringDiffSuppressFunction,
+				ValidateFunc:     ValidateInt64TypeString,
+				DiffSuppressFunc: Int64StringDiffSuppressFunction,
 			},
 			"namespace": {
 				Type:     schema.TypeString,
@@ -543,7 +543,7 @@ func (s *DevopsDeployStageResourceCrud) Create() error {
 		return err
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "devops")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "devops")
 
 	response, err := s.Client.CreateDeployStage(context.Background(), request)
 	if err != nil {
@@ -551,7 +551,7 @@ func (s *DevopsDeployStageResourceCrud) Create() error {
 	}
 
 	workId := response.OpcWorkRequestId
-	return s.getDeployStageFromWorkRequest(workId, getRetryPolicy(s.DisableNotFoundRetries, "devops"), oci_devops.ActionTypeCreated, s.D.Timeout(schema.TimeoutCreate))
+	return s.getDeployStageFromWorkRequest(workId, GetRetryPolicy(s.DisableNotFoundRetries, "devops"), oci_devops.ActionTypeCreated, s.D.Timeout(schema.TimeoutCreate))
 }
 
 func (s *DevopsDeployStageResourceCrud) getDeployStageFromWorkRequest(workId *string, retryPolicy *oci_common.RetryPolicy,
@@ -594,7 +594,7 @@ func deployStageWorkRequestShouldRetryFunc(timeout time.Duration) func(response 
 
 func deployStageWaitForWorkRequest(wId *string, entityType string, action oci_devops.ActionTypeEnum,
 	timeout time.Duration, disableFoundRetries bool, client *oci_devops.DevopsClient) (*string, error) {
-	retryPolicy := getRetryPolicy(disableFoundRetries, "devops")
+	retryPolicy := GetRetryPolicy(disableFoundRetries, "devops")
 	retryPolicy.ShouldRetryOperation = deployStageWorkRequestShouldRetryFunc(timeout)
 
 	response := oci_devops.GetWorkRequestResponse{}
@@ -675,7 +675,7 @@ func (s *DevopsDeployStageResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.DeployStageId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "devops")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "devops")
 
 	response, err := s.Client.GetDeployStage(context.Background(), request)
 	if err != nil {
@@ -693,7 +693,7 @@ func (s *DevopsDeployStageResourceCrud) Update() error {
 		return err
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "devops")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "devops")
 
 	response, err := s.Client.UpdateDeployStage(context.Background(), request)
 	if err != nil {
@@ -701,7 +701,7 @@ func (s *DevopsDeployStageResourceCrud) Update() error {
 	}
 
 	workId := response.OpcWorkRequestId
-	return s.getDeployStageFromWorkRequest(workId, getRetryPolicy(s.DisableNotFoundRetries, "devops"), oci_devops.ActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate))
+	return s.getDeployStageFromWorkRequest(workId, GetRetryPolicy(s.DisableNotFoundRetries, "devops"), oci_devops.ActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate))
 }
 
 func (s *DevopsDeployStageResourceCrud) Delete() error {
@@ -710,7 +710,7 @@ func (s *DevopsDeployStageResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.DeployStageId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "devops")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "devops")
 
 	response, err := s.Client.DeleteDeployStage(context.Background(), request)
 	if err != nil {
@@ -1864,23 +1864,6 @@ func (s *DevopsDeployStageResourceCrud) mapToWaitCriteria(fieldKeyFormat string)
 	return baseObject, nil
 }
 
-func WaitCriteriaToMap(obj *oci_devops.WaitCriteria) map[string]interface{} {
-	result := map[string]interface{}{}
-	switch v := (*obj).(type) {
-	case oci_devops.AbsoluteWaitCriteria:
-		result["wait_type"] = "ABSOLUTE_WAIT"
-
-		if v.WaitDuration != nil {
-			result["wait_duration"] = string(*v.WaitDuration)
-		}
-	default:
-		log.Printf("[WARN] Received 'wait_type' of unknown type %v", *obj)
-		return nil
-	}
-
-	return result
-}
-
 func (s *DevopsDeployStageResourceCrud) mapToWaitCriteriaSummary(fieldKeyFormat string) (oci_devops.WaitCriteriaSummary, error) {
 	var baseObject oci_devops.WaitCriteriaSummary
 	//discriminator
@@ -2024,13 +2007,13 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicCreateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.CreateDeployStageDetails = details
 	case strings.ToLower("DEPLOY_FUNCTION"):
 		details := oci_devops.CreateFunctionDeployStageDetails{}
 		if config, ok := s.D.GetOkExists("config"); ok {
-			details.Config = objectMapToStringMap(config.(map[string]interface{}))
+			details.Config = ObjectMapToStringMap(config.(map[string]interface{}))
 		}
 		if dockerImageDeployArtifactId, ok := s.D.GetOkExists("docker_image_deploy_artifact_id"); ok {
 			tmp := dockerImageDeployArtifactId.(string)
@@ -2082,7 +2065,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicCreateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.CreateDeployStageDetails = details
 	case strings.ToLower("INVOKE_FUNCTION"):
@@ -2133,7 +2116,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicCreateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.CreateDeployStageDetails = details
 	case strings.ToLower("LOAD_BALANCER_TRAFFIC_SHIFT"):
@@ -2221,7 +2204,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicCreateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.CreateDeployStageDetails = details
 	case strings.ToLower("MANUAL_APPROVAL"):
@@ -2266,7 +2249,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicCreateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.CreateDeployStageDetails = details
 	case strings.ToLower("OKE_DEPLOYMENT"):
@@ -2331,7 +2314,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicCreateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.CreateDeployStageDetails = details
 	case strings.ToLower("WAIT"):
@@ -2376,7 +2359,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicCreateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.CreateDeployStageDetails = details
 	default:
@@ -2485,13 +2468,13 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicUpdateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.UpdateDeployStageDetails = details
 	case strings.ToLower("DEPLOY_FUNCTION"):
 		details := oci_devops.UpdateFunctionDeployStageDetails{}
 		if config, ok := s.D.GetOkExists("config"); ok {
-			details.Config = objectMapToStringMap(config.(map[string]interface{}))
+			details.Config = ObjectMapToStringMap(config.(map[string]interface{}))
 		}
 		if dockerImageDeployArtifactId, ok := s.D.GetOkExists("docker_image_deploy_artifact_id"); ok {
 			tmp := dockerImageDeployArtifactId.(string)
@@ -2541,7 +2524,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicUpdateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.UpdateDeployStageDetails = details
 	case strings.ToLower("INVOKE_FUNCTION"):
@@ -2590,7 +2573,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicUpdateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.UpdateDeployStageDetails = details
 	case strings.ToLower("LOAD_BALANCER_TRAFFIC_SHIFT"):
@@ -2676,7 +2659,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicUpdateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.UpdateDeployStageDetails = details
 	case strings.ToLower("MANUAL_APPROVAL"):
@@ -2719,7 +2702,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicUpdateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.UpdateDeployStageDetails = details
 	case strings.ToLower("OKE_DEPLOYMENT"):
@@ -2782,7 +2765,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicUpdateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.UpdateDeployStageDetails = details
 	case strings.ToLower("WAIT"):
@@ -2825,7 +2808,7 @@ func (s *DevopsDeployStageResourceCrud) populateTopLevelPolymorphicUpdateDeployS
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.UpdateDeployStageDetails = details
 	default:

@@ -49,6 +49,8 @@ type GateDeploymentSpecOggData struct {
 	DeploymentName *string `json:"deploymentName" tf:"deployment_name"`
 	// +optional
 	Key *string `json:"key,omitempty" tf:"key"`
+	// +optional
+	OggVersion *string `json:"oggVersion,omitempty" tf:"ogg_version"`
 }
 
 type GateDeploymentSpec struct {
@@ -99,6 +101,8 @@ type GateDeploymentSpecResource struct {
 	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional
+	LifecycleSubState *string `json:"lifecycleSubState,omitempty" tf:"lifecycle_sub_state"`
+	// +optional
 	NsgIDS []string `json:"nsgIDS,omitempty" tf:"nsg_ids"`
 	// +optional
 	OggData *GateDeploymentSpecOggData `json:"oggData,omitempty" tf:"ogg_data"`
@@ -115,6 +119,8 @@ type GateDeploymentSpecResource struct {
 	TimeCreated *string `json:"timeCreated,omitempty" tf:"time_created"`
 	// +optional
 	TimeUpdated *string `json:"timeUpdated,omitempty" tf:"time_updated"`
+	// +optional
+	TimeUpgradeRequired *string `json:"timeUpgradeRequired,omitempty" tf:"time_upgrade_required"`
 }
 
 type GateDeploymentStatus struct {

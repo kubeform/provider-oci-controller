@@ -15,7 +15,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -73,6 +73,16 @@ func DatabaseVmClusterNetworkResource() *schema.Resource {
 						},
 
 						// Optional
+						"scan_listener_port_tcp": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							Computed: true,
+						},
+						"scan_listener_port_tcp_ssl": {
+							Type:     schema.TypeInt,
+							Optional: true,
+							Computed: true,
+						},
 
 						// Computed
 					},
@@ -329,7 +339,7 @@ func (s *DatabaseVmClusterNetworkResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if ntp, ok := s.D.GetOkExists("ntp"); ok {
@@ -385,7 +395,7 @@ func (s *DatabaseVmClusterNetworkResourceCrud) Create() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.CreateVmClusterNetwork(context.Background(), request)
 	if err != nil {
@@ -430,7 +440,7 @@ func (s *DatabaseVmClusterNetworkResourceCrud) Get() error {
 		log.Printf("[WARN] Get() unable to parse current ID: %s", s.D.Id())
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.GetVmClusterNetwork(context.Background(), request)
 	if err != nil {
@@ -445,7 +455,7 @@ func (s *DatabaseVmClusterNetworkResourceCrud) Update() error {
 
 	if s.D.Get("state").(string) == string(oci_database.VmClusterNetworkLifecycleStateValidated) ||
 		s.D.Get("state").(string) == string(oci_database.VmClusterNetworkLifecycleStateAllocated) {
-		return fmt.Errorf("update not allowed on validated vm cluster network")
+		return fmt.Errorf("Update not allowed on validated vm cluster network")
 	}
 
 	request := oci_database.UpdateVmClusterNetworkRequest{}
@@ -478,7 +488,7 @@ func (s *DatabaseVmClusterNetworkResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if ntp, ok := s.D.GetOkExists("ntp"); ok && s.D.HasChange("ntp") {
@@ -536,7 +546,7 @@ func (s *DatabaseVmClusterNetworkResourceCrud) Update() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.UpdateVmClusterNetwork(context.Background(), request)
 	if err != nil {
@@ -573,7 +583,7 @@ func (s *DatabaseVmClusterNetworkResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.VmClusterNetworkId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.DeleteVmClusterNetwork(context.Background(), request)
 	return err
@@ -739,6 +749,16 @@ func (s *DatabaseVmClusterNetworkResourceCrud) mapToScanDetails(fieldKeyFormat s
 		result.Port = &tmp
 	}
 
+	if scanListenerPortTcp, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "scan_listener_port_tcp")); ok {
+		tmp := scanListenerPortTcp.(int)
+		result.ScanListenerPortTcp = &tmp
+	}
+
+	if scanListenerPortTcpSsl, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "scan_listener_port_tcp_ssl")); ok {
+		tmp := scanListenerPortTcpSsl.(int)
+		result.ScanListenerPortTcpSsl = &tmp
+	}
+
 	return result, nil
 }
 
@@ -753,6 +773,14 @@ func ScanDetailsToMap(obj oci_database.ScanDetails) map[string]interface{} {
 
 	if obj.Port != nil {
 		result["port"] = int(*obj.Port)
+	}
+
+	if obj.ScanListenerPortTcp != nil {
+		result["scan_listener_port_tcp"] = int(*obj.ScanListenerPortTcp)
+	}
+
+	if obj.ScanListenerPortTcpSsl != nil {
+		result["scan_listener_port_tcp_ssl"] = int(*obj.ScanListenerPortTcpSsl)
 	}
 
 	return result
@@ -869,6 +897,12 @@ func scansHashCodeForSets(v interface{}) int {
 	if port, ok := m["port"]; ok {
 		buf.WriteString(fmt.Sprintf("%v-", port))
 	}
+	if scanListenerPortTcp, ok := m["scan_listener_port_tcp"]; ok {
+		buf.WriteString(fmt.Sprintf("%v-", scanListenerPortTcp))
+	}
+	if scanListenerPortTcpSsl, ok := m["scan_listener_port_tcp_ssl"]; ok {
+		buf.WriteString(fmt.Sprintf("%v-", scanListenerPortTcpSsl))
+	}
 	return hashcode.String(buf.String())
 }
 
@@ -908,7 +942,7 @@ func (s *DatabaseVmClusterNetworkResourceCrud) validateVmClusterNetwork(vmCluste
 
 	request.VmClusterNetworkId = &vmClusterNetworkId
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.ValidateVmClusterNetwork(context.Background(), request)
 	if err != nil {

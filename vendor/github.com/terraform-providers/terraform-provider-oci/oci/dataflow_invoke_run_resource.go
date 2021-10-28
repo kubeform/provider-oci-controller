@@ -10,7 +10,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_dataflow "github.com/oracle/oci-go-sdk/v45/dataflow"
+	oci_dataflow "github.com/oracle/oci-go-sdk/v50/dataflow"
 )
 
 func init() {
@@ -101,6 +101,12 @@ func DataflowInvokeRunResource() *schema.Resource {
 				Elem:     schema.TypeString,
 			},
 			"logs_bucket_uri": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+			},
+			"metastore_id": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -368,7 +374,7 @@ func (s *DataflowInvokeRunResourceCrud) Create() error {
 	}
 
 	if configuration, ok := s.D.GetOkExists("configuration"); ok {
-		request.Configuration = objectMapToStringMap(configuration.(map[string]interface{}))
+		request.Configuration = ObjectMapToStringMap(configuration.(map[string]interface{}))
 	}
 
 	if definedTags, ok := s.D.GetOkExists("defined_tags"); ok {
@@ -400,12 +406,17 @@ func (s *DataflowInvokeRunResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if logsBucketUri, ok := s.D.GetOkExists("logs_bucket_uri"); ok {
 		tmp := logsBucketUri.(string)
 		request.LogsBucketUri = &tmp
+	}
+
+	if metastoreId, ok := s.D.GetOkExists("metastore_id"); ok {
+		tmp := metastoreId.(string)
+		request.MetastoreId = &tmp
 	}
 
 	if numExecutors, ok := s.D.GetOkExists("num_executors"); ok {
@@ -440,7 +451,7 @@ func (s *DataflowInvokeRunResourceCrud) Create() error {
 		request.WarehouseBucketUri = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "dataflow")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "dataflow")
 
 	response, err := s.Client.CreateRun(context.Background(), request)
 	if err != nil {
@@ -457,7 +468,7 @@ func (s *DataflowInvokeRunResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.RunId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "dataflow")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "dataflow")
 
 	response, err := s.Client.GetRun(context.Background(), request)
 	if err != nil {
@@ -489,13 +500,13 @@ func (s *DataflowInvokeRunResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	tmp := s.D.Id()
 	request.RunId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "dataflow")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "dataflow")
 
 	response, err := s.Client.UpdateRun(context.Background(), request)
 	if err != nil {
@@ -512,7 +523,7 @@ func (s *DataflowInvokeRunResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	getRequest.RunId = &tmp
 
-	getRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "dataflow")
+	getRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "dataflow")
 
 	getResponse, err := s.Client.GetRun(context.Background(), getRequest)
 	if err != nil {
@@ -527,7 +538,7 @@ func (s *DataflowInvokeRunResourceCrud) Delete() error {
 	tmp = s.D.Id()
 	request.RunId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "dataflow")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "dataflow")
 
 	_, err = s.Client.DeleteRun(context.Background(), request)
 	return err
@@ -596,6 +607,10 @@ func (s *DataflowInvokeRunResourceCrud) SetData() error {
 
 	if s.Res.LogsBucketUri != nil {
 		s.D.Set("logs_bucket_uri", *s.Res.LogsBucketUri)
+	}
+
+	if s.Res.MetastoreId != nil {
+		s.D.Set("metastore_id", *s.Res.MetastoreId)
 	}
 
 	if s.Res.NumExecutors != nil {
@@ -691,11 +706,16 @@ func (s *DataflowInvokeRunResourceCrud) updateCompartment(compartment interface{
 		changeCompartmentRequest.RunId = &runId
 	}
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "dataflow")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "dataflow")
 
 	_, err := s.Client.ChangeRunCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }

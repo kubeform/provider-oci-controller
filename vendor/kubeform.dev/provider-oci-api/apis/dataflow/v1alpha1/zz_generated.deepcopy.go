@@ -233,6 +233,11 @@ func (in *ApplicationSpecResource) DeepCopyInto(out *ApplicationSpecResource) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.MetastoreID != nil {
+		in, out := &in.MetastoreID, &out.MetastoreID
+		*out = new(string)
+		**out = **in
+	}
 	if in.NumExecutors != nil {
 		in, out := &in.NumExecutors, &out.NumExecutors
 		*out = new(int64)
@@ -542,6 +547,11 @@ func (in *InvokeRunSpecResource) DeepCopyInto(out *InvokeRunSpecResource) {
 	}
 	if in.LogsBucketURI != nil {
 		in, out := &in.LogsBucketURI, &out.LogsBucketURI
+		*out = new(string)
+		**out = **in
+	}
+	if in.MetastoreID != nil {
+		in, out := &in.MetastoreID, &out.MetastoreID
 		*out = new(string)
 		**out = **in
 	}

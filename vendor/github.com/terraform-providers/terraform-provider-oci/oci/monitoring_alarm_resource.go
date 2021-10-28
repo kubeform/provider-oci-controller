@@ -10,8 +10,8 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
-	oci_monitoring "github.com/oracle/oci-go-sdk/v45/monitoring"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
+	oci_monitoring "github.com/oracle/oci-go-sdk/v50/monitoring"
 )
 
 func init() {
@@ -85,6 +85,11 @@ func MonitoringAlarmResource() *schema.Resource {
 				Computed: true,
 				Elem:     schema.TypeString,
 			},
+			"message_format": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
 			"metric_compartment_id_in_subtree": {
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -122,12 +127,12 @@ func MonitoringAlarmResource() *schema.Resource {
 						"time_suppress_from": {
 							Type:             schema.TypeString,
 							Required:         true,
-							DiffSuppressFunc: timeDiffSuppressFunction,
+							DiffSuppressFunc: TimeDiffSuppressFunction,
 						},
 						"time_suppress_until": {
 							Type:             schema.TypeString,
 							Required:         true,
-							DiffSuppressFunc: timeDiffSuppressFunction,
+							DiffSuppressFunc: TimeDiffSuppressFunction,
 						},
 
 						// Optional
@@ -265,12 +270,16 @@ func (s *MonitoringAlarmResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if isEnabled, ok := s.D.GetOkExists("is_enabled"); ok {
 		tmp := isEnabled.(bool)
 		request.IsEnabled = &tmp
+	}
+
+	if messageFormat, ok := s.D.GetOkExists("message_format"); ok {
+		request.MessageFormat = oci_monitoring.CreateAlarmDetailsMessageFormatEnum(messageFormat.(string))
 	}
 
 	if metricCompartmentId, ok := s.D.GetOkExists("metric_compartment_id"); ok {
@@ -328,7 +337,7 @@ func (s *MonitoringAlarmResourceCrud) Create() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "monitoring")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "monitoring")
 
 	response, err := s.Client.CreateAlarm(context.Background(), request)
 	if err != nil {
@@ -345,7 +354,7 @@ func (s *MonitoringAlarmResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.AlarmId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "monitoring")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "monitoring")
 
 	response, err := s.Client.GetAlarm(context.Background(), request)
 	if err != nil {
@@ -408,12 +417,16 @@ func (s *MonitoringAlarmResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if isEnabled, ok := s.D.GetOkExists("is_enabled"); ok {
 		tmp := isEnabled.(bool)
 		request.IsEnabled = &tmp
+	}
+
+	if messageFormat, ok := s.D.GetOkExists("message_format"); ok {
+		request.MessageFormat = oci_monitoring.UpdateAlarmDetailsMessageFormatEnum(messageFormat.(string))
 	}
 
 	if metricCompartmentId, ok := s.D.GetOkExists("metric_compartment_id"); ok {
@@ -471,7 +484,7 @@ func (s *MonitoringAlarmResourceCrud) Update() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "monitoring")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "monitoring")
 
 	response, err := s.Client.UpdateAlarm(context.Background(), request)
 	if err != nil {
@@ -488,7 +501,7 @@ func (s *MonitoringAlarmResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.AlarmId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "monitoring")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "monitoring")
 
 	_, err := s.Client.DeleteAlarm(context.Background(), request)
 	return err
@@ -518,6 +531,8 @@ func (s *MonitoringAlarmResourceCrud) SetData() error {
 	if s.Res.IsEnabled != nil {
 		s.D.Set("is_enabled", *s.Res.IsEnabled)
 	}
+
+	s.D.Set("message_format", s.Res.MessageFormat)
 
 	if s.Res.MetricCompartmentId != nil {
 		s.D.Set("metric_compartment_id", *s.Res.MetricCompartmentId)
@@ -626,11 +641,16 @@ func (s *MonitoringAlarmResourceCrud) updateCompartment(compartment interface{})
 	compartmentTmp := compartment.(string)
 	changeCompartmentRequest.CompartmentId = &compartmentTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "monitoring")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "monitoring")
 
 	_, err := s.Client.ChangeAlarmCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }

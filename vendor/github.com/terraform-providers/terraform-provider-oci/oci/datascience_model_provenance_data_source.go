@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_datascience "github.com/oracle/oci-go-sdk/v45/datascience"
+	oci_datascience "github.com/oracle/oci-go-sdk/v50/datascience"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func (s *DatascienceModelProvenanceDataSourceCrud) Get() error {
 		request.ModelId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "datascience")
 
 	response, err := s.Client.GetModelProvenance(context.Background(), request)
 	if err != nil {
@@ -81,6 +81,10 @@ func (s *DatascienceModelProvenanceDataSourceCrud) SetData() error {
 
 	if s.Res.ScriptDir != nil {
 		s.D.Set("script_dir", *s.Res.ScriptDir)
+	}
+
+	if s.Res.TrainingId != nil {
+		s.D.Set("training_id", *s.Res.TrainingId)
 	}
 
 	if s.Res.TrainingScript != nil {

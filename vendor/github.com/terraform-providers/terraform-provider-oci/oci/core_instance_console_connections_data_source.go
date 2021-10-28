@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_core "github.com/oracle/oci-go-sdk/v45/core"
+	oci_core "github.com/oracle/oci-go-sdk/v50/core"
 )
 
 func init() {
@@ -18,7 +18,7 @@ func CoreInstanceConsoleConnectionsDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readCoreInstanceConsoleConnections,
 		Schema: map[string]*schema.Schema{
-			"filter": dataSourceFiltersSchema(),
+			"filter": DataSourceFiltersSchema(),
 			"compartment_id": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -67,7 +67,7 @@ func (s *CoreInstanceConsoleConnectionsDataSourceCrud) Get() error {
 		request.InstanceId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "core")
 
 	response, err := s.Client.ListInstanceConsoleConnections(context.Background(), request)
 	if err != nil {
@@ -123,6 +123,10 @@ func (s *CoreInstanceConsoleConnectionsDataSourceCrud) SetData() error {
 
 		if r.InstanceId != nil {
 			instanceConsoleConnection["instance_id"] = *r.InstanceId
+		}
+
+		if r.ServiceHostKeyFingerprint != nil {
+			instanceConsoleConnection["service_host_key_fingerprint"] = *r.ServiceHostKeyFingerprint
 		}
 
 		instanceConsoleConnection["state"] = r.LifecycleState

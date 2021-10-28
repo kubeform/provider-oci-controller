@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_apigateway "github.com/oracle/oci-go-sdk/v45/apigateway"
+	oci_apigateway "github.com/oracle/oci-go-sdk/v50/apigateway"
 )
 
 func init() {
@@ -18,7 +18,7 @@ func ApigatewayGatewaysDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readApigatewayGateways,
 		Schema: map[string]*schema.Schema{
-			"filter": dataSourceFiltersSchema(),
+			"filter": DataSourceFiltersSchema(),
 			"certificate_id": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -85,7 +85,7 @@ func (s *ApigatewayGatewaysDataSourceCrud) Get() error {
 		request.LifecycleState = oci_apigateway.GatewayLifecycleStateEnum(state.(string))
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "apigateway")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "apigateway")
 
 	response, err := s.Client.ListGateways(context.Background(), request)
 	if err != nil {
@@ -105,7 +105,7 @@ func (s *ApigatewayGatewaysDataSourceCrud) SetData() error {
 
 	resources := []map[string]interface{}{}
 	for _, item := range s.Res.Items {
-		resources = append(resources, GatewaySummaryToMap(item))
+		resources = append(resources, GatewaySummaryToMap(item, true))
 	}
 
 	if f, fOk := s.D.GetOkExists("filter"); fOk {

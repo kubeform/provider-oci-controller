@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_database_management "github.com/oracle/oci-go-sdk/v45/databasemanagement"
+	oci_database_management "github.com/oracle/oci-go-sdk/v50/databasemanagement"
 )
 
 func init() {
@@ -44,6 +44,10 @@ func DatabaseManagementManagedDatabaseDataSource() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"deployment_type": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
 			"is_cluster": {
 				Type:     schema.TypeBool,
 				Computed: true,
@@ -72,6 +76,10 @@ func DatabaseManagementManagedDatabaseDataSource() *schema.Resource {
 						},
 					},
 				},
+			},
+			"management_option": {
+				Type:     schema.TypeString,
+				Computed: true,
 			},
 			"name": {
 				Type:     schema.TypeString,
@@ -115,7 +123,7 @@ func (s *DatabaseManagementManagedDatabaseDataSourceCrud) Get() error {
 		request.ManagedDatabaseId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database_management")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database_management")
 
 	response, err := s.Client.GetManagedDatabase(context.Background(), request)
 	if err != nil {
@@ -145,6 +153,8 @@ func (s *DatabaseManagementManagedDatabaseDataSourceCrud) SetData() error {
 
 	s.D.Set("database_type", s.Res.DatabaseType)
 
+	s.D.Set("deployment_type", s.Res.DeploymentType)
+
 	if s.Res.IsCluster != nil {
 		s.D.Set("is_cluster", *s.Res.IsCluster)
 	}
@@ -154,6 +164,8 @@ func (s *DatabaseManagementManagedDatabaseDataSourceCrud) SetData() error {
 		managedDatabaseGroups = append(managedDatabaseGroups, ParentGroupToMap(item))
 	}
 	s.D.Set("managed_database_groups", managedDatabaseGroups)
+
+	s.D.Set("management_option", s.Res.ManagementOption)
 
 	if s.Res.Name != nil {
 		s.D.Set("name", *s.Res.Name)

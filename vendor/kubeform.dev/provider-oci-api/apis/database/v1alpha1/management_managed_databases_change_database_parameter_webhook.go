@@ -43,6 +43,7 @@ var _ webhook.Validator = &ManagementManagedDatabasesChangeDatabaseParameter{}
 
 var managementmanageddatabaseschangedatabaseparameterForceNewList = map[string]bool{
 	"/credentials/*/role":          true,
+	"/credentials/*/secret_id":     true,
 	"/credentials/*/user_name":     true,
 	"/managed_database_id":         true,
 	"/parameters/*/name":           true,

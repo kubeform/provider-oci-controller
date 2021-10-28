@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_blockchain "github.com/oracle/oci-go-sdk/v45/blockchain"
+	oci_blockchain "github.com/oracle/oci-go-sdk/v50/blockchain"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_blockchain.BlockchainPlatformClient", &OracleClient{initClientFn: initBlockchainBlockchainPlatformClient})
+	RegisterOracleClient("oci_blockchain.BlockchainPlatformClient", &OracleClient{InitClientFn: initBlockchainBlockchainPlatformClient})
 }
 
 func initBlockchainBlockchainPlatformClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

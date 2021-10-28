@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_health_checks "github.com/oracle/oci-go-sdk/v45/healthchecks"
+	oci_health_checks "github.com/oracle/oci-go-sdk/v50/healthchecks"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_health_checks.HealthChecksClient", &OracleClient{initClientFn: initHealthchecksHealthChecksClient})
+	RegisterOracleClient("oci_health_checks.HealthChecksClient", &OracleClient{InitClientFn: initHealthchecksHealthChecksClient})
 }
 
 func initHealthchecksHealthChecksClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

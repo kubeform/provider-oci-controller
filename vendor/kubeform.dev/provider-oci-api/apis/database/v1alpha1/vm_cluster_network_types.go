@@ -45,6 +45,10 @@ type VmClusterNetworkSpecScans struct {
 	Hostname *string  `json:"hostname" tf:"hostname"`
 	Ips      []string `json:"ips" tf:"ips"`
 	Port     *int64   `json:"port" tf:"port"`
+	// +optional
+	ScanListenerPortTcp *int64 `json:"scanListenerPortTcp,omitempty" tf:"scan_listener_port_tcp"`
+	// +optional
+	ScanListenerPortTcpSsl *int64 `json:"scanListenerPortTcpSsl,omitempty" tf:"scan_listener_port_tcp_ssl"`
 }
 
 type VmClusterNetworkSpecVmNetworksNodes struct {

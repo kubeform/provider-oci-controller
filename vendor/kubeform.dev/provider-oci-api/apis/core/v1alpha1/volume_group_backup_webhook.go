@@ -42,6 +42,9 @@ func (r *VolumeGroupBackup) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &VolumeGroupBackup{}
 
 var volumegroupbackupForceNewList = map[string]bool{
+	"/source_details/*/kms_key_id":             true,
+	"/source_details/*/region":                 true,
+	"/source_details/*/volume_group_backup_id": true,
 	"/type":            true,
 	"/volume_group_id": true,
 }

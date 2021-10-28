@@ -4,13 +4,34 @@
 package oci
 
 import (
-	oci_osmanagement "github.com/oracle/oci-go-sdk/v45/osmanagement"
+	oci_osmanagement "github.com/oracle/oci-go-sdk/v50/osmanagement"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_osmanagement.OsManagementClient", &OracleClient{initClientFn: initOsmanagementOsManagementClient})
+	RegisterOracleClient("oci_osmanagement.EventClient", &OracleClient{InitClientFn: initOsmanagementEventClient})
+	RegisterOracleClient("oci_osmanagement.OsManagementClient", &OracleClient{InitClientFn: initOsmanagementOsManagementClient})
+}
+
+func initOsmanagementEventClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {
+	client, err := oci_osmanagement.NewEventClientWithConfigurationProvider(configProvider)
+	if err != nil {
+		return nil, err
+	}
+	err = configureClient(&client.BaseClient)
+	if err != nil {
+		return nil, err
+	}
+
+	if serviceClientOverrides.hostUrlOverride != "" {
+		client.Host = serviceClientOverrides.hostUrlOverride
+	}
+	return &client, nil
+}
+
+func (m *OracleClients) eventClient() *oci_osmanagement.EventClient {
+	return m.GetClient("oci_osmanagement.EventClient").(*oci_osmanagement.EventClient)
 }
 
 func initOsmanagementOsManagementClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

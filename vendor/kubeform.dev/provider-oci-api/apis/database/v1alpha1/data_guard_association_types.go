@@ -95,7 +95,11 @@ type DataGuardAssociationSpecResource struct {
 	// +optional
 	PeerDbSystemID *string `json:"peerDbSystemID,omitempty" tf:"peer_db_system_id"`
 	// +optional
+	PeerDbUniqueName *string `json:"peerDbUniqueName,omitempty" tf:"peer_db_unique_name"`
+	// +optional
 	PeerRole *string `json:"peerRole,omitempty" tf:"peer_role"`
+	// +optional
+	PeerSidPrefix *string `json:"peerSidPrefix,omitempty" tf:"peer_sid_prefix"`
 	// +optional
 	PeerVmClusterID *string `json:"peerVmClusterID,omitempty" tf:"peer_vm_cluster_id"`
 	ProtectionMode  *string `json:"protectionMode" tf:"protection_mode"`

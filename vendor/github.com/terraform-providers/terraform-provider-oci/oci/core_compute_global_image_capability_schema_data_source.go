@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_core "github.com/oracle/oci-go-sdk/v45/core"
+	oci_core "github.com/oracle/oci-go-sdk/v50/core"
 )
 
 func init() {
@@ -79,7 +79,7 @@ func (s *CoreComputeGlobalImageCapabilitySchemaDataSourceCrud) Get() error {
 		request.ComputeGlobalImageCapabilitySchemaId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "core")
 
 	response, err := s.Client.GetComputeGlobalImageCapabilitySchema(context.Background(), request)
 	if err != nil {

@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func (s *DatabaseAutonomousDatabaseDataSourceCrud) Get() error {
 		request.AutonomousDatabaseId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 
 	response, err := s.Client.GetAutonomousDatabase(context.Background(), request)
 	if err != nil {
@@ -80,6 +80,8 @@ func (s *DatabaseAutonomousDatabaseDataSourceCrud) SetData() error {
 	if s.Res.AutonomousContainerDatabaseId != nil {
 		s.D.Set("autonomous_container_database_id", *s.Res.AutonomousContainerDatabaseId)
 	}
+
+	s.D.Set("autonomous_maintenance_schedule_type", s.Res.AutonomousMaintenanceScheduleType)
 
 	s.D.Set("available_upgrade_versions", s.Res.AvailableUpgradeVersions)
 
@@ -169,6 +171,10 @@ func (s *DatabaseAutonomousDatabaseDataSourceCrud) SetData() error {
 
 	if s.Res.IsFreeTier != nil {
 		s.D.Set("is_free_tier", *s.Res.IsFreeTier)
+	}
+
+	if s.Res.IsMtlsConnectionRequired != nil {
+		s.D.Set("is_mtls_connection_required", *s.Res.IsMtlsConnectionRequired)
 	}
 
 	if s.Res.IsPreview != nil {

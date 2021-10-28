@@ -13,7 +13,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_datascience "github.com/oracle/oci-go-sdk/v45/datascience"
+	oci_datascience "github.com/oracle/oci-go-sdk/v50/datascience"
 )
 
 func init() {
@@ -55,6 +55,11 @@ func DatascienceModelProvenanceResource() *schema.Resource {
 				Computed: true,
 			},
 			"script_dir": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+			},
+			"training_id": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
@@ -137,12 +142,17 @@ func (s *DatascienceModelProvenanceResourceCrud) Create() error {
 		request.ScriptDir = &tmp
 	}
 
+	if trainingId, ok := s.D.GetOkExists("training_id"); ok {
+		tmp := trainingId.(string)
+		request.TrainingId = &tmp
+	}
+
 	if trainingScript, ok := s.D.GetOkExists("training_script"); ok {
 		tmp := trainingScript.(string)
 		request.TrainingScript = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	response, err := s.Client.CreateModelProvenance(context.Background(), request)
 	if err != nil {
@@ -168,7 +178,7 @@ func (s *DatascienceModelProvenanceResourceCrud) Get() error {
 		log.Printf("[WARN] Get() unable to parse current ID: %s", s.D.Id())
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	response, err := s.Client.GetModelProvenance(context.Background(), request)
 	if err != nil {
@@ -207,12 +217,17 @@ func (s *DatascienceModelProvenanceResourceCrud) Update() error {
 		request.ScriptDir = &tmp
 	}
 
+	if trainingId, ok := s.D.GetOkExists("training_id"); ok {
+		tmp := trainingId.(string)
+		request.TrainingId = &tmp
+	}
+
 	if trainingScript, ok := s.D.GetOkExists("training_script"); ok {
 		tmp := trainingScript.(string)
 		request.TrainingScript = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	response, err := s.Client.UpdateModelProvenance(context.Background(), request)
 	if err != nil {
@@ -246,6 +261,10 @@ func (s *DatascienceModelProvenanceResourceCrud) SetData() error {
 
 	if s.Res.ScriptDir != nil {
 		s.D.Set("script_dir", *s.Res.ScriptDir)
+	}
+
+	if s.Res.TrainingId != nil {
+		s.D.Set("training_id", *s.Res.TrainingId)
 	}
 
 	if s.Res.TrainingScript != nil {

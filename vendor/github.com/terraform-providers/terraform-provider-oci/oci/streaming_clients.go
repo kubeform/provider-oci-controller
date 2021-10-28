@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_streaming "github.com/oracle/oci-go-sdk/v45/streaming"
+	oci_streaming "github.com/oracle/oci-go-sdk/v50/streaming"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_streaming.StreamAdminClient", &OracleClient{initClientFn: initStreamingStreamAdminClient})
+	RegisterOracleClient("oci_streaming.StreamAdminClient", &OracleClient{InitClientFn: initStreamingStreamAdminClient})
 }
 
 func initStreamingStreamAdminClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

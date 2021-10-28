@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_datascience "github.com/oracle/oci-go-sdk/v45/datascience"
+	oci_datascience "github.com/oracle/oci-go-sdk/v50/datascience"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func (s *DatascienceNotebookSessionDataSourceCrud) Get() error {
 		request.NotebookSessionId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "datascience")
 
 	response, err := s.Client.GetNotebookSession(context.Background(), request)
 	if err != nil {

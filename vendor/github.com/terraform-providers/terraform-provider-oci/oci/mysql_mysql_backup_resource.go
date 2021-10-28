@@ -8,7 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_mysql "github.com/oracle/oci-go-sdk/v45/mysql"
+	oci_mysql "github.com/oracle/oci-go-sdk/v50/mysql"
 )
 
 func init() {
@@ -39,6 +39,11 @@ func MysqlMysqlBackupResource() *schema.Resource {
 				Optional: true,
 				Computed: true,
 				ForceNew: true,
+			},
+			"compartment_id": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
 			},
 			"defined_tags": {
 				Type:             schema.TypeMap,
@@ -74,10 +79,6 @@ func MysqlMysqlBackupResource() *schema.Resource {
 				Type:     schema.TypeInt,
 				Computed: true,
 			},
-			"compartment_id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
 			"creation_type": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -96,6 +97,11 @@ func MysqlMysqlBackupResource() *schema.Resource {
 						// Required
 
 						// Optional
+						"compartment_id": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+						},
 
 						// Computed
 						"admin_username": {
@@ -142,10 +148,6 @@ func MysqlMysqlBackupResource() *schema.Resource {
 									},
 								},
 							},
-						},
-						"compartment_id": {
-							Type:     schema.TypeString,
-							Computed: true,
 						},
 						"configuration_id": {
 							Type:     schema.TypeString,
@@ -418,7 +420,7 @@ func (s *MysqlMysqlBackupResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if retentionInDays, ok := s.D.GetOkExists("retention_in_days"); ok {
@@ -426,7 +428,7 @@ func (s *MysqlMysqlBackupResourceCrud) Create() error {
 		request.RetentionInDays = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "mysql")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "mysql")
 
 	response, err := s.Client.CreateBackup(context.Background(), request)
 	if err != nil {
@@ -443,7 +445,7 @@ func (s *MysqlMysqlBackupResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.BackupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "mysql")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "mysql")
 
 	response, err := s.Client.GetBackup(context.Background(), request)
 	if err != nil {
@@ -455,6 +457,15 @@ func (s *MysqlMysqlBackupResourceCrud) Get() error {
 }
 
 func (s *MysqlMysqlBackupResourceCrud) Update() error {
+	if compartment, ok := s.D.GetOkExists("compartment_id"); ok && s.D.HasChange("compartment_id") {
+		oldRaw, newRaw := s.D.GetChange("compartment_id")
+		if newRaw != "" && oldRaw != "" {
+			err := s.updateCompartment(compartment)
+			if err != nil {
+				return err
+			}
+		}
+	}
 	request := oci_mysql.UpdateBackupRequest{}
 
 	tmp := s.D.Id()
@@ -479,7 +490,7 @@ func (s *MysqlMysqlBackupResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if retentionInDays, ok := s.D.GetOkExists("retention_in_days"); ok {
@@ -487,7 +498,7 @@ func (s *MysqlMysqlBackupResourceCrud) Update() error {
 		request.RetentionInDays = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "mysql")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "mysql")
 
 	_, err := s.Client.UpdateBackup(context.Background(), request)
 	if err != nil {
@@ -503,7 +514,7 @@ func (s *MysqlMysqlBackupResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.BackupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "mysql")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "mysql")
 
 	_, err := s.Client.DeleteBackup(context.Background(), request)
 	return err
@@ -735,4 +746,27 @@ func MaintenanceDetailsToMap(obj *oci_mysql.MaintenanceDetails) map[string]inter
 	}
 
 	return result
+}
+
+func (s *MysqlMysqlBackupResourceCrud) updateCompartment(compartment interface{}) error {
+	changeCompartmentRequest := oci_mysql.ChangeBackupCompartmentRequest{}
+
+	tmp := s.D.Id()
+	changeCompartmentRequest.BackupId = &tmp
+
+	compartmentTmp := compartment.(string)
+	changeCompartmentRequest.CompartmentId = &compartmentTmp
+
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "mysql")
+
+	_, err := s.Client.ChangeBackupCompartment(context.Background(), changeCompartmentRequest)
+	if err != nil {
+		return err
+	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
+	return nil
 }

@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_containerengine "github.com/oracle/oci-go-sdk/v45/containerengine"
+	oci_containerengine "github.com/oracle/oci-go-sdk/v50/containerengine"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_containerengine.ContainerEngineClient", &OracleClient{initClientFn: initContainerengineContainerEngineClient})
+	RegisterOracleClient("oci_containerengine.ContainerEngineClient", &OracleClient{InitClientFn: initContainerengineContainerEngineClient})
 }
 
 func initContainerengineContainerEngineClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

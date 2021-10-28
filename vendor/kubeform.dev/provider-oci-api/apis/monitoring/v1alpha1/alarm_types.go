@@ -75,9 +75,11 @@ type AlarmSpecResource struct {
 	Destinations []string          `json:"destinations" tf:"destinations"`
 	DisplayName  *string           `json:"displayName" tf:"display_name"`
 	// +optional
-	FreeformTags        map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
-	IsEnabled           *bool             `json:"isEnabled" tf:"is_enabled"`
-	MetricCompartmentID *string           `json:"metricCompartmentID" tf:"metric_compartment_id"`
+	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
+	IsEnabled    *bool             `json:"isEnabled" tf:"is_enabled"`
+	// +optional
+	MessageFormat       *string `json:"messageFormat,omitempty" tf:"message_format"`
+	MetricCompartmentID *string `json:"metricCompartmentID" tf:"metric_compartment_id"`
 	// +optional
 	MetricCompartmentIDInSubtree *bool   `json:"metricCompartmentIDInSubtree,omitempty" tf:"metric_compartment_id_in_subtree"`
 	Namespace                    *string `json:"namespace" tf:"namespace"`

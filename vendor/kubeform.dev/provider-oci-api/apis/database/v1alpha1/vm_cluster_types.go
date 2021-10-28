@@ -69,6 +69,8 @@ type VmClusterSpecResource struct {
 	// +optional
 	DbNodeStorageSizeInGbs *int64 `json:"dbNodeStorageSizeInGbs,omitempty" tf:"db_node_storage_size_in_gbs"`
 	// +optional
+	DbServers []string `json:"dbServers,omitempty" tf:"db_servers"`
+	// +optional
 	DefinedTags             map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
 	DisplayName             *string           `json:"displayName" tf:"display_name"`
 	ExadataInfrastructureID *string           `json:"exadataInfrastructureID" tf:"exadata_infrastructure_id"`

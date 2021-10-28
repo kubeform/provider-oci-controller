@@ -44,7 +44,9 @@ var _ webhook.Validator = &Model{}
 var modelForceNewList = map[string]bool{
 	"/artifact_content_disposition": true,
 	"/artifact_content_length":      true,
+	"/input_schema":                 true,
 	"/model_artifact":               true,
+	"/output_schema":                true,
 	"/project_id":                   true,
 }
 

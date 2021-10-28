@@ -94,7 +94,16 @@ type DatabaseSpecDatabase struct {
 	// +optional
 	PdbName *string `json:"pdbName,omitempty" tf:"pdb_name"`
 	// +optional
+	SidPrefix *string `json:"sidPrefix,omitempty" tf:"sid_prefix"`
+	// +optional
 	TdeWalletPassword *string `json:"-" sensitive:"true" tf:"tde_wallet_password"`
+}
+
+type DatabaseSpecDatabaseManagementConfig struct {
+	// +optional
+	ManagementStatus *string `json:"managementStatus,omitempty" tf:"management_status"`
+	// +optional
+	ManagementType *string `json:"managementType,omitempty" tf:"management_type"`
 }
 
 type DatabaseSpecDbBackupConfigBackupDestinationDetails struct {
@@ -144,6 +153,8 @@ type DatabaseSpecResource struct {
 	ConnectionStrings *DatabaseSpecConnectionStrings `json:"connectionStrings,omitempty" tf:"connection_strings"`
 	Database          *DatabaseSpecDatabase          `json:"database" tf:"database"`
 	// +optional
+	DatabaseManagementConfig *DatabaseSpecDatabaseManagementConfig `json:"databaseManagementConfig,omitempty" tf:"database_management_config"`
+	// +optional
 	DatabaseSoftwareImageID *string `json:"databaseSoftwareImageID,omitempty" tf:"database_software_image_id"`
 	// +optional
 	DbBackupConfig *DatabaseSpecDbBackupConfig `json:"dbBackupConfig,omitempty" tf:"db_backup_config"`
@@ -163,6 +174,8 @@ type DatabaseSpecResource struct {
 	// +optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
+	IsCdb *bool `json:"isCdb,omitempty" tf:"is_cdb"`
+	// +optional
 	KmsKeyID *string `json:"kmsKeyID,omitempty" tf:"kms_key_id"`
 	// +optional
 	KmsKeyMigration *bool `json:"kmsKeyMigration,omitempty" tf:"kms_key_migration"`
@@ -178,7 +191,9 @@ type DatabaseSpecResource struct {
 	NcharacterSet *string `json:"ncharacterSet,omitempty" tf:"ncharacter_set"`
 	// +optional
 	PdbName *string `json:"pdbName,omitempty" tf:"pdb_name"`
-	Source  *string `json:"source" tf:"source"`
+	// +optional
+	SidPrefix *string `json:"sidPrefix,omitempty" tf:"sid_prefix"`
+	Source    *string `json:"source" tf:"source"`
 	// +optional
 	SourceDatabasePointInTimeRecoveryTimestamp *string `json:"sourceDatabasePointInTimeRecoveryTimestamp,omitempty" tf:"source_database_point_in_time_recovery_timestamp"`
 	// +optional

@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_apigateway "github.com/oracle/oci-go-sdk/v45/apigateway"
+	oci_apigateway "github.com/oracle/oci-go-sdk/v50/apigateway"
 )
 
 func init() {
@@ -109,7 +109,7 @@ func (s *ApigatewayApiValidationDataSourceCrud) Get() error {
 		request.ApiId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "apigateway")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "apigateway")
 
 	response, err := s.Client.GetApiValidations(context.Background(), request)
 	if err != nil {

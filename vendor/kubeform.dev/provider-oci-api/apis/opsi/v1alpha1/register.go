@@ -60,6 +60,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&DatabaseInsightList{},
 		&EnterpriseManagerBridge{},
 		&EnterpriseManagerBridgeList{},
+		&ExadataInsight{},
+		&ExadataInsightList{},
 		&HostInsight{},
 		&HostInsightList{},
 	)

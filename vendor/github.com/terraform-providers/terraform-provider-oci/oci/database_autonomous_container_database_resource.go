@@ -7,9 +7,11 @@ import (
 	"context"
 	"fmt"
 
+	oci_work_requests "github.com/oracle/oci-go-sdk/v50/workrequests"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -22,9 +24,9 @@ func DatabaseAutonomousContainerDatabaseResource() *schema.Resource {
 			State: schema.ImportStatePassthrough,
 		},
 		Timeouts: &schema.ResourceTimeout{
-			Create: getTimeoutDuration("12h"),
-			Update: getTimeoutDuration("12h"),
-			Delete: getTimeoutDuration("12h"),
+			Create: GetTimeoutDuration("12h"),
+			Update: GetTimeoutDuration("12h"),
+			Delete: GetTimeoutDuration("12h"),
 		},
 		Create: createDatabaseAutonomousContainerDatabase,
 		Read:   readDatabaseAutonomousContainerDatabase,
@@ -485,6 +487,7 @@ func createDatabaseAutonomousContainerDatabase(d *schema.ResourceData, m interfa
 	sync := &DatabaseAutonomousContainerDatabaseResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	if e := CreateResource(d, sync); e != nil {
 		return e
@@ -504,6 +507,7 @@ func readDatabaseAutonomousContainerDatabase(d *schema.ResourceData, m interface
 	sync := &DatabaseAutonomousContainerDatabaseResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return ReadResource(sync)
 }
@@ -512,6 +516,7 @@ func updateDatabaseAutonomousContainerDatabase(d *schema.ResourceData, m interfa
 	sync := &DatabaseAutonomousContainerDatabaseResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	if _, ok := sync.D.GetOkExists("rotate_key_trigger"); ok && sync.D.HasChange("rotate_key_trigger") {
 		err := sync.RotateContainerDatabaseEncryptionKey()
@@ -527,6 +532,7 @@ func deleteDatabaseAutonomousContainerDatabase(d *schema.ResourceData, m interfa
 	sync := &DatabaseAutonomousContainerDatabaseResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 	sync.DisableNotFoundRetries = true
 
 	return DeleteResource(d, sync)
@@ -535,6 +541,7 @@ func deleteDatabaseAutonomousContainerDatabase(d *schema.ResourceData, m interfa
 type DatabaseAutonomousContainerDatabaseResourceCrud struct {
 	BaseCrud
 	Client                 *oci_database.DatabaseClient
+	WorkRequestClient      *oci_work_requests.WorkRequestClient
 	Res                    *oci_database.AutonomousContainerDatabase
 	DisableNotFoundRetries bool
 }
@@ -634,7 +641,7 @@ func (s *DatabaseAutonomousContainerDatabaseResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if keyStoreId, ok := s.D.GetOkExists("key_store_id"); ok {
@@ -716,11 +723,18 @@ func (s *DatabaseAutonomousContainerDatabaseResourceCrud) Create() error {
 		request.StandbyMaintenanceBufferInDays = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.CreateAutonomousContainerDatabase(context.Background(), request)
 	if err != nil {
 		return err
+	}
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeCreated, s.D.Timeout(schema.TimeoutCreate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
 	}
 
 	s.Res = &response.AutonomousContainerDatabase
@@ -733,7 +747,7 @@ func (s *DatabaseAutonomousContainerDatabaseResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.AutonomousContainerDatabaseId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.GetAutonomousContainerDatabase(context.Background(), request)
 	if err != nil {
@@ -784,7 +798,7 @@ func (s *DatabaseAutonomousContainerDatabaseResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if maintenanceWindowDetails, ok := s.D.GetOkExists("maintenance_window_details"); ok {
@@ -807,11 +821,19 @@ func (s *DatabaseAutonomousContainerDatabaseResourceCrud) Update() error {
 		request.StandbyMaintenanceBufferInDays = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.UpdateAutonomousContainerDatabase(context.Background(), request)
 	if err != nil {
 		return err
+	}
+
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
 	}
 
 	s.Res = &response.AutonomousContainerDatabase
@@ -824,7 +846,7 @@ func (s *DatabaseAutonomousContainerDatabaseResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.AutonomousContainerDatabaseId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.TerminateAutonomousContainerDatabase(context.Background(), request)
 	return err
@@ -1193,12 +1215,17 @@ func (s *DatabaseAutonomousContainerDatabaseResourceCrud) updateCompartment(comp
 	compartmentTmp := compartment.(string)
 	changeCompartmentRequest.CompartmentId = &compartmentTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.ChangeAutonomousContainerDatabaseCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }
 
@@ -1212,11 +1239,18 @@ func (s *DatabaseAutonomousContainerDatabaseResourceCrud) RotateContainerDatabas
 	tmp := s.D.Id()
 	request.AutonomousContainerDatabaseId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.RotateAutonomousContainerDatabaseEncryptionKey(context.Background(), request)
 	if err != nil {
 		return err
+	}
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
 	}
 
 	val := s.D.Get("rotate_key_trigger")

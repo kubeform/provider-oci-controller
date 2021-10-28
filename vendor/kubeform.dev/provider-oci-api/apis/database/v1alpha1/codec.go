@@ -40,11 +40,13 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                        AutonomousExadataInfrastructureSpecMaintenanceWindowCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindowDetails{}).Type1()):                 AutonomousExadataInfrastructureSpecMaintenanceWindowDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(BackupDestinationSpecMountTypeDetails{}).Type1()):                                       BackupDestinationSpecMountTypeDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CloudDatabaseManagementSpecCredentialdetails{}).Type1()):                                CloudDatabaseManagementSpecCredentialdetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(CloudExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                             CloudExadataInfrastructureSpecMaintenanceWindowCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(CloudVmClusterSpecIormConfigCache{}).Type1()):                                           CloudVmClusterSpecIormConfigCacheCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecConnectionStrings{}).Type1()):                                               DatabaseSpecConnectionStringsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabase{}).Type1()):                                                        DatabaseSpecDatabaseCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseDbBackupConfig{}).Type1()):                                          DatabaseSpecDatabaseDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseManagementConfig{}).Type1()):                                        DatabaseSpecDatabaseManagementConfigCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDbBackupConfig{}).Type1()):                                                  DatabaseSpecDbBackupConfigCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecConnectionStrings{}).Type1()):                                        DatabaseUpgradeSpecConnectionStringsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDatabaseUpgradeSourceDetails{}).Type1()):                             DatabaseUpgradeSpecDatabaseUpgradeSourceDetailsCodec{},
@@ -114,11 +116,13 @@ func GetDecoder() map[string]jsoniter.ValDecoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                        AutonomousExadataInfrastructureSpecMaintenanceWindowCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindowDetails{}).Type1()):                 AutonomousExadataInfrastructureSpecMaintenanceWindowDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(BackupDestinationSpecMountTypeDetails{}).Type1()):                                       BackupDestinationSpecMountTypeDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CloudDatabaseManagementSpecCredentialdetails{}).Type1()):                                CloudDatabaseManagementSpecCredentialdetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(CloudExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                             CloudExadataInfrastructureSpecMaintenanceWindowCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(CloudVmClusterSpecIormConfigCache{}).Type1()):                                           CloudVmClusterSpecIormConfigCacheCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecConnectionStrings{}).Type1()):                                               DatabaseSpecConnectionStringsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabase{}).Type1()):                                                        DatabaseSpecDatabaseCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseDbBackupConfig{}).Type1()):                                          DatabaseSpecDatabaseDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseManagementConfig{}).Type1()):                                        DatabaseSpecDatabaseManagementConfigCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDbBackupConfig{}).Type1()):                                                  DatabaseSpecDbBackupConfigCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecConnectionStrings{}).Type1()):                                        DatabaseUpgradeSpecConnectionStringsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDatabaseUpgradeSourceDetails{}).Type1()):                             DatabaseUpgradeSpecDatabaseUpgradeSourceDetailsCodec{},
@@ -1213,6 +1217,85 @@ func (BackupDestinationSpecMountTypeDetailsCodec) Decode(ptr unsafe.Pointer, ite
 }
 
 // +k8s:deepcopy-gen=false
+type CloudDatabaseManagementSpecCredentialdetailsCodec struct {
+}
+
+func (CloudDatabaseManagementSpecCredentialdetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*CloudDatabaseManagementSpecCredentialdetails)(ptr) == nil
+}
+
+func (CloudDatabaseManagementSpecCredentialdetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*CloudDatabaseManagementSpecCredentialdetails)(ptr)
+	var objs []CloudDatabaseManagementSpecCredentialdetails
+	if obj != nil {
+		objs = []CloudDatabaseManagementSpecCredentialdetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CloudDatabaseManagementSpecCredentialdetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (CloudDatabaseManagementSpecCredentialdetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*CloudDatabaseManagementSpecCredentialdetails)(ptr) = CloudDatabaseManagementSpecCredentialdetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []CloudDatabaseManagementSpecCredentialdetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CloudDatabaseManagementSpecCredentialdetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*CloudDatabaseManagementSpecCredentialdetails)(ptr) = objs[0]
+			} else {
+				*(*CloudDatabaseManagementSpecCredentialdetails)(ptr) = CloudDatabaseManagementSpecCredentialdetails{}
+			}
+		} else {
+			*(*CloudDatabaseManagementSpecCredentialdetails)(ptr) = CloudDatabaseManagementSpecCredentialdetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj CloudDatabaseManagementSpecCredentialdetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CloudDatabaseManagementSpecCredentialdetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*CloudDatabaseManagementSpecCredentialdetails)(ptr) = obj
+		} else {
+			*(*CloudDatabaseManagementSpecCredentialdetails)(ptr) = CloudDatabaseManagementSpecCredentialdetails{}
+		}
+	default:
+		iter.ReportError("decode CloudDatabaseManagementSpecCredentialdetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
 type CloudExadataInfrastructureSpecMaintenanceWindowCodec struct {
 }
 
@@ -1604,6 +1687,85 @@ func (DatabaseSpecDatabaseDbBackupConfigCodec) Decode(ptr unsafe.Pointer, iter *
 		}
 	default:
 		iter.ReportError("decode DatabaseSpecDatabaseDbBackupConfig", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type DatabaseSpecDatabaseManagementConfigCodec struct {
+}
+
+func (DatabaseSpecDatabaseManagementConfigCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*DatabaseSpecDatabaseManagementConfig)(ptr) == nil
+}
+
+func (DatabaseSpecDatabaseManagementConfigCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*DatabaseSpecDatabaseManagementConfig)(ptr)
+	var objs []DatabaseSpecDatabaseManagementConfig
+	if obj != nil {
+		objs = []DatabaseSpecDatabaseManagementConfig{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseManagementConfig{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (DatabaseSpecDatabaseManagementConfigCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*DatabaseSpecDatabaseManagementConfig)(ptr) = DatabaseSpecDatabaseManagementConfig{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []DatabaseSpecDatabaseManagementConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseManagementConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*DatabaseSpecDatabaseManagementConfig)(ptr) = objs[0]
+			} else {
+				*(*DatabaseSpecDatabaseManagementConfig)(ptr) = DatabaseSpecDatabaseManagementConfig{}
+			}
+		} else {
+			*(*DatabaseSpecDatabaseManagementConfig)(ptr) = DatabaseSpecDatabaseManagementConfig{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj DatabaseSpecDatabaseManagementConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseManagementConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*DatabaseSpecDatabaseManagementConfig)(ptr) = obj
+		} else {
+			*(*DatabaseSpecDatabaseManagementConfig)(ptr) = DatabaseSpecDatabaseManagementConfig{}
+		}
+	default:
+		iter.ReportError("decode DatabaseSpecDatabaseManagementConfig", "unexpected JSON type")
 	}
 }
 

@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_apm "github.com/oracle/oci-go-sdk/v45/apmcontrolplane"
+	oci_apm "github.com/oracle/oci-go-sdk/v50/apmcontrolplane"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func (s *ApmApmDomainDataSourceCrud) Get() error {
 		request.ApmDomainId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "apm")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "apm")
 
 	response, err := s.Client.GetApmDomain(context.Background(), request)
 	if err != nil {

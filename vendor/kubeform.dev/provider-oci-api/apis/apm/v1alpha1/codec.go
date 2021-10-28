@@ -28,6 +28,7 @@ import (
 func GetEncoder() map[string]jsoniter.ValEncoder {
 	return map[string]jsoniter.ValEncoder{
 		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecConfiguration{}).Type1()):                          SyntheticsMonitorSpecConfigurationCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecConfigurationNetworkConfiguration{}).Type1()):      SyntheticsMonitorSpecConfigurationNetworkConfigurationCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecConfigurationReqAuthenticationDetails{}).Type1()):  SyntheticsMonitorSpecConfigurationReqAuthenticationDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecScriptParametersMonitorScriptParameter{}).Type1()): SyntheticsMonitorSpecScriptParametersMonitorScriptParameterCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsScriptSpecMonitorStatusCountMap{}).Type1()):                   SyntheticsScriptSpecMonitorStatusCountMapCodec{},
@@ -38,6 +39,7 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 func GetDecoder() map[string]jsoniter.ValDecoder {
 	return map[string]jsoniter.ValDecoder{
 		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecConfiguration{}).Type1()):                          SyntheticsMonitorSpecConfigurationCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecConfigurationNetworkConfiguration{}).Type1()):      SyntheticsMonitorSpecConfigurationNetworkConfigurationCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecConfigurationReqAuthenticationDetails{}).Type1()):  SyntheticsMonitorSpecConfigurationReqAuthenticationDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecScriptParametersMonitorScriptParameter{}).Type1()): SyntheticsMonitorSpecScriptParametersMonitorScriptParameterCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsScriptSpecMonitorStatusCountMap{}).Type1()):                   SyntheticsScriptSpecMonitorStatusCountMapCodec{},
@@ -133,6 +135,85 @@ func (SyntheticsMonitorSpecConfigurationCodec) Decode(ptr unsafe.Pointer, iter *
 		}
 	default:
 		iter.ReportError("decode SyntheticsMonitorSpecConfiguration", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type SyntheticsMonitorSpecConfigurationNetworkConfigurationCodec struct {
+}
+
+func (SyntheticsMonitorSpecConfigurationNetworkConfigurationCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*SyntheticsMonitorSpecConfigurationNetworkConfiguration)(ptr) == nil
+}
+
+func (SyntheticsMonitorSpecConfigurationNetworkConfigurationCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*SyntheticsMonitorSpecConfigurationNetworkConfiguration)(ptr)
+	var objs []SyntheticsMonitorSpecConfigurationNetworkConfiguration
+	if obj != nil {
+		objs = []SyntheticsMonitorSpecConfigurationNetworkConfiguration{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecConfigurationNetworkConfiguration{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (SyntheticsMonitorSpecConfigurationNetworkConfigurationCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*SyntheticsMonitorSpecConfigurationNetworkConfiguration)(ptr) = SyntheticsMonitorSpecConfigurationNetworkConfiguration{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []SyntheticsMonitorSpecConfigurationNetworkConfiguration
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecConfigurationNetworkConfiguration{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*SyntheticsMonitorSpecConfigurationNetworkConfiguration)(ptr) = objs[0]
+			} else {
+				*(*SyntheticsMonitorSpecConfigurationNetworkConfiguration)(ptr) = SyntheticsMonitorSpecConfigurationNetworkConfiguration{}
+			}
+		} else {
+			*(*SyntheticsMonitorSpecConfigurationNetworkConfiguration)(ptr) = SyntheticsMonitorSpecConfigurationNetworkConfiguration{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj SyntheticsMonitorSpecConfigurationNetworkConfiguration
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(SyntheticsMonitorSpecConfigurationNetworkConfiguration{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*SyntheticsMonitorSpecConfigurationNetworkConfiguration)(ptr) = obj
+		} else {
+			*(*SyntheticsMonitorSpecConfigurationNetworkConfiguration)(ptr) = SyntheticsMonitorSpecConfigurationNetworkConfiguration{}
+		}
+	default:
+		iter.ReportError("decode SyntheticsMonitorSpecConfigurationNetworkConfiguration", "unexpected JSON type")
 	}
 }
 

@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
-	oci_dns "github.com/oracle/oci-go-sdk/v45/dns"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
+	oci_dns "github.com/oracle/oci-go-sdk/v50/dns"
 )
 
 func init() {
@@ -20,7 +20,7 @@ func DnsZonesDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readDnsZones,
 		Schema: map[string]*schema.Schema{
-			"filter": dataSourceFiltersSchema(),
+			"filter": DataSourceFiltersSchema(),
 			"compartment_id": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -162,7 +162,7 @@ func (s *DnsZonesDataSourceCrud) Get() error {
 		request.ZoneType = oci_dns.ListZonesZoneTypeEnum(zoneType.(string))
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "dns")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "dns")
 
 	response, err := s.Client.ListZones(context.Background(), request)
 	if err != nil {

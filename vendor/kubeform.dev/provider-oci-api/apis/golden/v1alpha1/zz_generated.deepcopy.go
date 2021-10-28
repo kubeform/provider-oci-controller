@@ -639,6 +639,11 @@ func (in *GateDeploymentSpecOggData) DeepCopyInto(out *GateDeploymentSpecOggData
 		*out = new(string)
 		**out = **in
 	}
+	if in.OggVersion != nil {
+		in, out := &in.OggVersion, &out.OggVersion
+		*out = new(string)
+		**out = **in
+	}
 	return
 }
 
@@ -744,6 +749,11 @@ func (in *GateDeploymentSpecResource) DeepCopyInto(out *GateDeploymentSpecResour
 		*out = new(string)
 		**out = **in
 	}
+	if in.LifecycleSubState != nil {
+		in, out := &in.LifecycleSubState, &out.LifecycleSubState
+		*out = new(string)
+		**out = **in
+	}
 	if in.NsgIDS != nil {
 		in, out := &in.NsgIDS, &out.NsgIDS
 		*out = make([]string, len(*in))
@@ -788,6 +798,11 @@ func (in *GateDeploymentSpecResource) DeepCopyInto(out *GateDeploymentSpecResour
 	}
 	if in.TimeUpdated != nil {
 		in, out := &in.TimeUpdated, &out.TimeUpdated
+		*out = new(string)
+		**out = **in
+	}
+	if in.TimeUpgradeRequired != nil {
+		in, out := &in.TimeUpgradeRequired, &out.TimeUpgradeRequired
 		*out = new(string)
 		**out = **in
 	}

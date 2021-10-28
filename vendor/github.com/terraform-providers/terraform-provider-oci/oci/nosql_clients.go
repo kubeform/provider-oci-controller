@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_nosql "github.com/oracle/oci-go-sdk/v45/nosql"
+	oci_nosql "github.com/oracle/oci-go-sdk/v50/nosql"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_nosql.NosqlClient", &OracleClient{initClientFn: initNosqlNosqlClient})
+	RegisterOracleClient("oci_nosql.NosqlClient", &OracleClient{InitClientFn: initNosqlNosqlClient})
 }
 
 func initNosqlNosqlClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

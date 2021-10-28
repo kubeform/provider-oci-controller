@@ -8,7 +8,7 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_service_catalog "github.com/oracle/oci-go-sdk/v45/servicecatalog"
+	oci_service_catalog "github.com/oracle/oci-go-sdk/v50/servicecatalog"
 )
 
 func init() {
@@ -82,7 +82,7 @@ func (s *ServiceCatalogPrivateApplicationPackageDataSourceCrud) Get() error {
 		request.PrivateApplicationPackageId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "service_catalog")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "service_catalog")
 
 	response, err := s.Client.GetPrivateApplicationPackage(context.Background(), request)
 	if err != nil {

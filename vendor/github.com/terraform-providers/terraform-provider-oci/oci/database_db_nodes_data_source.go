@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -18,10 +18,14 @@ func DatabaseDbNodesDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readDatabaseDbNodes,
 		Schema: map[string]*schema.Schema{
-			"filter": dataSourceFiltersSchema(),
+			"filter": DataSourceFiltersSchema(),
 			"compartment_id": {
 				Type:     schema.TypeString,
 				Required: true,
+			},
+			"db_server_id": {
+				Type:     schema.TypeString,
+				Optional: true,
 			},
 			"db_system_id": {
 				Type:     schema.TypeString,
@@ -38,7 +42,99 @@ func DatabaseDbNodesDataSource() *schema.Resource {
 			"db_nodes": {
 				Type:     schema.TypeList,
 				Computed: true,
-				Elem:     GetDataSourceItemSchema(DatabaseDbNodeDataSource()),
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						// Required
+
+						// Optional
+
+						// Computed
+						"additional_details": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"backup_ip_id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"backup_vnic2id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"backup_vnic_id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"cpu_core_count": {
+							Type:     schema.TypeInt,
+							Computed: true,
+						},
+						"db_node_storage_size_in_gbs": {
+							Type:     schema.TypeInt,
+							Computed: true,
+						},
+						"db_server_id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"db_system_id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"fault_domain": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"host_ip_id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"hostname": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"maintenance_type": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"memory_size_in_gbs": {
+							Type:     schema.TypeInt,
+							Computed: true,
+						},
+						"software_storage_size_in_gb": {
+							Type:     schema.TypeInt,
+							Computed: true,
+						},
+						"state": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"time_created": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"time_maintenance_window_end": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"time_maintenance_window_start": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"vnic2id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"vnic_id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+					},
+				},
 			},
 		},
 	}
@@ -70,6 +166,11 @@ func (s *DatabaseDbNodesDataSourceCrud) Get() error {
 		request.CompartmentId = &tmp
 	}
 
+	if dbServerId, ok := s.D.GetOkExists("db_server_id"); ok {
+		tmp := dbServerId.(string)
+		request.DbServerId = &tmp
+	}
+
 	if dbSystemId, ok := s.D.GetOkExists("db_system_id"); ok {
 		tmp := dbSystemId.(string)
 		request.DbSystemId = &tmp
@@ -84,7 +185,7 @@ func (s *DatabaseDbNodesDataSourceCrud) Get() error {
 		request.VmClusterId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 
 	response, err := s.Client.ListDbNodes(context.Background(), request)
 	if err != nil {
@@ -125,12 +226,40 @@ func (s *DatabaseDbNodesDataSourceCrud) SetData() error {
 			dbNode["additional_details"] = *r.AdditionalDetails
 		}
 
+		if r.BackupIpId != nil {
+			dbNode["backup_ip_id"] = *r.BackupIpId
+		}
+
+		if r.BackupVnic2Id != nil {
+			dbNode["backup_vnic2id"] = *r.BackupVnic2Id
+		}
+
 		if r.BackupVnicId != nil {
 			dbNode["backup_vnic_id"] = *r.BackupVnicId
 		}
 
+		if r.CpuCoreCount != nil {
+			dbNode["cpu_core_count"] = *r.CpuCoreCount
+		}
+
+		if r.DbNodeStorageSizeInGBs != nil {
+			dbNode["db_node_storage_size_in_gbs"] = *r.DbNodeStorageSizeInGBs
+		}
+
+		if r.DbServerId != nil {
+			dbNode["db_server_id"] = *r.DbServerId
+		}
+
+		if r.DbSystemId != nil {
+			dbNode["db_system_id"] = *r.DbSystemId
+		}
+
 		if r.FaultDomain != nil {
 			dbNode["fault_domain"] = *r.FaultDomain
+		}
+
+		if r.HostIpId != nil {
+			dbNode["host_ip_id"] = *r.HostIpId
 		}
 
 		if r.Hostname != nil {
@@ -143,6 +272,10 @@ func (s *DatabaseDbNodesDataSourceCrud) SetData() error {
 		}
 
 		dbNode["maintenance_type"] = r.MaintenanceType
+
+		if r.MemorySizeInGBs != nil {
+			dbNode["memory_size_in_gbs"] = *r.MemorySizeInGBs
+		}
 
 		if r.SoftwareStorageSizeInGB != nil {
 			dbNode["software_storage_size_in_gb"] = *r.SoftwareStorageSizeInGB
@@ -160,6 +293,10 @@ func (s *DatabaseDbNodesDataSourceCrud) SetData() error {
 
 		if r.TimeMaintenanceWindowStart != nil {
 			dbNode["time_maintenance_window_start"] = r.TimeMaintenanceWindowStart.String()
+		}
+
+		if r.Vnic2Id != nil {
+			dbNode["vnic2id"] = *r.Vnic2Id
 		}
 
 		if r.VnicId != nil {

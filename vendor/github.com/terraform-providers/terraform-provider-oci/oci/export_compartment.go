@@ -17,6 +17,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"time"
 
 	"golang.org/x/mod/semver"
 
@@ -24,8 +25,8 @@ import (
 
 	"github.com/hashicorp/terraform-exec/tfexec"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
-	oci_identity "github.com/oracle/oci-go-sdk/v45/identity"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
+	oci_identity "github.com/oracle/oci-go-sdk/v50/identity"
 )
 
 const (
@@ -48,6 +49,13 @@ These missing attributes are also added to the lifecycle ignore_changes.
 	terraformBinPathName                = "terraform_bin_path"
 )
 
+type ResourceDiscoveryStage int
+
+const (
+	Discovery       ResourceDiscoveryStage = 1
+	GeneratingState                        = 2
+)
+
 var referenceMap map[string]string //	stores references to replace the ocids in config
 var refMapLock sync.Mutex
 var referenceResourceNameSet map[string]bool   // this set contains terraform resource names for the references in referenceMap
@@ -64,6 +72,22 @@ var missingAttributesPerResourceLock sync.Mutex
 var sem chan struct{}
 var exportConfigProvider oci_common.ConfigurationProvider
 var tfHclVersion TfHclVersion
+
+func elapsed(what string, step *resourceDiscoveryBaseStep, stage ResourceDiscoveryStage) func() {
+	start := time.Now()
+	return func() {
+		totalTime := time.Since(start)
+		Debugf("[DEBUG] %s took %v\n", what, totalTime)
+		if step != nil {
+			switch stage {
+			case Discovery:
+				step.updateTimeTakenForDiscovery(totalTime)
+			case GeneratingState:
+				step.updateTimeTakenForGeneratingState(totalTime)
+			}
+		}
+	}
+}
 
 func init() {
 	resourceNameCount = map[string]int{}
@@ -280,7 +304,7 @@ func RunExportCommand(args *ExportCommandArgs) (err error, status Status) {
 		The time out value is configurable from export command
 	*/
 	if args.RetryTimeout != nil && *args.RetryTimeout != "" {
-		longRetryTime = *getTimeoutDuration(*args.RetryTimeout)
+		longRetryTime = *GetTimeoutDuration(*args.RetryTimeout)
 		shortRetryTime = longRetryTime
 	}
 
@@ -400,26 +424,26 @@ func getExportConfig(d *schema.ResourceData) (interface{}, error) {
 func runExportCommand(ctx *resourceDiscoveryContext) error {
 	Logf("[INFO] Running export command\n")
 	Logf("[INFO] parallelism: %d", ctx.Parallelism)
-
 	defer ctx.printSummary()
-
+	exportStart := time.Now()
+	defer elapsed("entire export command", nil, 0)()
 	steps, err := getDiscoverResourceSteps(ctx)
 	if err != nil {
 		return err
 	}
-
+	discoveryStart := time.Now()
 	var discoverWg sync.WaitGroup
 	discoverWg.Add(len(steps))
-
 	for i, step := range steps {
 
 		sem <- struct{}{}
 
 		go func(i int, step resourceDiscoveryStep) {
 			Debugf("[DEBUG] discover: Running step %d", i)
-
+			defer elapsed(fmt.Sprintf("time taken in discovering resources for step %d", i), step.getBaseStep(), Discovery)()
 			defer func() {
 				if r := recover(); r != nil {
+					Logf("[ERROR] panic in discover goroutine")
 					Logf("[ERROR] panic in discover goroutine")
 					debug.PrintStack()
 				}
@@ -448,6 +472,7 @@ func runExportCommand(ctx *resourceDiscoveryContext) error {
 			}
 
 			Debugf("[DEBUG] discover: Completed step %d", i)
+			Debugf("[DEBUG] discovered %d resources for step %d", len(step.getDiscoveredResources()), i)
 			<-sem
 		}(i, step)
 
@@ -455,10 +480,13 @@ func runExportCommand(ctx *resourceDiscoveryContext) error {
 
 	// Wait for all steps to complete discovery
 	discoverWg.Wait()
+	totalDiscoveryTime := time.Since(discoveryStart)
+	Debugf("discovering resources for all services took %v\n", totalDiscoveryTime)
+	ctx.timeTakenToDiscover = totalDiscoveryTime
 	Debug("[DEBUG] ~~~~~~ discover steps completed ~~~~~~")
 
 	if ctx.GenerateState {
-
+		stateStart := time.Now()
 		// Run import commands
 		if ctx.Parallelism > 1 {
 			Debug("[DEBUG] Generating state in parallel")
@@ -477,6 +505,9 @@ func runExportCommand(ctx *resourceDiscoveryContext) error {
 			// lock not required for referenceMap as only 1 thread is running at this point
 			deleteInvalidReferences(referenceMap, ctx.discoveredResources)
 		}
+		timeForStateGeneration := time.Since(stateStart)
+		Debugf("[DEBUG] state generation took %v\n", timeForStateGeneration)
+		ctx.timeTakenToGenerateState = timeForStateGeneration
 	}
 
 	// Reset discovered resources if already set by writeTmpConfigurationForImport
@@ -489,12 +520,12 @@ func runExportCommand(ctx *resourceDiscoveryContext) error {
 	wgDone := make(chan bool)
 
 	// Write configuration for imported resources
+	configStart := time.Now()
 	for i, step := range steps {
 
 		sem <- struct{}{}
 		go func(i int, step resourceDiscoveryStep) {
 			Debugf("[DEBUG] writeConfiguration: Running step %d", i)
-
 			defer func() {
 				if r := recover(); r != nil {
 					Logf("[ERROR] panic in writeConfiguration goroutine")
@@ -523,6 +554,7 @@ func runExportCommand(ctx *resourceDiscoveryContext) error {
 	select {
 	case <-wgDone:
 		Debugf("[DEBUG] ~~~~~~ writeConfiguration steps completed ~~~~~~")
+		Debugf("[DEBUG] writing config took %v\n", time.Since(configStart))
 		break
 	case err := <-errorChannel:
 		close(errorChannel)
@@ -552,7 +584,7 @@ func runExportCommand(ctx *resourceDiscoveryContext) error {
 			ctx.summaryStatements = append(ctx.summaryStatements, fmt.Sprintf("%s: %s", key, strings.Join(value, ",")))
 		}
 	}
-
+	ctx.timeTakenForEntireExport = time.Since(exportStart)
 	ctx.postValidate()
 	return nil
 }
@@ -570,6 +602,7 @@ func generateStateParallel(ctx *resourceDiscoveryContext, steps []resourceDiscov
 	isInitDone = false
 	// Cleanup the temporary state files created for each input service
 	defer cleanupTempStateFiles(ctx)
+	defer elapsed("generating state in parallel", nil, 0)()
 
 	errorChannel := make(chan error)
 	var stateWg sync.WaitGroup
@@ -587,7 +620,7 @@ func generateStateParallel(ctx *resourceDiscoveryContext, steps []resourceDiscov
 
 		go func(i int, step resourceDiscoveryStep) {
 			Debugf("[DEBUG] writing temp config and state: Running step %d", i)
-
+			defer elapsed(fmt.Sprintf("time taken by step %s to generate state", fmt.Sprint(i)), step.getBaseStep(), GeneratingState)()
 			defer func() {
 				if r := recover(); r != nil {
 					Logf("[ERROR] panic in writing temp config and state goroutine")
@@ -643,12 +676,12 @@ func generateStateParallel(ctx *resourceDiscoveryContext, steps []resourceDiscov
 		return nil
 	}
 
-	// create final state file to write state
+	// Create final state file to write state
 	stateOutputFile := fmt.Sprintf("%s%s%s", *ctx.OutputDir, string(os.PathSeparator), defaultStateFilename)
 
 	f, err := os.OpenFile(stateOutputFile, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, os.ModePerm)
 	if err != nil {
-		return fmt.Errorf("[ERROR] failed to create state file %s: %s", stateOutputFile, err.Error())
+		return fmt.Errorf("[ERROR] failed to Create state file %s: %s", stateOutputFile, err.Error())
 	}
 
 	// write generate state to file
@@ -808,7 +841,7 @@ func getDiscoverResourceSteps(ctx *resourceDiscoveryContext) ([]resourceDiscover
 }
 
 func getDiscoverResourceWithGraphSteps(ctx *resourceDiscoveryContext) ([]resourceDiscoveryStep, error) {
-
+	defer elapsed("Building resource discovery graph", nil, 0)()
 	if ctx.CompartmentId == nil || *ctx.CompartmentId == "" {
 		*ctx.CompartmentId = ctx.tenancyOcid
 	}
@@ -1578,7 +1611,7 @@ func generateTerraformNameFromResource(resourceAttributes map[string]interface{}
 				terraformName := getNormalizedTerraformName(value.(string))
 				resourceNameCountLock.Lock()
 				if count, resourceNameExists := resourceNameCount[terraformName]; resourceNameExists {
-					// update count for existing name
+					// Update count for existing name
 					resourceNameCount[terraformName] = count + 1
 					terraformName = fmt.Sprintf("%s_%d", terraformName, count)
 				}
@@ -1755,7 +1788,7 @@ func getTenancyOcidFromCompartment(clients *OracleClients, compartmentId string)
 		response, err := clients.identityClient().GetCompartment(context.Background(), oci_identity.GetCompartmentRequest{
 			CompartmentId: &compartmentId,
 			RequestMetadata: oci_common.RequestMetadata{
-				RetryPolicy: getRetryPolicy(true, "identity"),
+				RetryPolicy: GetRetryPolicy(true, "identity"),
 			},
 		})
 		if err != nil {

@@ -98,13 +98,18 @@ type BackendSetSpecSessionPersistenceConfiguration struct {
 }
 
 type BackendSetSpecSslConfiguration struct {
-	CertificateName *string `json:"certificateName" tf:"certificate_name"`
+	// +optional
+	CertificateIDS []string `json:"certificateIDS,omitempty" tf:"certificate_ids"`
+	// +optional
+	CertificateName *string `json:"certificateName,omitempty" tf:"certificate_name"`
 	// +optional
 	CipherSuiteName *string `json:"cipherSuiteName,omitempty" tf:"cipher_suite_name"`
 	// +optional
 	Protocols []string `json:"protocols,omitempty" tf:"protocols"`
 	// +optional
 	ServerOrderPreference *string `json:"serverOrderPreference,omitempty" tf:"server_order_preference"`
+	// +optional
+	TrustedCertificateAuthorityIDS []string `json:"trustedCertificateAuthorityIDS,omitempty" tf:"trusted_certificate_authority_ids"`
 	// +optional
 	VerifyDepth *int64 `json:"verifyDepth,omitempty" tf:"verify_depth"`
 	// +optional

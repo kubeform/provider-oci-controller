@@ -11,7 +11,8 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_core "github.com/oracle/oci-go-sdk/v45/core"
+	oci_core "github.com/oracle/oci-go-sdk/v50/core"
+	oci_work_requests "github.com/oracle/oci-go-sdk/v50/workrequests"
 )
 
 func init() {
@@ -153,6 +154,8 @@ func createCoreBootVolumeBackup(d *schema.ResourceData, m interface{}) error {
 	sync := &CoreBootVolumeBackupResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).blockstorageClient()
+	sync.workRequestClient = m.(*OracleClients).workRequestClient
+
 	compartment, ok := sync.D.GetOkExists("compartment_id")
 
 	err := CreateResource(d, sync)
@@ -169,11 +172,11 @@ func createCoreBootVolumeBackup(d *schema.ResourceData, m interface{}) error {
 		sync.Res.CompartmentId = &tmp
 		err := sync.Get()
 		if err != nil {
-			log.Printf("error doing a Get() after compartment update: %v", err)
+			log.Printf("error doing a Get() after compartment Update: %v", err)
 		}
 		err = sync.SetData()
 		if err != nil {
-			log.Printf("error doing a SetData() after compartment update: %v", err)
+			log.Printf("error doing a SetData() after compartment Update: %v", err)
 		}
 	}
 	return nil
@@ -183,6 +186,7 @@ func readCoreBootVolumeBackup(d *schema.ResourceData, m interface{}) error {
 	sync := &CoreBootVolumeBackupResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).blockstorageClient()
+	sync.workRequestClient = m.(*OracleClients).workRequestClient
 
 	return ReadResource(sync)
 }
@@ -191,6 +195,7 @@ func updateCoreBootVolumeBackup(d *schema.ResourceData, m interface{}) error {
 	sync := &CoreBootVolumeBackupResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).blockstorageClient()
+	sync.workRequestClient = m.(*OracleClients).workRequestClient
 
 	return UpdateResource(d, sync)
 }
@@ -199,6 +204,7 @@ func deleteCoreBootVolumeBackup(d *schema.ResourceData, m interface{}) error {
 	sync := &CoreBootVolumeBackupResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).blockstorageClient()
+	sync.workRequestClient = m.(*OracleClients).workRequestClient
 	sync.DisableNotFoundRetries = true
 
 	return DeleteResource(d, sync)
@@ -208,6 +214,7 @@ type CoreBootVolumeBackupResourceCrud struct {
 	BaseCrud
 	Client                 *oci_core.BlockstorageClient
 	SourceRegionClient     *oci_core.BlockstorageClient
+	workRequestClient      *oci_work_requests.WorkRequestClient
 	Res                    *oci_core.BootVolumeBackup
 	DisableNotFoundRetries bool
 }
@@ -290,14 +297,14 @@ func (s *CoreBootVolumeBackupResourceCrud) createBootVolumeBackup() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if type_, ok := s.D.GetOkExists("type"); ok {
 		request.Type = oci_core.CreateBootVolumeBackupDetailsTypeEnum(type_.(string))
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.CreateBootVolumeBackup(context.Background(), request)
 	if err != nil {
@@ -354,7 +361,17 @@ func (s *CoreBootVolumeBackupResourceCrud) createBootVolumeBackupCopy() error {
 		return err
 	}
 
+	workRequestId := response.OpcWorkRequestId
+
 	s.Res = &response.BootVolumeBackup
+
+	if workRequestId != nil {
+		_, err := WaitForWorkRequestWithErrorHandling(s.workRequestClient, workRequestId, "bootVolumeBackup", oci_work_requests.WorkRequestResourceActionTypeCreated, s.D.Timeout(schema.TimeoutCreate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -364,7 +381,7 @@ func (s *CoreBootVolumeBackupResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.BootVolumeBackupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.GetBootVolumeBackup(context.Background(), request)
 	if err != nil {
@@ -385,7 +402,7 @@ func (s *CoreBootVolumeBackupResourceCrud) Update() error {
 			}
 		}
 	}
-	//check if there are any fields is set (empty update request is invalid)
+	//check if there are any fields is set (empty Update request is invalid)
 	hasAttributeSet := false
 
 	request := oci_core.UpdateBootVolumeBackupRequest{}
@@ -412,14 +429,14 @@ func (s *CoreBootVolumeBackupResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		hasAttributeSet = true
 	}
 	if !hasAttributeSet {
 		return nil
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.UpdateBootVolumeBackup(context.Background(), request)
 	if err != nil {
@@ -436,7 +453,7 @@ func (s *CoreBootVolumeBackupResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.BootVolumeBackupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	_, err := s.Client.DeleteBootVolumeBackup(context.Background(), request)
 	return err
@@ -515,11 +532,16 @@ func (s *CoreBootVolumeBackupResourceCrud) updateCompartment(compartment interfa
 	compartmentTmp := compartment.(string)
 	changeCompartmentRequest.CompartmentId = &compartmentTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	_, err := s.Client.ChangeBootVolumeBackupCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }

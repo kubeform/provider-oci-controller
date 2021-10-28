@@ -9,9 +9,11 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	oci_work_requests "github.com/oracle/oci-go-sdk/v50/workrequests"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -313,6 +315,7 @@ func createDatabaseExadataInfrastructure(d *schema.ResourceData, m interface{}) 
 	sync := &DatabaseExadataInfrastructureResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return CreateResource(d, sync)
 }
@@ -321,6 +324,7 @@ func readDatabaseExadataInfrastructure(d *schema.ResourceData, m interface{}) er
 	sync := &DatabaseExadataInfrastructureResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return ReadResource(sync)
 }
@@ -329,6 +333,7 @@ func updateDatabaseExadataInfrastructure(d *schema.ResourceData, m interface{}) 
 	sync := &DatabaseExadataInfrastructureResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return UpdateResource(d, sync)
 }
@@ -337,6 +342,7 @@ func deleteDatabaseExadataInfrastructure(d *schema.ResourceData, m interface{}) 
 	sync := &DatabaseExadataInfrastructureResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 	sync.DisableNotFoundRetries = true
 
 	return DeleteResource(d, sync)
@@ -345,6 +351,7 @@ func deleteDatabaseExadataInfrastructure(d *schema.ResourceData, m interface{}) 
 type DatabaseExadataInfrastructureResourceCrud struct {
 	BaseCrud
 	Client                 *oci_database.DatabaseClient
+	WorkRequestClient      *oci_work_requests.WorkRequestClient
 	Res                    *oci_database.ExadataInfrastructure
 	DisableNotFoundRetries bool
 }
@@ -487,7 +494,7 @@ func (s *DatabaseExadataInfrastructureResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if gateway, ok := s.D.GetOkExists("gateway"); ok {
@@ -545,7 +552,7 @@ func (s *DatabaseExadataInfrastructureResourceCrud) Create() error {
 		request.TimeZone = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.CreateExadataInfrastructure(context.Background(), request)
 	if err != nil {
@@ -576,7 +583,7 @@ func (s *DatabaseExadataInfrastructureResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.ExadataInfrastructureId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.GetExadataInfrastructure(context.Background(), request)
 	if err != nil {
@@ -668,7 +675,7 @@ func (s *DatabaseExadataInfrastructureResourceCrud) Update() error {
 	request.ExadataInfrastructureId = &tmp
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if gateway, ok := s.D.GetOkExists("gateway"); ok && s.D.HasChange("gateway") {
@@ -716,7 +723,7 @@ func (s *DatabaseExadataInfrastructureResourceCrud) Update() error {
 		request.TimeZone = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	if s.D.Get("state").(string) == string(oci_database.ExadataInfrastructureLifecycleStateRequiresActivation) ||
 		s.D.Get("additional_storage_count").(int) > 0 {
@@ -743,10 +750,6 @@ func (s *DatabaseExadataInfrastructureResourceCrud) Update() error {
 		return waitErr
 	}
 
-	//if s.Res.Shape != s.D.Get("state") {
-	//	s.D.Set("shape", s.Res.Shape)
-	//}
-
 	return nil
 }
 
@@ -756,7 +759,7 @@ func (s *DatabaseExadataInfrastructureResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.ExadataInfrastructureId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.DeleteExadataInfrastructure(context.Background(), request)
 	return err
@@ -1104,12 +1107,17 @@ func (s *DatabaseExadataInfrastructureResourceCrud) updateCompartment(compartmen
 	idTmp := s.D.Id()
 	changeCompartmentRequest.ExadataInfrastructureId = &idTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.ChangeExadataInfrastructureCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }
 
@@ -1126,11 +1134,19 @@ func (s *DatabaseExadataInfrastructureResourceCrud) activateExadataInfrastructur
 
 	request.ExadataInfrastructureId = &exadataInfrastructureId
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.ActivateExadataInfrastructure(context.Background(), request)
 	if err != nil {
 		return nil, err
+	}
+
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "exadataInfrastructure", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &response, nil

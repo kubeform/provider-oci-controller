@@ -165,6 +165,11 @@ func (in *AlarmSpecResource) DeepCopyInto(out *AlarmSpecResource) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.MessageFormat != nil {
+		in, out := &in.MessageFormat, &out.MessageFormat
+		*out = new(string)
+		**out = **in
+	}
 	if in.MetricCompartmentID != nil {
 		in, out := &in.MetricCompartmentID, &out.MetricCompartmentID
 		*out = new(string)

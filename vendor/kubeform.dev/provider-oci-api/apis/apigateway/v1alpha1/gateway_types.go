@@ -109,6 +109,8 @@ type GatewaySpecResource struct {
 	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional
+	NetworkSecurityGroupIDS []string `json:"networkSecurityGroupIDS,omitempty" tf:"network_security_group_ids"`
+	// +optional
 	ResponseCacheDetails *GatewaySpecResponseCacheDetails `json:"responseCacheDetails,omitempty" tf:"response_cache_details"`
 	// +optional
 	State    *string `json:"state,omitempty" tf:"state"`

@@ -84,6 +84,8 @@ type DatabaseInsightSpecResource struct {
 	EnterpriseManagerIdentifier *string `json:"enterpriseManagerIdentifier" tf:"enterprise_manager_identifier"`
 	EntitySource                *string `json:"entitySource" tf:"entity_source"`
 	// +optional
+	ExadataInsightID *string `json:"exadataInsightID,omitempty" tf:"exadata_insight_id"`
+	// +optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`

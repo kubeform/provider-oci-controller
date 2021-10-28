@@ -4,15 +4,15 @@
 package oci
 
 import (
-	oci_kms "github.com/oracle/oci-go-sdk/v45/keymanagement"
+	oci_kms "github.com/oracle/oci-go-sdk/v50/keymanagement"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_kms.KmsCryptoClient", &OracleClient{initClientFn: initKeymanagementKmsCryptoClient})
-	RegisterOracleClient("oci_kms.KmsManagementClient", &OracleClient{initClientFn: initKeymanagementKmsManagementClient})
-	RegisterOracleClient("oci_kms.KmsVaultClient", &OracleClient{initClientFn: initKeymanagementKmsVaultClient})
+	RegisterOracleClient("oci_kms.KmsCryptoClient", &OracleClient{InitClientFn: initKeymanagementKmsCryptoClient})
+	RegisterOracleClient("oci_kms.KmsManagementClient", &OracleClient{InitClientFn: initKeymanagementKmsManagementClient})
+	RegisterOracleClient("oci_kms.KmsVaultClient", &OracleClient{InitClientFn: initKeymanagementKmsVaultClient})
 }
 
 func initKeymanagementKmsCryptoClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

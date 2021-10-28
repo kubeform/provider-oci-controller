@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_management_agent "github.com/oracle/oci-go-sdk/v45/managementagent"
+	oci_management_agent "github.com/oracle/oci-go-sdk/v50/managementagent"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func (s *ManagementAgentManagementAgentDataSourceCrud) Get() error {
 		request.ManagementAgentId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "management_agent")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "management_agent")
 
 	response, err := s.Client.GetManagementAgent(context.Background(), request)
 	if err != nil {
@@ -87,6 +87,10 @@ func (s *ManagementAgentManagementAgentDataSourceCrud) SetData() error {
 		s.D.Set("host", *s.Res.Host)
 	}
 
+	if s.Res.HostId != nil {
+		s.D.Set("host_id", *s.Res.HostId)
+	}
+
 	if s.Res.InstallKeyId != nil {
 		s.D.Set("install_key_id", *s.Res.InstallKeyId)
 	}
@@ -95,8 +99,14 @@ func (s *ManagementAgentManagementAgentDataSourceCrud) SetData() error {
 		s.D.Set("install_path", *s.Res.InstallPath)
 	}
 
+	s.D.Set("install_type", s.Res.InstallType)
+
 	if s.Res.IsAgentAutoUpgradable != nil {
 		s.D.Set("is_agent_auto_upgradable", *s.Res.IsAgentAutoUpgradable)
+	}
+
+	if s.Res.IsCustomerDeployed != nil {
+		s.D.Set("is_customer_deployed", *s.Res.IsCustomerDeployed)
 	}
 
 	if s.Res.LifecycleDetails != nil {
@@ -118,6 +128,10 @@ func (s *ManagementAgentManagementAgentDataSourceCrud) SetData() error {
 		pluginList = append(pluginList, ManagementAgentPluginDetailsToMap(item))
 	}
 	s.D.Set("plugin_list", pluginList)
+
+	if s.Res.ResourceArtifactVersion != nil {
+		s.D.Set("resource_artifact_version", *s.Res.ResourceArtifactVersion)
+	}
 
 	s.D.Set("state", s.Res.LifecycleState)
 

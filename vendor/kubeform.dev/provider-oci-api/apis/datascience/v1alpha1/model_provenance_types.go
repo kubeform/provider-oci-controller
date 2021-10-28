@@ -70,6 +70,8 @@ type ModelProvenanceSpecResource struct {
 	// +optional
 	ScriptDir *string `json:"scriptDir,omitempty" tf:"script_dir"`
 	// +optional
+	TrainingID *string `json:"trainingID,omitempty" tf:"training_id"`
+	// +optional
 	TrainingScript *string `json:"trainingScript,omitempty" tf:"training_script"`
 }
 

@@ -49,6 +49,8 @@ type ManagementManagedDatabaseGroupSpecManagedDatabases struct {
 	// +optional
 	DatabaseType *string `json:"databaseType,omitempty" tf:"database_type"`
 	// +optional
+	DeploymentType *string `json:"deploymentType,omitempty" tf:"deployment_type"`
+	// +optional
 	ID *string `json:"ID,omitempty" tf:"id"`
 	// +optional
 	Name *string `json:"name,omitempty" tf:"name"`

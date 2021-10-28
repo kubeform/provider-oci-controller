@@ -89,7 +89,9 @@ type ApplicationSpecResource struct {
 	Language     *string           `json:"language" tf:"language"`
 	// +optional
 	LogsBucketURI *string `json:"logsBucketURI,omitempty" tf:"logs_bucket_uri"`
-	NumExecutors  *int64  `json:"numExecutors" tf:"num_executors"`
+	// +optional
+	MetastoreID  *string `json:"metastoreID,omitempty" tf:"metastore_id"`
+	NumExecutors *int64  `json:"numExecutors" tf:"num_executors"`
 	// +optional
 	OwnerPrincipalID *string `json:"ownerPrincipalID,omitempty" tf:"owner_principal_id"`
 	// +optional

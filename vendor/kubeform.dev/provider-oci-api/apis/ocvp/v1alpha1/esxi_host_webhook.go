@@ -42,8 +42,9 @@ func (r *EsxiHost) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &EsxiHost{}
 
 var esxihostForceNewList = map[string]bool{
-	"/current_sku": true,
-	"/sddc_id":     true,
+	"/compute_availability_domain": true,
+	"/current_sku":                 true,
+	"/sddc_id":                     true,
 }
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type

@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_integration "github.com/oracle/oci-go-sdk/v45/integration"
+	oci_integration "github.com/oracle/oci-go-sdk/v50/integration"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_integration.IntegrationInstanceClient", &OracleClient{initClientFn: initIntegrationIntegrationInstanceClient})
+	RegisterOracleClient("oci_integration.IntegrationInstanceClient", &OracleClient{InitClientFn: initIntegrationIntegrationInstanceClient})
 }
 
 func initIntegrationIntegrationInstanceClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"reflect"
 	"sort"
 	"strconv"
@@ -21,9 +22,9 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
-	oci_load_balancer "github.com/oracle/oci-go-sdk/v45/loadbalancer"
-	oci_work_requests "github.com/oracle/oci-go-sdk/v45/workrequests"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
+	oci_load_balancer "github.com/oracle/oci-go-sdk/v50/loadbalancer"
+	oci_work_requests "github.com/oracle/oci-go-sdk/v50/workrequests"
 
 	"github.com/terraform-providers/terraform-provider-oci/httpreplay"
 )
@@ -266,10 +267,10 @@ func waitForStateRefreshForHybridPolling(workRequestClient *oci_work_requests.Wo
 	if _, e := stateConf.WaitForState(); e != nil {
 		handleMissingResourceError(sync, &e)
 		if _, ok := e.(*resource.UnexpectedStateError); ok {
-			retryPolicy := getRetryPolicy(disableFoundRetries, "work_request")
+			retryPolicy := GetRetryPolicy(disableFoundRetries, "work_request")
 			retryPolicy.ShouldRetryOperation = workRequestShouldRetryFunc(timeout)
 			e = getWorkRequestErrors(workRequestClient, workRequestIds, retryPolicy, entityType, action)
-			return handleError(sync, e)
+			return e
 		}
 
 		if _, ok := e.(*resource.TimeoutError); ok {
@@ -475,8 +476,8 @@ func stateRefreshFunc(sync StatefulResource) resource.StateRefreshFunc {
 	}
 }
 
-// Helper function to wait for update to reach terminal state before doing another update
-// Useful in situations where more than one update is needed and prior update needs to complete
+// Helper function to wait for Update to reach terminal state before doing another Update
+// Useful in situations where more than one Update is needed and prior Update needs to complete
 func waitForUpdatedState(d *schema.ResourceData, sync ResourceUpdater) error {
 	if stateful, ok := sync.(StatefullyUpdatedResource); ok {
 		if e := waitForStateRefresh(stateful, d.Timeout(schema.TimeoutUpdate), "update", stateful.UpdatedPending(), stateful.UpdatedTarget()); e != nil {
@@ -487,8 +488,8 @@ func waitForUpdatedState(d *schema.ResourceData, sync ResourceUpdater) error {
 	return nil
 }
 
-// Helper function to wait for create to reach terminal state before doing another operation
-// Useful in situations where another operation is done right after create
+// Helper function to wait for Create to reach terminal state before doing another operation
+// Useful in situations where another operation is done right after Create
 func waitForCreatedState(d *schema.ResourceData, sync ResourceCreator) error {
 	d.SetId(sync.ID())
 	if stateful, ok := sync.(StatefullyCreatedResource); ok {
@@ -526,7 +527,7 @@ func waitForStateRefresh(sync StatefulResource, timeout time.Duration, operation
 			} else {
 				e = fmt.Errorf("During %s, service reported unexpected state: %s.", operationName, sync.State())
 			}
-			return handleError(sync, e)
+			return e
 		}
 
 		if _, ok := e.(*resource.TimeoutError); ok {
@@ -578,6 +579,20 @@ func dbVersionDiffSuppress(key string, old string, new string, d *schema.Resourc
 		return oldVersionNumber == newVersionNumber
 	}
 	return strings.HasPrefix(strings.ToLower(old), strings.ToLower(new))
+}
+
+func adDiffSuppress(key string, old string, new string, d *schema.ResourceData) bool {
+	const float64EqualityThreshold = 1e-6
+	oldf, err := strconv.ParseFloat(old, 64)
+	if err != nil {
+		return false
+	}
+	newf, err := strconv.ParseFloat(new, 64)
+	if err != nil {
+		return false
+	}
+
+	return math.Abs(oldf-newf) <= float64EqualityThreshold
 }
 
 func giVersionDiffSuppress(key string, old string, new string, d *schema.ResourceData) bool {
@@ -912,7 +927,7 @@ func WaitForWorkRequestWithErrorHandling(workRequestClient *oci_work_requests.Wo
 
 func WaitForWorkRequest(workRequestClient *oci_work_requests.WorkRequestClient, workRequestId *string, entityType string, action oci_work_requests.WorkRequestResourceActionTypeEnum,
 	timeout time.Duration, disableFoundRetries bool, expectIdentifier bool) (*string, error) {
-	retryPolicy := getRetryPolicy(disableFoundRetries, "work_request")
+	retryPolicy := GetRetryPolicy(disableFoundRetries, "work_request")
 	retryPolicy.ShouldRetryOperation = workRequestShouldRetryFunc(timeout)
 
 	response := oci_work_requests.GetWorkRequestResponse{}
@@ -1026,7 +1041,7 @@ func getWorkRequestErrors(workRequestClient *oci_work_requests.WorkRequestClient
 // Helper to marshal JSON objects from service into strings that can be stored in state.
 // This limitation exists because Terraform doesn't support maps of nested objects and so we use JSON strings representation
 // as a workaround.
-func genericMapToJsonMap(genericMap map[string]interface{}) map[string]interface{} {
+func GenericMapToJsonMap(genericMap map[string]interface{}) map[string]interface{} {
 	result := map[string]interface{}{}
 
 	for key, value := range genericMap {
@@ -1045,7 +1060,7 @@ func genericMapToJsonMap(genericMap map[string]interface{}) map[string]interface
 	return result
 }
 
-func getTimeoutDuration(timeout string) *time.Duration {
+func GetTimeoutDuration(timeout string) *time.Duration {
 	timeoutDuration, err := time.ParseDuration(timeout)
 	if err != nil {
 		// Return the OCI Provider's default timeout if there is an error
@@ -1054,7 +1069,7 @@ func getTimeoutDuration(timeout string) *time.Duration {
 	return &timeoutDuration
 }
 
-func convertObjectToJsonString(object interface{}) (string, error) {
+func ConvertObjectToJsonString(object interface{}) (string, error) {
 	bytes, err := json.Marshal(object)
 	if err != nil {
 		return "", err

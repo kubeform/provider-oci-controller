@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_object_storage "github.com/oracle/oci-go-sdk/v45/objectstorage"
+	oci_object_storage "github.com/oracle/oci-go-sdk/v50/objectstorage"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_object_storage.ObjectStorageClient", &OracleClient{initClientFn: initObjectstorageObjectStorageClient})
+	RegisterOracleClient("oci_object_storage.ObjectStorageClient", &OracleClient{InitClientFn: initObjectstorageObjectStorageClient})
 }
 
 func initObjectstorageObjectStorageClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

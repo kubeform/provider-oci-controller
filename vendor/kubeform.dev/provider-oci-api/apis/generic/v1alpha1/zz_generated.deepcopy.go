@@ -177,7 +177,12 @@ func (in *ArtifactsContentArtifactByPathSpecResource) DeepCopyInto(out *Artifact
 	}
 	if in.SizeInBytes != nil {
 		in, out := &in.SizeInBytes, &out.SizeInBytes
-		*out = new(int64)
+		*out = new(string)
+		**out = **in
+	}
+	if in.Source != nil {
+		in, out := &in.Source, &out.Source
+		*out = new(string)
 		**out = **in
 	}
 	if in.State != nil {

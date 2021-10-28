@@ -8,7 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -21,9 +21,9 @@ func DatabaseDatabaseSoftwareImageResource() *schema.Resource {
 			State: schema.ImportStatePassthrough,
 		},
 		Timeouts: &schema.ResourceTimeout{
-			Create: getTimeoutDuration("2h"),
-			Update: getTimeoutDuration("30m"),
-			Delete: getTimeoutDuration("30m"),
+			Create: GetTimeoutDuration("2h"),
+			Update: GetTimeoutDuration("30m"),
+			Delete: GetTimeoutDuration("30m"),
 		},
 		Create: createDatabaseDatabaseSoftwareImage,
 		Read:   readDatabaseDatabaseSoftwareImage,
@@ -242,7 +242,7 @@ func (s *DatabaseDatabaseSoftwareImageResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if imageShapeFamily, ok := s.D.GetOkExists("image_shape_family"); ok {
@@ -268,7 +268,7 @@ func (s *DatabaseDatabaseSoftwareImageResourceCrud) Create() error {
 		request.SourceDbHomeId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.CreateDatabaseSoftwareImage(context.Background(), request)
 	if err != nil {
@@ -276,6 +276,11 @@ func (s *DatabaseDatabaseSoftwareImageResourceCrud) Create() error {
 	}
 
 	s.Res = &response.DatabaseSoftwareImage
+
+	if waitErr := waitForCreatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }
 
@@ -285,7 +290,7 @@ func (s *DatabaseDatabaseSoftwareImageResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.DatabaseSoftwareImageId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.GetDatabaseSoftwareImage(context.Background(), request)
 	if err != nil {
@@ -325,14 +330,19 @@ func (s *DatabaseDatabaseSoftwareImageResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.UpdateDatabaseSoftwareImage(context.Background(), request)
 	if err != nil {
 		return err
+	}
+
+	// This Update does not support work-request
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
 	}
 
 	s.Res = &response.DatabaseSoftwareImage
@@ -345,7 +355,7 @@ func (s *DatabaseDatabaseSoftwareImageResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.DatabaseSoftwareImageId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.DeleteDatabaseSoftwareImage(context.Background(), request)
 	return err
@@ -416,11 +426,16 @@ func (s *DatabaseDatabaseSoftwareImageResourceCrud) updateCompartment(compartmen
 	idTmp := s.D.Id()
 	changeCompartmentRequest.DatabaseSoftwareImageId = &idTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.ChangeDatabaseSoftwareImageCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }

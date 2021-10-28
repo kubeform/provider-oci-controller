@@ -7,15 +7,19 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
+	"strconv"
 	"strings"
 	"time"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_work_requests "github.com/oracle/oci-go-sdk/v50/workrequests"
+
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -28,9 +32,9 @@ func DatabaseDatabaseResource() *schema.Resource {
 			State: schema.ImportStatePassthrough,
 		},
 		Timeouts: &schema.ResourceTimeout{
-			Create: getTimeoutDuration("12h"),
-			Update: getTimeoutDuration("2h"),
-			Delete: getTimeoutDuration("2h"),
+			Create: GetTimeoutDuration("12h"),
+			Update: GetTimeoutDuration("2h"),
+			Delete: GetTimeoutDuration("2h"),
 		},
 		Create: createDatabaseDatabase,
 		Read:   readDatabaseDatabase,
@@ -176,6 +180,12 @@ func DatabaseDatabaseResource() *schema.Resource {
 							Computed: true,
 							ForceNew: true,
 						},
+						"sid_prefix": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+							ForceNew: true,
+						},
 						"tde_wallet_password": {
 							Type:      schema.TypeString,
 							Optional:  true,
@@ -266,6 +276,29 @@ func DatabaseDatabaseResource() *schema.Resource {
 					},
 				},
 			},
+			"database_management_config": {
+				Type:     schema.TypeList,
+				Computed: true,
+				MaxItems: 1,
+				MinItems: 1,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						// Required
+
+						// Optional
+
+						// Computed
+						"management_status": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"management_type": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+					},
+				},
+			},
 			"database_software_image_id": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -344,6 +377,10 @@ func DatabaseDatabaseResource() *schema.Resource {
 				Computed: true,
 				Elem:     schema.TypeString,
 			},
+			"is_cdb": {
+				Type:     schema.TypeBool,
+				Computed: true,
+			},
 			"last_backup_timestamp": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -357,6 +394,10 @@ func DatabaseDatabaseResource() *schema.Resource {
 				Computed: true,
 			},
 			"pdb_name": {
+				Type:     schema.TypeString,
+				Computed: true,
+			},
+			"sid_prefix": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
@@ -384,6 +425,7 @@ func createDatabaseDatabase(d *schema.ResourceData, m interface{}) error {
 	sync := &DatabaseDatabaseResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return CreateResource(d, sync)
 }
@@ -392,6 +434,7 @@ func readDatabaseDatabase(d *schema.ResourceData, m interface{}) error {
 	sync := &DatabaseDatabaseResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return ReadResource(sync)
 }
@@ -400,6 +443,7 @@ func deleteDatabaseDatabase(d *schema.ResourceData, m interface{}) error {
 	sync := &DatabaseDatabaseResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 	sync.DisableNotFoundRetries = true
 
 	return DeleteResource(d, sync)
@@ -408,6 +452,7 @@ func deleteDatabaseDatabase(d *schema.ResourceData, m interface{}) error {
 type DatabaseDatabaseResourceCrud struct {
 	BaseCrud
 	Client                 *oci_database.DatabaseClient
+	WorkRequestClient      *oci_work_requests.WorkRequestClient
 	Res                    *oci_database.Database
 	DisableNotFoundRetries bool
 }
@@ -462,11 +507,18 @@ func (s *DatabaseDatabaseResourceCrud) Create() error {
 	}
 
 	createDatabaseRetryDurationFn := getdatabaseRetryDurationFunction(s.D.Timeout(schema.TimeoutCreate))
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database", createDatabaseRetryDurationFn)
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database", createDatabaseRetryDurationFn)
 
 	response, err := s.Client.CreateDatabase(context.Background(), request)
 	if err != nil {
 		return err
+	}
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeCreated, s.D.Timeout(schema.TimeoutCreate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
 	}
 
 	s.Res = &response.Database
@@ -479,7 +531,7 @@ func (s *DatabaseDatabaseResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.DatabaseId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.GetDatabase(context.Background(), request)
 	if err != nil {
@@ -502,7 +554,7 @@ func (s *DatabaseDatabaseResourceCrud) Delete() error {
 	}
 
 	deleteDatabaseRetryDurationFn := getdatabaseRetryDurationFunction(s.D.Timeout(schema.TimeoutDelete))
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database", deleteDatabaseRetryDurationFn)
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database", deleteDatabaseRetryDurationFn)
 
 	_, err := s.Client.DeleteDatabase(context.Background(), request)
 	return err
@@ -524,6 +576,12 @@ func (s *DatabaseDatabaseResourceCrud) SetData() error {
 		s.D.Set("connection_strings", []interface{}{DatabaseConnectionStringsToMap(s.Res.ConnectionStrings)})
 	} else {
 		s.D.Set("connection_strings", nil)
+	}
+
+	if s.Res.DatabaseManagementConfig != nil {
+		s.D.Set("database_management_config", []interface{}{CloudDatabaseManagementConfigToMap(s.Res.DatabaseManagementConfig)})
+	} else {
+		s.D.Set("database_management_config", nil)
 	}
 
 	if s.Res.DatabaseSoftwareImageId != nil {
@@ -562,6 +620,10 @@ func (s *DatabaseDatabaseResourceCrud) SetData() error {
 
 	s.D.Set("freeform_tags", s.Res.FreeformTags)
 
+	if s.Res.IsCdb != nil {
+		s.D.Set("is_cdb", *s.Res.IsCdb)
+	}
+
 	if s.Res.KmsKeyId != nil {
 		s.D.Set("kms_key_id", *s.Res.KmsKeyId)
 	}
@@ -580,6 +642,10 @@ func (s *DatabaseDatabaseResourceCrud) SetData() error {
 
 	if s.Res.PdbName != nil {
 		s.D.Set("pdb_name", *s.Res.PdbName)
+	}
+
+	if s.Res.SidPrefix != nil {
+		s.D.Set("sid_prefix", *s.Res.SidPrefix)
 	}
 
 	if s.Res.SourceDatabasePointInTimeRecoveryTimestamp != nil {
@@ -644,6 +710,16 @@ func BackupDestinationDetailsToMap(obj oci_database.BackupDestinationDetails) ma
 	return result
 }
 
+func CloudDatabaseManagementConfigToMap(obj *oci_database.CloudDatabaseManagementConfig) map[string]interface{} {
+	result := map[string]interface{}{}
+
+	result["management_status"] = string(obj.ManagementStatus)
+
+	result["management_type"] = string(obj.ManagementType)
+
+	return result
+}
+
 func (s *DatabaseDatabaseResourceCrud) mapToCreateDatabaseDetails(fieldKeyFormat string) (oci_database.CreateDatabaseDetails, error) {
 	result := oci_database.CreateDatabaseDetails{}
 
@@ -696,7 +772,7 @@ func (s *DatabaseDatabaseResourceCrud) mapToCreateDatabaseDetails(fieldKeyFormat
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if ncharacterSet, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "ncharacter_set")); ok {
@@ -707,6 +783,11 @@ func (s *DatabaseDatabaseResourceCrud) mapToCreateDatabaseDetails(fieldKeyFormat
 	if pdbName, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "pdb_name")); ok {
 		tmp := pdbName.(string)
 		result.PdbName = &tmp
+	}
+
+	if sidPrefix, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "sid_prefix")); ok {
+		tmp := sidPrefix.(string)
+		result.SidPrefix = &tmp
 	}
 
 	if tdeWalletPassword, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "tde_wallet_password")); ok {
@@ -743,6 +824,11 @@ func (s *DatabaseDatabaseResourceCrud) mapToCreateDatabaseFromBackupDetails(fiel
 	if dbUniqueName, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "db_unique_name")); ok {
 		tmp := dbUniqueName.(string)
 		result.DbUniqueName = &tmp
+	}
+
+	if sidPrefix, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "sid_prefix")); ok {
+		tmp := sidPrefix.(string)
+		result.SidPrefix = &tmp
 	}
 
 	return result, nil
@@ -879,6 +965,7 @@ func updateDatabaseDatabase(d *schema.ResourceData, m interface{}) error {
 	sync := &DatabaseDatabaseResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return UpdateResource(d, sync)
 }
@@ -911,11 +998,19 @@ func (s *DatabaseDatabaseResourceCrud) Update() error {
 	}
 
 	updateDatabaseRetryDurationFn := getdatabaseRetryDurationFunction(s.D.Timeout(schema.TimeoutUpdate))
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database", updateDatabaseRetryDurationFn)
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database", updateDatabaseRetryDurationFn)
 
 	response, err := s.Client.UpdateDatabase(context.Background(), request)
 	if err != nil {
 		return err
+	}
+
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
 	}
 
 	s.Res = &response.Database
@@ -965,7 +1060,7 @@ func (s *DatabaseDatabaseResourceCrud) mapToUpdateDatabaseDetails(fieldKeyFormat
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if adminPassword, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "admin_password")); ok && s.D.HasChange(fmt.Sprintf(fieldKeyFormat, "admin_password")) {
@@ -1007,6 +1102,10 @@ func (s *DatabaseDatabaseResourceCrud) DatabaseToMap(obj *oci_database.Database)
 		result["character_set"] = string(*obj.CharacterSet)
 	}
 
+	if obj.DatabaseManagementConfig != nil {
+		result["database_management_config"] = []interface{}{CloudDatabaseManagementConfigToMap(obj.DatabaseManagementConfig)}
+	}
+
 	if obj.DbBackupConfig != nil {
 		result["db_backup_config"] = []interface{}{DbBackupConfigToMap(obj.DbBackupConfig)}
 	}
@@ -1037,6 +1136,10 @@ func (s *DatabaseDatabaseResourceCrud) DatabaseToMap(obj *oci_database.Database)
 		result["pdb_name"] = string(*obj.PdbName)
 	}
 
+	if obj.SidPrefix != nil {
+		result["sid_prefix"] = string(*obj.SidPrefix)
+	}
+
 	return result
 }
 
@@ -1044,9 +1147,19 @@ func (s *DatabaseDatabaseResourceCrud) kmsRotation(databaseId string) error {
 	if _, ok := s.D.GetOkExists("kms_key_rotation"); ok && s.D.HasChange("kms_key_rotation") {
 		rotateKeyRequest := oci_database.RotateVaultKeyRequest{}
 		rotateKeyRequest.DatabaseId = &databaseId
-		rotateKeyRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
-		_, err := s.Client.RotateVaultKey(context.Background(), rotateKeyRequest)
-		return err
+		rotateKeyRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
+		response, err := s.Client.RotateVaultKey(context.Background(), rotateKeyRequest)
+		if err != nil {
+			return err
+		}
+		workId := response.OpcWorkRequestId
+		if workId != nil {
+			_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+			if err != nil {
+				return err
+			}
+		}
+		return nil
 	}
 	return nil
 }
@@ -1056,7 +1169,7 @@ func (s *DatabaseDatabaseResourceCrud) kmsMigration(databaseId string) error {
 	if _, ok := s.D.GetOkExists("kms_key_migration"); ok && s.D.HasChange("kms_key_migration") && s.D.Get("kms_key_migration").(bool) {
 		migrationKeyRequest := oci_database.MigrateVaultKeyRequest{}
 		migrationKeyRequest.DatabaseId = &databaseId
-		migrationKeyRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+		migrationKeyRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 		if kmsKeyId, ok := s.D.GetOkExists("kms_key_id"); ok && s.D.HasChange("kms_key_id") {
 			oldRaw, newRaw := s.D.GetChange("kms_key_id")
 			if oldRaw == "" && newRaw != "" {
@@ -1072,9 +1185,15 @@ func (s *DatabaseDatabaseResourceCrud) kmsMigration(databaseId string) error {
 				migrationKeyRequest.KmsKeyVersionId = &temp
 			}
 		}
-		_, err := s.Client.MigrateVaultKey(context.Background(), migrationKeyRequest)
+		response, err := s.Client.MigrateVaultKey(context.Background(), migrationKeyRequest)
 		if err != nil {
 			return err
+		}
+		workId := response.OpcWorkRequestId
+		if workId != nil {
+			_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "database", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+			if err != nil {
+			}
 		}
 		migrateOperation = true
 	}
@@ -1095,8 +1214,13 @@ func getdatabaseRetryDurationFunction(retryTimeout time.Duration) expectedRetryD
 		if response.Response == nil || response.Response.HTTPResponse() == nil {
 			return defaultRetryTime
 		}
+		e := response.Error
 		switch statusCode := response.Response.HTTPResponse().StatusCode; statusCode {
 		case 409:
+			if isDisable409Retry, _ := strconv.ParseBool(getEnvSettingWithDefault("disable_409_retry", "false")); isDisable409Retry {
+				log.Printf("[ERROR] Resource is in conflict state due to multiple update request: %v", e.Error())
+				return 0
+			}
 			if e := response.Error; e != nil {
 				if strings.Contains(e.Error(), "IncorrectState") {
 					defaultRetryTime = retryTimeout

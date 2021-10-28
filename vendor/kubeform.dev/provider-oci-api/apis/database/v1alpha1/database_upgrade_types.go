@@ -133,6 +133,8 @@ type DatabaseUpgradeSpecResource struct {
 	// +optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
+	IsCdb *bool `json:"isCdb,omitempty" tf:"is_cdb"`
+	// +optional
 	LastBackupTimestamp *string `json:"lastBackupTimestamp,omitempty" tf:"last_backup_timestamp"`
 	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
@@ -140,6 +142,8 @@ type DatabaseUpgradeSpecResource struct {
 	NcharacterSet *string `json:"ncharacterSet,omitempty" tf:"ncharacter_set"`
 	// +optional
 	PdbName *string `json:"pdbName,omitempty" tf:"pdb_name"`
+	// +optional
+	SidPrefix *string `json:"sidPrefix,omitempty" tf:"sid_prefix"`
 	// +optional
 	SourceDatabasePointInTimeRecoveryTimestamp *string `json:"sourceDatabasePointInTimeRecoveryTimestamp,omitempty" tf:"source_database_point_in_time_recovery_timestamp"`
 	// +optional

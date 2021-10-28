@@ -103,6 +103,8 @@ type InvokeRunSpecResource struct {
 	// +optional
 	LogsBucketURI *string `json:"logsBucketURI,omitempty" tf:"logs_bucket_uri"`
 	// +optional
+	MetastoreID *string `json:"metastoreID,omitempty" tf:"metastore_id"`
+	// +optional
 	NumExecutors *int64 `json:"numExecutors,omitempty" tf:"num_executors"`
 	// +optional
 	OpcRequestID *string `json:"opcRequestID,omitempty" tf:"opc_request_id"`

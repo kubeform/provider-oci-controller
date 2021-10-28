@@ -17,7 +17,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hashicorp/go-multierror"
+	multierror "github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 
@@ -56,6 +56,19 @@ variable "InstanceImageOCID" {
 	}
 
 `
+	DefinedShieldedImageOCIDs = `
+      variable "InstanceImageOCIDShieldedCompatible" {
+	  type = "map"
+	  default = {
+		// See https://docs.us-phoenix-1.oraclecloud.com/images/
+		// Oracle-provided image "Oracle-Linux-8.4-2021.07.27-0"
+		us-phoenix-1 = "ocid1.image.oc1.phx.aaaaaaaalw6v7wxgiuedh36jzy5ilbnfjezsxey2glgg3jtlodwzltxregba"
+		us-ashburn-1 = "ocid1.image.oc1.iad.aaaaaaaay7qb3q2bttzhvzzacdpweqo2mvj43tfkm5b4j46xf6pzazspz6aq"
+		eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaasehd3xu75nmbxp6lbaaontfgmowlszrx5c72mw4kks5f75euj7gq"
+		uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaa7fgs4dpcjkkeemyfzyo3yo5lezqfskac45dblmgnfq5az4jmgcza"
+	  }
+	}`
+
 	FlexVmImageIdsVariable = `
 	variable "FlexInstanceImageOCID" {
 	  type = "map"
@@ -111,8 +124,8 @@ data "oci_core_volume_backup_policies" "test_volume_backup_policies" {
 	variable "OsManagedImageOCID" {
 	  type = "map"
 	  default = {
-		us-phoenix-1 = "ocid1.image.oc1.phx.aaaaaaaaxdwzaqqvxvmyznmcx2n766fxatd6owcojqapkih7oqq4qt3o4wwa"
-		us-ashburn-1 = "ocid1.image.oc1.iad.aaaaaaaabip6l5i5ikqsnm64xwrw2rrkj3tzo2dv47frowlt3droliwpvfaa"
+		us-phoenix-1 = "ocid1.image.oc1.phx.aaaaaaaavxm3s4jskx5rcoi63rekg54e3a27v2b7tiuuumnx5owzhkul6ufq"
+		us-ashburn-1 = "ocid1.image.oc1.iad.aaaaaaaaqhzgbezuoq5fz7haq5p7uyydfipffclz6w7fwyzge7tcxbbloz3q"
 		eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaaulz7xiht632iidvdm4iezy33fofulmerq2nkllwnkjy335qkswza"
 		uk-london-1 = "ocid1.image.oc1.uk-london-1.aaaaaaaayt6ppuyj6q4dwb4pkkyy3llrhxntywewfk4ssd365d4cn22i6yxa"
 	  }
@@ -120,7 +133,7 @@ data "oci_core_volume_backup_policies" "test_volume_backup_policies" {
 	`
 )
 
-func literalTypeHashCodeForSets(m interface{}) int {
+func LiteralTypeHashCodeForSets(m interface{}) int {
 	return hashcode.String(fmt.Sprintf("%v", m))
 }
 
@@ -157,7 +170,7 @@ func validateNotEmptyString() schema.SchemaValidateFunc {
 	}
 }
 
-func objectMapToStringMap(rm map[string]interface{}) map[string]string {
+func ObjectMapToStringMap(rm map[string]interface{}) map[string]string {
 	result := map[string]string{}
 	for k, v := range rm {
 		switch assertedValue := v.(type) {
@@ -182,7 +195,7 @@ func StringMapToObjectMap(sm map[string]string) map[string]interface{} {
 	return result
 }
 
-func validateInt64TypeString(v interface{}, k string) (ws []string, errors []error) {
+func ValidateInt64TypeString(v interface{}, k string) (ws []string, errors []error) {
 	value := v.(string)
 
 	_, err := strconv.ParseInt(value, 10, 64)
@@ -192,7 +205,7 @@ func validateInt64TypeString(v interface{}, k string) (ws []string, errors []err
 	return
 }
 
-func int64StringDiffSuppressFunction(key string, old string, new string, d *schema.ResourceData) bool {
+func Int64StringDiffSuppressFunction(key string, old string, new string, d *schema.ResourceData) bool {
 	// We may get interpolation syntax in this function call as well; so be sure to check for errors.
 	oldIntVal, err := strconv.ParseInt(old, 10, 64)
 	if err != nil {
@@ -207,7 +220,7 @@ func int64StringDiffSuppressFunction(key string, old string, new string, d *sche
 }
 
 // Ignore differences in floating point numbers after the second decimal place, ex: 1.001 == 1.002
-func monetaryDiffSuppress(key string, old string, new string, d *schema.ResourceData) bool {
+func MonetaryDiffSuppress(key string, old string, new string, d *schema.ResourceData) bool {
 	oldVal, err := strconv.ParseFloat(old, 10)
 	if err != nil {
 		return false
@@ -220,7 +233,7 @@ func monetaryDiffSuppress(key string, old string, new string, d *schema.Resource
 	return fmt.Sprintf("%.2f", oldVal) == fmt.Sprintf("%.2f", newVal)
 }
 
-func timeDiffSuppressFunction(key string, old string, new string, d *schema.ResourceData) bool {
+func TimeDiffSuppressFunction(key string, old string, new string, d *schema.ResourceData) bool {
 	oldTime, err := time.Parse(time.RFC3339Nano, old)
 	if err != nil {
 		return false
@@ -232,7 +245,7 @@ func timeDiffSuppressFunction(key string, old string, new string, d *schema.Reso
 	return oldTime.Equal(newTime)
 }
 
-func convertMapOfStringSlicesToMapOfStrings(rm map[string][]string) (map[string]string, error) {
+func ConvertMapOfStringSlicesToMapOfStrings(rm map[string][]string) (map[string]string, error) {
 	result := map[string]string{}
 	for k, v := range rm {
 		val, err := json.Marshal(v)
@@ -245,7 +258,7 @@ func convertMapOfStringSlicesToMapOfStrings(rm map[string][]string) (map[string]
 	return result, nil
 }
 
-func randomString(length int, charset string) string {
+func RandomString(length int, charset string) string {
 	var seededRand *rand.Rand = rand.New(
 		rand.NewSource(time.Now().UnixNano()))
 	b := make([]byte, length)
@@ -255,11 +268,11 @@ func randomString(length int, charset string) string {
 	return string(b)
 }
 
-func randomStringOrHttpReplayValue(length int, charset string, httpReplayValue string) string {
+func RandomStringOrHttpReplayValue(length int, charset string, httpReplayValue string) string {
 	if httpreplay.ModeRecordReplay() {
 		return httpReplayValue
 	}
-	return randomString(length, charset)
+	return RandomString(length, charset)
 }
 
 // Set the state for the input source file using the file path and last modification time
@@ -301,7 +314,7 @@ func getSortedKeys(source map[string]interface{}) []string {
 //  }
 //
 // These are the same JSON objects and should be treated as such.
-func jsonStringDiffSuppressFunction(key, old, new string, d *schema.ResourceData) bool {
+func JsonStringDiffSuppressFunction(key, old, new string, d *schema.ResourceData) bool {
 	var oldVal, newVal interface{}
 
 	if err := json.Unmarshal([]byte(old), &oldVal); err != nil {
@@ -315,7 +328,7 @@ func jsonStringDiffSuppressFunction(key, old, new string, d *schema.ResourceData
 	return reflect.DeepEqual(oldVal, newVal)
 }
 
-func getMd5Hash(source interface{}) string {
+func GetMd5Hash(source interface{}) string {
 	if source == nil {
 		return ""
 	}
@@ -324,7 +337,7 @@ func getMd5Hash(source interface{}) string {
 	return hex.EncodeToString(hexSum[:])
 }
 
-func hexToB64(hexEncoded string) (*string, error) {
+func HexToB64(hexEncoded string) (*string, error) {
 	decoded, err := hex.DecodeString(hexEncoded)
 	if err != nil {
 		return nil, err
@@ -334,7 +347,7 @@ func hexToB64(hexEncoded string) (*string, error) {
 	return &b64Encoded, nil
 }
 
-func isHex(content string) bool {
+func IsHex(content string) bool {
 	_, err := hex.DecodeString(content)
 	return err == nil
 }

@@ -41,6 +41,13 @@ type VolumeGroupBackup struct {
 	Status            VolumeGroupBackupStatus `json:"status,omitempty"`
 }
 
+type VolumeGroupBackupSpecSourceDetails struct {
+	// +optional
+	KmsKeyID            *string `json:"kmsKeyID,omitempty" tf:"kms_key_id"`
+	Region              *string `json:"region" tf:"region"`
+	VolumeGroupBackupID *string `json:"volumeGroupBackupID" tf:"volume_group_backup_id"`
+}
+
 type VolumeGroupBackupSpec struct {
 	State *VolumeGroupBackupSpecResource `json:"state,omitempty" tf:"-"`
 
@@ -75,6 +82,8 @@ type VolumeGroupBackupSpecResource struct {
 	// +optional
 	SizeInMbs *string `json:"sizeInMbs,omitempty" tf:"size_in_mbs"`
 	// +optional
+	SourceDetails *VolumeGroupBackupSpecSourceDetails `json:"sourceDetails,omitempty" tf:"source_details"`
+	// +optional
 	SourceType *string `json:"sourceType,omitempty" tf:"source_type"`
 	// +optional
 	SourceVolumeGroupBackupID *string `json:"sourceVolumeGroupBackupID,omitempty" tf:"source_volume_group_backup_id"`
@@ -92,7 +101,8 @@ type VolumeGroupBackupSpecResource struct {
 	UniqueSizeInMbs *string `json:"uniqueSizeInMbs,omitempty" tf:"unique_size_in_mbs"`
 	// +optional
 	VolumeBackupIDS []string `json:"volumeBackupIDS,omitempty" tf:"volume_backup_ids"`
-	VolumeGroupID   *string  `json:"volumeGroupID" tf:"volume_group_id"`
+	// +optional
+	VolumeGroupID *string `json:"volumeGroupID,omitempty" tf:"volume_group_id"`
 }
 
 type VolumeGroupBackupStatus struct {

@@ -45,6 +45,7 @@ var artifactscontentartifactbypathForceNewList = map[string]bool{
 	"/artifact_path": true,
 	"/content":       true,
 	"/repository_id": true,
+	"/source":        true,
 	"/version":       true,
 }
 

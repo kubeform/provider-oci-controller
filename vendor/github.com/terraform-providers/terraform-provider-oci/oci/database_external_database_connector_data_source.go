@@ -8,7 +8,7 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -50,7 +50,7 @@ func (s *DatabaseExternalDatabaseConnectorDataSourceCrud) Get() error {
 		request.ExternalDatabaseConnectorId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 
 	response, err := s.Client.GetExternalDatabaseConnector(context.Background(), request)
 	if err != nil {

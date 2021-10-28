@@ -65,6 +65,8 @@ type EsxiHostSpecResource struct {
 	// +optional
 	CompartmentID *string `json:"compartmentID,omitempty" tf:"compartment_id"`
 	// +optional
+	ComputeAvailabilityDomain *string `json:"computeAvailabilityDomain,omitempty" tf:"compute_availability_domain"`
+	// +optional
 	ComputeInstanceID *string `json:"computeInstanceID,omitempty" tf:"compute_instance_id"`
 	// +optional
 	CurrentSku *string `json:"currentSku,omitempty" tf:"current_sku"`

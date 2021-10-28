@@ -111,6 +111,12 @@ type InstanceSpecLaunchOptions struct {
 
 type InstanceSpecPlatformConfig struct {
 	// +optional
+	IsMeasuredBootEnabled *bool `json:"isMeasuredBootEnabled,omitempty" tf:"is_measured_boot_enabled"`
+	// +optional
+	IsSecureBootEnabled *bool `json:"isSecureBootEnabled,omitempty" tf:"is_secure_boot_enabled"`
+	// +optional
+	IsTrustedPlatformModuleEnabled *bool `json:"isTrustedPlatformModuleEnabled,omitempty" tf:"is_trusted_platform_module_enabled"`
+	// +optional
 	NumaNodesPerSocket *string `json:"numaNodesPerSocket,omitempty" tf:"numa_nodes_per_socket"`
 	Type               *string `json:"type" tf:"type"`
 }
@@ -180,6 +186,8 @@ type InstanceSpecResource struct {
 
 	// +optional
 	AgentConfig *InstanceSpecAgentConfig `json:"agentConfig,omitempty" tf:"agent_config"`
+	// +optional
+	Async *bool `json:"async,omitempty" tf:"async"`
 	// +optional
 	AvailabilityConfig *InstanceSpecAvailabilityConfig `json:"availabilityConfig,omitempty" tf:"availability_config"`
 	AvailabilityDomain *string                         `json:"availabilityDomain" tf:"availability_domain"`

@@ -13,7 +13,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
-	oci_core "github.com/oracle/oci-go-sdk/v45/core"
+	oci_core "github.com/oracle/oci-go-sdk/v50/core"
 )
 
 func init() {
@@ -213,8 +213,8 @@ func CoreInstanceConfigurationResource() *schema.Resource {
 													Optional:         true,
 													Computed:         true,
 													ForceNew:         true,
-													ValidateFunc:     validateInt64TypeString,
-													DiffSuppressFunc: int64StringDiffSuppressFunction,
+													ValidateFunc:     ValidateInt64TypeString,
+													DiffSuppressFunc: Int64StringDiffSuppressFunction,
 												},
 												"source_details": {
 													Type:     schema.TypeList,
@@ -254,8 +254,8 @@ func CoreInstanceConfigurationResource() *schema.Resource {
 													Optional:         true,
 													Computed:         true,
 													ForceNew:         true,
-													ValidateFunc:     validateInt64TypeString,
-													DiffSuppressFunc: int64StringDiffSuppressFunction,
+													ValidateFunc:     ValidateInt64TypeString,
+													DiffSuppressFunc: Int64StringDiffSuppressFunction,
 												},
 
 												// Computed
@@ -442,7 +442,7 @@ func CoreInstanceConfigurationResource() *schema.Resource {
 													Type:     schema.TypeSet,
 													Optional: true,
 													ForceNew: true,
-													Set:      literalTypeHashCodeForSets,
+													Set:      LiteralTypeHashCodeForSets,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -495,7 +495,7 @@ func CoreInstanceConfigurationResource() *schema.Resource {
 										Optional:         true,
 										Computed:         true,
 										ForceNew:         true,
-										DiffSuppressFunc: jsonStringDiffSuppressFunction,
+										DiffSuppressFunc: JsonStringDiffSuppressFunction,
 										Elem:             schema.TypeString,
 									},
 									"fault_domain": {
@@ -629,10 +629,32 @@ func CoreInstanceConfigurationResource() *schema.Resource {
 													DiffSuppressFunc: EqualIgnoreCaseSuppressDiff,
 													ValidateFunc: validation.StringInSlice([]string{
 														"AMD_MILAN_BM",
+														"AMD_ROME_BM",
+														"AMD_VM",
+														"INTEL_SKYLAKE_BM",
+														"INTEL_VM",
 													}, true),
 												},
 
 												// Optional
+												"is_measured_boot_enabled": {
+													Type:     schema.TypeBool,
+													Optional: true,
+													Computed: true,
+													ForceNew: true,
+												},
+												"is_secure_boot_enabled": {
+													Type:     schema.TypeBool,
+													Optional: true,
+													Computed: true,
+													ForceNew: true,
+												},
+												"is_trusted_platform_module_enabled": {
+													Type:     schema.TypeBool,
+													Optional: true,
+													Computed: true,
+													ForceNew: true,
+												},
 												"numa_nodes_per_socket": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -772,8 +794,8 @@ func CoreInstanceConfigurationResource() *schema.Resource {
 													Optional:         true,
 													Computed:         true,
 													ForceNew:         true,
-													ValidateFunc:     validateInt64TypeString,
-													DiffSuppressFunc: int64StringDiffSuppressFunction,
+													ValidateFunc:     ValidateInt64TypeString,
+													DiffSuppressFunc: Int64StringDiffSuppressFunction,
 												},
 												"image_id": {
 													Type:     schema.TypeString,
@@ -856,7 +878,7 @@ func CoreInstanceConfigurationResource() *schema.Resource {
 													Type:     schema.TypeSet,
 													Optional: true,
 													ForceNew: true,
-													Set:      literalTypeHashCodeForSets,
+													Set:      LiteralTypeHashCodeForSets,
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -991,7 +1013,7 @@ func (s *CoreInstanceConfigurationResourceCrud) Create() error {
 		return err
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.CreateInstanceConfiguration(context.Background(), request)
 	if err != nil {
@@ -1008,7 +1030,7 @@ func (s *CoreInstanceConfigurationResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.InstanceConfigurationId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.GetInstanceConfiguration(context.Background(), request)
 	if err != nil {
@@ -1045,13 +1067,13 @@ func (s *CoreInstanceConfigurationResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	tmp := s.D.Id()
 	request.InstanceConfigurationId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	response, err := s.Client.UpdateInstanceConfiguration(context.Background(), request)
 	if err != nil {
@@ -1068,7 +1090,7 @@ func (s *CoreInstanceConfigurationResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.InstanceConfigurationId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	_, err := s.Client.DeleteInstanceConfiguration(context.Background(), request)
 	return err
@@ -1398,7 +1420,7 @@ func (s *CoreInstanceConfigurationResourceCrud) mapToInstanceConfigurationCreate
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if hostnameLabel, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "hostname_label")); ok {
@@ -1472,7 +1494,7 @@ func InstanceConfigurationCreateVnicDetailsToMap(obj *oci_core.InstanceConfigura
 	if datasource {
 		result["nsg_ids"] = nsgIds
 	} else {
-		result["nsg_ids"] = schema.NewSet(literalTypeHashCodeForSets, nsgIds)
+		result["nsg_ids"] = schema.NewSet(LiteralTypeHashCodeForSets, nsgIds)
 	}
 
 	if obj.PrivateIp != nil {
@@ -1522,7 +1544,7 @@ func (s *CoreInstanceConfigurationResourceCrud) mapToInstanceConfigurationCreate
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if kmsKeyId, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "kms_key_id")); ok {
@@ -1933,7 +1955,7 @@ func (s *CoreInstanceConfigurationResourceCrud) mapToInstanceConfigurationLaunch
 	}
 
 	if freeformTags, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "freeform_tags")); ok {
-		result.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		result.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if instanceOptions, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "instance_options")); ok {
@@ -1973,7 +1995,7 @@ func (s *CoreInstanceConfigurationResourceCrud) mapToInstanceConfigurationLaunch
 	}
 
 	if metadata, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "metadata")); ok {
-		result.Metadata = objectMapToStringMap(metadata.(map[string]interface{}))
+		result.Metadata = ObjectMapToStringMap(metadata.(map[string]interface{}))
 	}
 
 	if platformConfig, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "platform_config")); ok {
@@ -2071,7 +2093,7 @@ func InstanceConfigurationLaunchInstanceDetailsToMap(obj *oci_core.InstanceConfi
 		result["display_name"] = string(*obj.DisplayName)
 	}
 
-	result["extended_metadata"] = genericMapToJsonMap(obj.ExtendedMetadata)
+	result["extended_metadata"] = GenericMapToJsonMap(obj.ExtendedMetadata)
 
 	if obj.FaultDomain != nil {
 		result["fault_domain"] = string(*obj.FaultDomain)
@@ -2148,6 +2170,78 @@ func (s *CoreInstanceConfigurationResourceCrud) mapToInstanceConfigurationLaunch
 		if numaNodesPerSocket, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "numa_nodes_per_socket")); ok {
 			details.NumaNodesPerSocket = oci_core.InstanceConfigurationAmdMilanBmLaunchInstancePlatformConfigNumaNodesPerSocketEnum(numaNodesPerSocket.(string))
 		}
+		if isMeasuredBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_measured_boot_enabled")); ok {
+			tmp := isMeasuredBootEnabled.(bool)
+			details.IsMeasuredBootEnabled = &tmp
+		}
+		if isSecureBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_secure_boot_enabled")); ok {
+			tmp := isSecureBootEnabled.(bool)
+			details.IsSecureBootEnabled = &tmp
+		}
+		if isTrustedPlatformModuleEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_trusted_platform_module_enabled")); ok {
+			tmp := isTrustedPlatformModuleEnabled.(bool)
+			details.IsTrustedPlatformModuleEnabled = &tmp
+		}
+		baseObject = details
+	case strings.ToLower("AMD_ROME_BM"):
+		details := oci_core.InstanceConfigurationAmdRomeBmLaunchInstancePlatformConfig{}
+		if isMeasuredBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_measured_boot_enabled")); ok {
+			tmp := isMeasuredBootEnabled.(bool)
+			details.IsMeasuredBootEnabled = &tmp
+		}
+		if isSecureBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_secure_boot_enabled")); ok {
+			tmp := isSecureBootEnabled.(bool)
+			details.IsSecureBootEnabled = &tmp
+		}
+		if isTrustedPlatformModuleEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_trusted_platform_module_enabled")); ok {
+			tmp := isTrustedPlatformModuleEnabled.(bool)
+			details.IsTrustedPlatformModuleEnabled = &tmp
+		}
+		baseObject = details
+	case strings.ToLower("AMD_VM"):
+		details := oci_core.InstanceConfigurationAmdVmLaunchInstancePlatformConfig{}
+		if isMeasuredBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_measured_boot_enabled")); ok {
+			tmp := isMeasuredBootEnabled.(bool)
+			details.IsMeasuredBootEnabled = &tmp
+		}
+		if isSecureBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_secure_boot_enabled")); ok {
+			tmp := isSecureBootEnabled.(bool)
+			details.IsSecureBootEnabled = &tmp
+		}
+		if isTrustedPlatformModuleEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_trusted_platform_module_enabled")); ok {
+			tmp := isTrustedPlatformModuleEnabled.(bool)
+			details.IsTrustedPlatformModuleEnabled = &tmp
+		}
+		baseObject = details
+	case strings.ToLower("INTEL_SKYLAKE_BM"):
+		details := oci_core.InstanceConfigurationIntelSkylakeBmLaunchInstancePlatformConfig{}
+		if isMeasuredBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_measured_boot_enabled")); ok {
+			tmp := isMeasuredBootEnabled.(bool)
+			details.IsMeasuredBootEnabled = &tmp
+		}
+		if isSecureBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_secure_boot_enabled")); ok {
+			tmp := isSecureBootEnabled.(bool)
+			details.IsSecureBootEnabled = &tmp
+		}
+		if isTrustedPlatformModuleEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_trusted_platform_module_enabled")); ok {
+			tmp := isTrustedPlatformModuleEnabled.(bool)
+			details.IsTrustedPlatformModuleEnabled = &tmp
+		}
+		baseObject = details
+	case strings.ToLower("INTEL_VM"):
+		details := oci_core.InstanceConfigurationIntelVmLaunchInstancePlatformConfig{}
+		if isMeasuredBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_measured_boot_enabled")); ok {
+			tmp := isMeasuredBootEnabled.(bool)
+			details.IsMeasuredBootEnabled = &tmp
+		}
+		if isSecureBootEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_secure_boot_enabled")); ok {
+			tmp := isSecureBootEnabled.(bool)
+			details.IsSecureBootEnabled = &tmp
+		}
+		if isTrustedPlatformModuleEnabled, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "is_trusted_platform_module_enabled")); ok {
+			tmp := isTrustedPlatformModuleEnabled.(bool)
+			details.IsTrustedPlatformModuleEnabled = &tmp
+		}
 		baseObject = details
 	default:
 		return nil, fmt.Errorf("unknown type '%v' was specified", type_)
@@ -2162,6 +2256,14 @@ func InstanceConfigurationLaunchInstancePlatformConfigToMap(obj *oci_core.Instan
 		result["type"] = "AMD_MILAN_BM"
 
 		result["numa_nodes_per_socket"] = string(v.NumaNodesPerSocket)
+	case oci_core.InstanceConfigurationAmdRomeBmLaunchInstancePlatformConfig:
+		result["type"] = "AMD_ROME_BM"
+	case oci_core.InstanceConfigurationAmdVmLaunchInstancePlatformConfig:
+		result["type"] = "AMD_VM"
+	case oci_core.InstanceConfigurationIntelSkylakeBmLaunchInstancePlatformConfig:
+		result["type"] = "INTEL_SKYLAKE_BM"
+	case oci_core.InstanceConfigurationIntelVmLaunchInstancePlatformConfig:
+		result["type"] = "INTEL_VM"
 	default:
 		log.Printf("[WARN] Received 'type' of unknown type %v", *obj)
 		return nil
@@ -2387,7 +2489,7 @@ func (s *CoreInstanceConfigurationResourceCrud) populateTopLevelPolymorphicCreat
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.CreateInstanceConfiguration = details
 	case strings.ToLower("NONE"):
@@ -2418,7 +2520,7 @@ func (s *CoreInstanceConfigurationResourceCrud) populateTopLevelPolymorphicCreat
 			details.DisplayName = &tmp
 		}
 		if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-			details.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+			details.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 		}
 		request.CreateInstanceConfiguration = details
 	default:
@@ -2436,11 +2538,16 @@ func (s *CoreInstanceConfigurationResourceCrud) updateCompartment(compartment in
 	idTmp := s.D.Id()
 	changeCompartmentRequest.InstanceConfigurationId = &idTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "core")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "core")
 
 	_, err := s.Client.ChangeInstanceConfigurationCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }

@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_opsi "github.com/oracle/oci-go-sdk/v45/opsi"
+	oci_opsi "github.com/oracle/oci-go-sdk/v50/opsi"
 )
 
 func init() {
@@ -18,8 +18,16 @@ func OpsiHostInsightsDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readOpsiHostInsights,
 		Schema: map[string]*schema.Schema{
-			"filter": dataSourceFiltersSchema(),
+			"filter": DataSourceFiltersSchema(),
 			"compartment_id": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"enterprise_manager_bridge_id": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+			"exadata_insight_id": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -109,6 +117,16 @@ func (s *OpsiHostInsightsDataSourceCrud) Get() error {
 		request.Id = []string{id.(string)}
 	}
 
+	if enterpriseManagerBridgeId, ok := s.D.GetOkExists("enterprise_manager_bridge_id"); ok {
+		tmp := enterpriseManagerBridgeId.(string)
+		request.EnterpriseManagerBridgeId = &tmp
+	}
+
+	if exadataInsightId, ok := s.D.GetOkExists("exadata_insight_id"); ok {
+		tmp := exadataInsightId.(string)
+		request.ExadataInsightId = &tmp
+	}
+
 	if state, ok := s.D.GetOkExists("state"); ok {
 		interfaces := state.([]interface{})
 		tmp := make([]oci_opsi.LifecycleStateEnum, len(interfaces))
@@ -135,7 +153,7 @@ func (s *OpsiHostInsightsDataSourceCrud) Get() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "opsi")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "opsi")
 
 	response, err := s.Client.ListHostInsights(context.Background(), request)
 	if err != nil {

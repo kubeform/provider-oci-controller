@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_dataflow "github.com/oracle/oci-go-sdk/v45/dataflow"
+	oci_dataflow "github.com/oracle/oci-go-sdk/v50/dataflow"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func (s *DataflowApplicationDataSourceCrud) Get() error {
 		request.ApplicationId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "dataflow")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "dataflow")
 
 	response, err := s.Client.GetApplication(context.Background(), request)
 	if err != nil {
@@ -117,6 +117,10 @@ func (s *DataflowApplicationDataSourceCrud) SetData() error {
 
 	if s.Res.LogsBucketUri != nil {
 		s.D.Set("logs_bucket_uri", *s.Res.LogsBucketUri)
+	}
+
+	if s.Res.MetastoreId != nil {
+		s.D.Set("metastore_id", *s.Res.MetastoreId)
 	}
 
 	if s.Res.NumExecutors != nil {

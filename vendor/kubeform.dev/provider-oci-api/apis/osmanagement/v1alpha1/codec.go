@@ -27,12 +27,16 @@ import (
 
 func GetEncoder() map[string]jsoniter.ValEncoder {
 	return map[string]jsoniter.ValEncoder{
+		jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecAutonomous{}).Type1()):                     ManagedInstanceSpecAutonomousCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecParentSoftwareSource{}).Type1()):           ManagedInstanceSpecParentSoftwareSourceCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceManagementSpecParentSoftwareSource{}).Type1()): ManagedInstanceManagementSpecParentSoftwareSourceCodec{},
 	}
 }
 
 func GetDecoder() map[string]jsoniter.ValDecoder {
 	return map[string]jsoniter.ValDecoder{
+		jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecAutonomous{}).Type1()):                     ManagedInstanceSpecAutonomousCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecParentSoftwareSource{}).Type1()):           ManagedInstanceSpecParentSoftwareSourceCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceManagementSpecParentSoftwareSource{}).Type1()): ManagedInstanceManagementSpecParentSoftwareSourceCodec{},
 	}
 }
@@ -47,6 +51,164 @@ func getDecodersWithout(typ string) map[string]jsoniter.ValDecoder {
 	origMap := GetDecoder()
 	delete(origMap, typ)
 	return origMap
+}
+
+// +k8s:deepcopy-gen=false
+type ManagedInstanceSpecAutonomousCodec struct {
+}
+
+func (ManagedInstanceSpecAutonomousCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ManagedInstanceSpecAutonomous)(ptr) == nil
+}
+
+func (ManagedInstanceSpecAutonomousCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ManagedInstanceSpecAutonomous)(ptr)
+	var objs []ManagedInstanceSpecAutonomous
+	if obj != nil {
+		objs = []ManagedInstanceSpecAutonomous{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecAutonomous{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ManagedInstanceSpecAutonomousCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ManagedInstanceSpecAutonomous)(ptr) = ManagedInstanceSpecAutonomous{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ManagedInstanceSpecAutonomous
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecAutonomous{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ManagedInstanceSpecAutonomous)(ptr) = objs[0]
+			} else {
+				*(*ManagedInstanceSpecAutonomous)(ptr) = ManagedInstanceSpecAutonomous{}
+			}
+		} else {
+			*(*ManagedInstanceSpecAutonomous)(ptr) = ManagedInstanceSpecAutonomous{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ManagedInstanceSpecAutonomous
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecAutonomous{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ManagedInstanceSpecAutonomous)(ptr) = obj
+		} else {
+			*(*ManagedInstanceSpecAutonomous)(ptr) = ManagedInstanceSpecAutonomous{}
+		}
+	default:
+		iter.ReportError("decode ManagedInstanceSpecAutonomous", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type ManagedInstanceSpecParentSoftwareSourceCodec struct {
+}
+
+func (ManagedInstanceSpecParentSoftwareSourceCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ManagedInstanceSpecParentSoftwareSource)(ptr) == nil
+}
+
+func (ManagedInstanceSpecParentSoftwareSourceCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ManagedInstanceSpecParentSoftwareSource)(ptr)
+	var objs []ManagedInstanceSpecParentSoftwareSource
+	if obj != nil {
+		objs = []ManagedInstanceSpecParentSoftwareSource{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecParentSoftwareSource{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ManagedInstanceSpecParentSoftwareSourceCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ManagedInstanceSpecParentSoftwareSource)(ptr) = ManagedInstanceSpecParentSoftwareSource{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ManagedInstanceSpecParentSoftwareSource
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecParentSoftwareSource{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ManagedInstanceSpecParentSoftwareSource)(ptr) = objs[0]
+			} else {
+				*(*ManagedInstanceSpecParentSoftwareSource)(ptr) = ManagedInstanceSpecParentSoftwareSource{}
+			}
+		} else {
+			*(*ManagedInstanceSpecParentSoftwareSource)(ptr) = ManagedInstanceSpecParentSoftwareSource{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ManagedInstanceSpecParentSoftwareSource
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ManagedInstanceSpecParentSoftwareSource{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ManagedInstanceSpecParentSoftwareSource)(ptr) = obj
+		} else {
+			*(*ManagedInstanceSpecParentSoftwareSource)(ptr) = ManagedInstanceSpecParentSoftwareSource{}
+		}
+	default:
+		iter.ReportError("decode ManagedInstanceSpecParentSoftwareSource", "unexpected JSON type")
+	}
 }
 
 // +k8s:deepcopy-gen=false

@@ -8,8 +8,8 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
-	oci_work_requests "github.com/oracle/oci-go-sdk/v45/workrequests"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
+	oci_work_requests "github.com/oracle/oci-go-sdk/v50/workrequests"
 )
 
 func init() {
@@ -55,7 +55,7 @@ func DatabaseVmClusterResource() *schema.Resource {
 			"ssh_public_keys": {
 				Type:     schema.TypeSet,
 				Required: true,
-				Set:      literalTypeHashCodeForSets,
+				Set:      LiteralTypeHashCodeForSets,
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -76,6 +76,15 @@ func DatabaseVmClusterResource() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 				Computed: true,
+			},
+			"db_servers": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 			},
 			"defined_tags": {
 				Type:             schema.TypeMap,
@@ -260,6 +269,19 @@ func (s *DatabaseVmClusterResourceCrud) Create() error {
 		request.DbNodeStorageSizeInGBs = &tmp
 	}
 
+	if dbServers, ok := s.D.GetOkExists("db_servers"); ok {
+		interfaces := dbServers.([]interface{})
+		tmp := make([]string, len(interfaces))
+		for i := range interfaces {
+			if interfaces[i] != nil {
+				tmp[i] = interfaces[i].(string)
+			}
+		}
+		if len(tmp) != 0 || s.D.HasChange("db_servers") {
+			request.DbServers = tmp
+		}
+	}
+
 	if definedTags, ok := s.D.GetOkExists("defined_tags"); ok {
 		convertedDefinedTags, err := mapToDefinedTags(definedTags.(map[string]interface{}))
 		if err != nil {
@@ -279,7 +301,7 @@ func (s *DatabaseVmClusterResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if giVersion, ok := s.D.GetOkExists("gi_version"); ok {
@@ -331,7 +353,7 @@ func (s *DatabaseVmClusterResourceCrud) Create() error {
 		request.VmClusterNetworkId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.CreateVmCluster(context.Background(), request)
 	if err != nil {
@@ -348,7 +370,7 @@ func (s *DatabaseVmClusterResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.VmClusterId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.GetVmCluster(context.Background(), request)
 	if err != nil {
@@ -395,7 +417,7 @@ func (s *DatabaseVmClusterResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if licenseModel, ok := s.D.GetOkExists("license_model"); ok && s.D.HasChange("license_model") {
@@ -423,7 +445,7 @@ func (s *DatabaseVmClusterResourceCrud) Update() error {
 	tmp := s.D.Id()
 	request.VmClusterId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.UpdateVmCluster(context.Background(), request)
 	if err != nil {
@@ -440,7 +462,7 @@ func (s *DatabaseVmClusterResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.VmClusterId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	_, err := s.Client.DeleteVmCluster(context.Background(), request)
 	return err
@@ -463,6 +485,8 @@ func (s *DatabaseVmClusterResourceCrud) SetData() error {
 	if s.Res.DbNodeStorageSizeInGBs != nil {
 		s.D.Set("db_node_storage_size_in_gbs", *s.Res.DbNodeStorageSizeInGBs)
 	}
+
+	s.D.Set("db_servers", s.Res.DbServers)
 
 	if s.Res.DefinedTags != nil {
 		s.D.Set("defined_tags", definedTagsToMap(s.Res.DefinedTags))
@@ -512,7 +536,7 @@ func (s *DatabaseVmClusterResourceCrud) SetData() error {
 	for _, item := range s.Res.SshPublicKeys {
 		sshPublicKeys = append(sshPublicKeys, item)
 	}
-	s.D.Set("ssh_public_keys", schema.NewSet(literalTypeHashCodeForSets, sshPublicKeys))
+	s.D.Set("ssh_public_keys", schema.NewSet(LiteralTypeHashCodeForSets, sshPublicKeys))
 
 	s.D.Set("state", s.Res.LifecycleState)
 
@@ -544,7 +568,7 @@ func (s *DatabaseVmClusterResourceCrud) updateCompartment(compartment interface{
 	idTmp := s.D.Id()
 	changeCompartmentRequest.VmClusterId = &idTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.ChangeVmClusterCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {

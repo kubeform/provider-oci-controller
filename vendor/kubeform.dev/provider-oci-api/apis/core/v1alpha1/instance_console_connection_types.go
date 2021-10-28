@@ -73,6 +73,8 @@ type InstanceConsoleConnectionSpecResource struct {
 	InstanceID   *string           `json:"instanceID" tf:"instance_id"`
 	PublicKey    *string           `json:"publicKey" tf:"public_key"`
 	// +optional
+	ServiceHostKeyFingerprint *string `json:"serviceHostKeyFingerprint,omitempty" tf:"service_host_key_fingerprint"`
+	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional
 	VncConnectionString *string `json:"vncConnectionString,omitempty" tf:"vnc_connection_string"`

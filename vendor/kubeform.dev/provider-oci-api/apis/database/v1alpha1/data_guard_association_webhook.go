@@ -52,6 +52,8 @@ var dataguardassociationForceNewList = map[string]bool{
 	"/nsg_ids":                    true,
 	"/peer_db_home_id":            true,
 	"/peer_db_system_id":          true,
+	"/peer_db_unique_name":        true,
+	"/peer_sid_prefix":            true,
 	"/peer_vm_cluster_id":         true,
 	"/shape":                      true,
 	"/subnet_id":                  true,

@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -18,7 +18,7 @@ func DatabaseVmClustersDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readDatabaseVmClusters,
 		Schema: map[string]*schema.Schema{
-			"filter": dataSourceFiltersSchema(),
+			"filter": DataSourceFiltersSchema(),
 			"compartment_id": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -84,7 +84,7 @@ func (s *DatabaseVmClustersDataSourceCrud) Get() error {
 		request.LifecycleState = oci_database.VmClusterSummaryLifecycleStateEnum(state.(string))
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 
 	response, err := s.Client.ListVmClusters(context.Background(), request)
 	if err != nil {
@@ -132,6 +132,8 @@ func (s *DatabaseVmClustersDataSourceCrud) SetData() error {
 		if r.DbNodeStorageSizeInGBs != nil {
 			vmCluster["db_node_storage_size_in_gbs"] = *r.DbNodeStorageSizeInGBs
 		}
+
+		vmCluster["db_servers"] = r.DbServers
 
 		if r.DefinedTags != nil {
 			vmCluster["defined_tags"] = definedTagsToMap(r.DefinedTags)

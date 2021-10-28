@@ -14,7 +14,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_load_balancer "github.com/oracle/oci-go-sdk/v45/loadbalancer"
+	oci_load_balancer "github.com/oracle/oci-go-sdk/v50/loadbalancer"
 )
 
 func init() {
@@ -69,8 +69,8 @@ func LoadBalancerListenerResource() *schema.Resource {
 						"idle_timeout_in_seconds": {
 							Type:             schema.TypeString,
 							Required:         true,
-							ValidateFunc:     validateInt64TypeString,
-							DiffSuppressFunc: int64StringDiffSuppressFunction,
+							ValidateFunc:     ValidateInt64TypeString,
+							DiffSuppressFunc: Int64StringDiffSuppressFunction,
 						},
 
 						// Optional
@@ -116,13 +116,19 @@ func LoadBalancerListenerResource() *schema.Resource {
 				MinItems: 1,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						// Required
+						// Optional
+						"certificate_ids": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
 						"certificate_name": {
 							Type:     schema.TypeString,
-							Required: true,
+							Optional: true,
 						},
-
-						// Optional
 						"cipher_suite_name": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -140,6 +146,14 @@ func LoadBalancerListenerResource() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 							Computed: true,
+						},
+						"trusted_certificate_authority_ids": {
+							Type:     schema.TypeList,
+							Optional: true,
+							Computed: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
 						},
 						"verify_depth": {
 							Type:     schema.TypeInt,
@@ -332,7 +346,7 @@ func (s *LoadBalancerListenerResourceCrud) Create() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
 
 	response, err := s.Client.CreateListener(context.Background(), request)
 	if err != nil {
@@ -342,13 +356,13 @@ func (s *LoadBalancerListenerResourceCrud) Create() error {
 	workReqID := response.OpcWorkRequestId
 	getWorkRequestRequest := oci_load_balancer.GetWorkRequestRequest{}
 	getWorkRequestRequest.WorkRequestId = workReqID
-	getWorkRequestRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
+	getWorkRequestRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
 	workRequestResponse, err := s.Client.GetWorkRequest(context.Background(), getWorkRequestRequest)
 	if err != nil {
 		return err
 	}
 	s.WorkRequest = &workRequestResponse.WorkRequest
-	err = LoadBalancerWaitForWorkRequest(s.Client, s.D, s.WorkRequest, getRetryPolicy(s.DisableNotFoundRetries, "load_balancer"))
+	err = LoadBalancerWaitForWorkRequest(s.Client, s.D, s.WorkRequest, GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer"))
 	if err != nil {
 		return err
 	}
@@ -357,7 +371,7 @@ func (s *LoadBalancerListenerResourceCrud) Create() error {
 
 func (s *LoadBalancerListenerResourceCrud) Get() (e error) {
 	// key: {workRequestID} || {loadBalancerID,name}
-	_, stillWorking, err := LoadBalancerResourceGet(s.Client, s.D, s.WorkRequest, getRetryPolicy(s.DisableNotFoundRetries, "load_balancer"))
+	_, stillWorking, err := LoadBalancerResourceGet(s.Client, s.D, s.WorkRequest, GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer"))
 	if err != nil {
 		return err
 	}
@@ -385,7 +399,7 @@ func (s *LoadBalancerListenerResourceCrud) Get() (e error) {
 func (s *LoadBalancerListenerResourceCrud) GetListener(loadBalancerID, name string) (*oci_load_balancer.Listener, error) {
 	request := oci_load_balancer.GetLoadBalancerRequest{}
 	request.LoadBalancerId = &loadBalancerID
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
 
 	response, err := s.Client.GetLoadBalancer(context.Background(), request)
 	if err != nil {
@@ -488,7 +502,7 @@ func (s *LoadBalancerListenerResourceCrud) Update() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
 
 	response, err := s.Client.UpdateListener(context.Background(), request)
 	if err != nil {
@@ -498,13 +512,13 @@ func (s *LoadBalancerListenerResourceCrud) Update() error {
 	workReqID := response.OpcWorkRequestId
 	getWorkRequestRequest := oci_load_balancer.GetWorkRequestRequest{}
 	getWorkRequestRequest.WorkRequestId = workReqID
-	getWorkRequestRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
+	getWorkRequestRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
 	workRequestResponse, err := s.Client.GetWorkRequest(context.Background(), getWorkRequestRequest)
 	if err != nil {
 		return err
 	}
 	s.WorkRequest = &workRequestResponse.WorkRequest
-	err = LoadBalancerWaitForWorkRequest(s.Client, s.D, s.WorkRequest, getRetryPolicy(s.DisableNotFoundRetries, "load_balancer"))
+	err = LoadBalancerWaitForWorkRequest(s.Client, s.D, s.WorkRequest, GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer"))
 	if err != nil {
 		return err
 	}
@@ -525,7 +539,7 @@ func (s *LoadBalancerListenerResourceCrud) Delete() error {
 		request.LoadBalancerId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
 
 	response, err := s.Client.DeleteListener(context.Background(), request)
 	if err != nil {
@@ -535,13 +549,13 @@ func (s *LoadBalancerListenerResourceCrud) Delete() error {
 	workReqID := response.OpcWorkRequestId
 	getWorkRequestRequest := oci_load_balancer.GetWorkRequestRequest{}
 	getWorkRequestRequest.WorkRequestId = workReqID
-	getWorkRequestRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
+	getWorkRequestRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer")
 	workRequestResponse, err := s.Client.GetWorkRequest(context.Background(), getWorkRequestRequest)
 	if err != nil {
 		return err
 	}
 	s.WorkRequest = &workRequestResponse.WorkRequest
-	err = LoadBalancerWaitForWorkRequest(s.Client, s.D, s.WorkRequest, getRetryPolicy(s.DisableNotFoundRetries, "load_balancer"))
+	err = LoadBalancerWaitForWorkRequest(s.Client, s.D, s.WorkRequest, GetRetryPolicy(s.DisableNotFoundRetries, "load_balancer"))
 	if err != nil {
 		return err
 	}
@@ -659,9 +673,24 @@ func ConnectionConfigurationToMap(obj *oci_load_balancer.ConnectionConfiguration
 func (s *LoadBalancerListenerResourceCrud) mapToSSLConfigurationDetails(fieldKeyFormat string) (oci_load_balancer.SslConfigurationDetails, error) {
 	result := oci_load_balancer.SslConfigurationDetails{}
 
+	if certificateIds, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "certificate_ids")); ok {
+		interfaces := certificateIds.([]interface{})
+		tmp := make([]string, len(interfaces))
+		for i := range interfaces {
+			if interfaces[i] != nil {
+				tmp[i] = interfaces[i].(string)
+			}
+		}
+		if len(tmp) != 0 || s.D.HasChange(fmt.Sprintf(fieldKeyFormat, "certificate_ids")) {
+			result.CertificateIds = tmp
+		}
+	}
+
 	if certificateName, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "certificate_name")); ok {
 		tmp := certificateName.(string)
-		result.CertificateName = &tmp
+		if len(tmp) != 0 || s.D.HasChange(fmt.Sprintf(fieldKeyFormat, "certificate_name")) {
+			result.CertificateName = &tmp
+		}
 	}
 
 	if cipherSuiteName, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "cipher_suite_name")); ok {
@@ -680,6 +709,19 @@ func (s *LoadBalancerListenerResourceCrud) mapToSSLConfigurationDetails(fieldKey
 
 	if serverOrderPreference, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "server_order_preference")); ok {
 		result.ServerOrderPreference = oci_load_balancer.SslConfigurationDetailsServerOrderPreferenceEnum(serverOrderPreference.(string))
+	}
+
+	if trustedCertificateAuthorityIds, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "trusted_certificate_authority_ids")); ok {
+		interfaces := trustedCertificateAuthorityIds.([]interface{})
+		tmp := make([]string, len(interfaces))
+		for i := range interfaces {
+			if interfaces[i] != nil {
+				tmp[i] = interfaces[i].(string)
+			}
+		}
+		if len(tmp) != 0 || s.D.HasChange(fmt.Sprintf(fieldKeyFormat, "trusted_certificate_authority_ids")) {
+			result.TrustedCertificateAuthorityIds = tmp
+		}
 	}
 
 	if verifyDepth, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "verify_depth")); ok {

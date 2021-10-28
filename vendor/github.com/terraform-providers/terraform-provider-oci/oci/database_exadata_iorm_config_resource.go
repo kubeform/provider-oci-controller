@@ -8,11 +8,13 @@ import (
 	"context"
 	"fmt"
 
+	oci_work_requests "github.com/oracle/oci-go-sdk/v50/workrequests"
+
 	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -93,6 +95,7 @@ func createDatabaseExadataIormConfig(d *schema.ResourceData, m interface{}) erro
 	sync := &DatabaseExadataIormConfigResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return CreateResource(d, sync)
 }
@@ -101,6 +104,7 @@ func readDatabaseExadataIormConfig(d *schema.ResourceData, m interface{}) error 
 	sync := &DatabaseExadataIormConfigResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return ReadResource(sync)
 }
@@ -109,6 +113,7 @@ func updateDatabaseExadataIormConfig(d *schema.ResourceData, m interface{}) erro
 	sync := &DatabaseExadataIormConfigResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return UpdateResource(d, sync)
 }
@@ -117,6 +122,7 @@ func deleteDatabaseExadataIormConfig(d *schema.ResourceData, m interface{}) erro
 	sync := &DatabaseExadataIormConfigResourceCrud{}
 	sync.D = d
 	sync.Client = m.(*OracleClients).databaseClient()
+	sync.WorkRequestClient = m.(*OracleClients).workRequestClient
 
 	return DeleteResource(d, sync)
 }
@@ -124,6 +130,7 @@ func deleteDatabaseExadataIormConfig(d *schema.ResourceData, m interface{}) erro
 type DatabaseExadataIormConfigResourceCrud struct {
 	BaseCrud
 	Client                 *oci_database.DatabaseClient
+	WorkRequestClient      *oci_work_requests.WorkRequestClient
 	Res                    *oci_database.ExadataIormConfig
 	DisableNotFoundRetries bool
 }
@@ -165,7 +172,7 @@ func (s *DatabaseExadataIormConfigResourceCrud) Create() error {
 		request.DbSystemId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	if _, err := s.Client.GetExadataIormConfig(context.Background(), request); err != nil {
 		return err
@@ -189,7 +196,7 @@ func (s *DatabaseExadataIormConfigResourceCrud) Get() error {
 		request.DbSystemId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.GetExadataIormConfig(context.Background(), request)
 	if err != nil {
@@ -230,10 +237,19 @@ func (s *DatabaseExadataIormConfigResourceCrud) Update() error {
 		request.Objective = oci_database.ExadataIormConfigUpdateDetailsObjectiveEnum(objective.(string))
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
-	if _, err := s.Client.UpdateExadataIormConfig(context.Background(), request); err != nil {
+	response, err := s.Client.UpdateExadataIormConfig(context.Background(), request)
+	if err != nil {
 		return err
+	}
+
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "dbSystem", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
 	}
 
 	retentionPolicyFunc := func() bool { return s.Res.LifecycleState == oci_database.ExadataIormConfigLifecycleStateEnabled }
@@ -323,11 +339,19 @@ func (s *DatabaseExadataIormConfigResourceCrud) Delete() error {
 		request.DbSystemId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database")
 
 	response, err := s.Client.UpdateExadataIormConfig(context.Background(), request)
 	if err != nil {
 		return err
+	}
+
+	workId := response.OpcWorkRequestId
+	if workId != nil {
+		_, err = WaitForWorkRequestWithErrorHandling(s.WorkRequestClient, workId, "dbSystem", oci_work_requests.WorkRequestResourceActionTypeUpdated, s.D.Timeout(schema.TimeoutUpdate), s.DisableNotFoundRetries)
+		if err != nil {
+			return err
+		}
 	}
 
 	s.Res = &response.ExadataIormConfig

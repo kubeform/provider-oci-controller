@@ -12,12 +12,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/oracle/oci-go-sdk/v45/common"
+	"github.com/oracle/oci-go-sdk/v50/common"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 
-	oci_datascience "github.com/oracle/oci-go-sdk/v45/datascience"
+	oci_datascience "github.com/oracle/oci-go-sdk/v50/datascience"
 )
 
 func init() {
@@ -40,8 +40,8 @@ func DatascienceModelResource() *schema.Resource {
 				Type:             schema.TypeString,
 				Required:         true,
 				ForceNew:         true,
-				ValidateFunc:     validateInt64TypeString,
-				DiffSuppressFunc: int64StringDiffSuppressFunction,
+				ValidateFunc:     ValidateInt64TypeString,
+				DiffSuppressFunc: Int64StringDiffSuppressFunction,
 			},
 			"model_artifact": {
 				Type:     schema.TypeString,
@@ -59,6 +59,74 @@ func DatascienceModelResource() *schema.Resource {
 			},
 
 			// Optional
+			"custom_metadata_list": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						// Required
+
+						// Optional
+						"category": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+						},
+						"description": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+						},
+						"key": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+						},
+						"value": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+						},
+
+						// Computed
+					},
+				},
+			},
+			"defined_metadata_list": {
+				Type:     schema.TypeList,
+				Optional: true,
+				Computed: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						// Required
+
+						// Optional
+						"category": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+						},
+						"description": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+						},
+						"key": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+						},
+						"value": {
+							Type:     schema.TypeString,
+							Optional: true,
+							Computed: true,
+						},
+
+						// Computed
+					},
+				},
+			},
 			"artifact_content_disposition": {
 				Type:     schema.TypeString,
 				Optional: true,
@@ -87,6 +155,18 @@ func DatascienceModelResource() *schema.Resource {
 				Optional: true,
 				Computed: true,
 				Elem:     schema.TypeString,
+			},
+			"input_schema": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
+			},
+			"output_schema": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Computed: true,
+				ForceNew: true,
 			},
 			"state": {
 				Type:             schema.TypeString,
@@ -259,6 +339,40 @@ func (s *DatascienceModelResourceCrud) Create() error {
 		request.CompartmentId = &tmp
 	}
 
+	if customMetadataList, ok := s.D.GetOkExists("custom_metadata_list"); ok {
+		interfaces := customMetadataList.([]interface{})
+		tmp := make([]oci_datascience.Metadata, len(interfaces))
+		for i := range interfaces {
+			stateDataIndex := i
+			fieldKeyFormat := fmt.Sprintf("%s.%d.%%s", "custom_metadata_list", stateDataIndex)
+			converted, err := s.mapToMetadata(fieldKeyFormat)
+			if err != nil {
+				return err
+			}
+			tmp[i] = converted
+		}
+		if len(tmp) != 0 || s.D.HasChange("custom_metadata_list") {
+			request.CustomMetadataList = tmp
+		}
+	}
+
+	if definedMetadataList, ok := s.D.GetOkExists("defined_metadata_list"); ok {
+		interfaces := definedMetadataList.([]interface{})
+		tmp := make([]oci_datascience.Metadata, len(interfaces))
+		for i := range interfaces {
+			stateDataIndex := i
+			fieldKeyFormat := fmt.Sprintf("%s.%d.%%s", "defined_metadata_list", stateDataIndex)
+			converted, err := s.mapToMetadataDefined(fieldKeyFormat)
+			if err != nil {
+				return err
+			}
+			tmp[i] = converted
+		}
+		if len(tmp) != 0 || s.D.HasChange("defined_metadata_list") {
+			request.DefinedMetadataList = tmp
+		}
+	}
+
 	if definedTags, ok := s.D.GetOkExists("defined_tags"); ok {
 		convertedDefinedTags, err := mapToDefinedTags(definedTags.(map[string]interface{}))
 		if err != nil {
@@ -278,7 +392,17 @@ func (s *DatascienceModelResourceCrud) Create() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
+	}
+
+	if inputSchema, ok := s.D.GetOkExists("input_schema"); ok {
+		tmp := inputSchema.(string)
+		request.InputSchema = &tmp
+	}
+
+	if outputSchema, ok := s.D.GetOkExists("output_schema"); ok {
+		tmp := outputSchema.(string)
+		request.OutputSchema = &tmp
 	}
 
 	if projectId, ok := s.D.GetOkExists("project_id"); ok {
@@ -286,7 +410,7 @@ func (s *DatascienceModelResourceCrud) Create() error {
 		request.ProjectId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	response, err := s.Client.CreateModel(context.Background(), request)
 	if err != nil {
@@ -303,7 +427,7 @@ func (s *DatascienceModelResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.ModelId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	response, err := s.Client.GetModel(context.Background(), request)
 	if err != nil {
@@ -336,6 +460,40 @@ func (s *DatascienceModelResourceCrud) Update() error {
 	}
 	request := oci_datascience.UpdateModelRequest{}
 
+	if customMetadataList, ok := s.D.GetOkExists("custom_metadata_list"); ok {
+		interfaces := customMetadataList.([]interface{})
+		tmp := make([]oci_datascience.Metadata, len(interfaces))
+		for i := range interfaces {
+			stateDataIndex := i
+			fieldKeyFormat := fmt.Sprintf("%s.%d.%%s", "custom_metadata_list", stateDataIndex)
+			converted, err := s.mapToMetadata(fieldKeyFormat)
+			if err != nil {
+				return err
+			}
+			tmp[i] = converted
+		}
+		if len(tmp) != 0 || s.D.HasChange("custom_metadata_list") {
+			request.CustomMetadataList = tmp
+		}
+	}
+
+	if definedMetadataList, ok := s.D.GetOkExists("defined_metadata_list"); ok {
+		interfaces := definedMetadataList.([]interface{})
+		tmp := make([]oci_datascience.Metadata, len(interfaces))
+		for i := range interfaces {
+			stateDataIndex := i
+			fieldKeyFormat := fmt.Sprintf("%s.%d.%%s", "defined_metadata_list", stateDataIndex)
+			converted, err := s.mapToMetadataDefined(fieldKeyFormat)
+			if err != nil {
+				return err
+			}
+			tmp[i] = converted
+		}
+		if len(tmp) != 0 || s.D.HasChange("defined_metadata_list") {
+			request.DefinedMetadataList = tmp
+		}
+	}
+
 	if definedTags, ok := s.D.GetOkExists("defined_tags"); ok {
 		convertedDefinedTags, err := mapToDefinedTags(definedTags.(map[string]interface{}))
 		if err != nil {
@@ -355,13 +513,13 @@ func (s *DatascienceModelResourceCrud) Update() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	tmp := s.D.Id()
 	request.ModelId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	response, err := s.Client.UpdateModel(context.Background(), request)
 	if err != nil {
@@ -378,7 +536,7 @@ func (s *DatascienceModelResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.ModelId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	_, err := s.Client.DeleteModel(context.Background(), request)
 	return err
@@ -392,6 +550,18 @@ func (s *DatascienceModelResourceCrud) SetData() error {
 	if s.Res.CreatedBy != nil {
 		s.D.Set("created_by", *s.Res.CreatedBy)
 	}
+
+	customMetadataList := []interface{}{}
+	for _, item := range s.Res.CustomMetadataList {
+		customMetadataList = append(customMetadataList, MetadataToMap(item))
+	}
+	s.D.Set("custom_metadata_list", customMetadataList)
+
+	definedMetadataList := []interface{}{}
+	for _, item := range s.Res.DefinedMetadataList {
+		definedMetadataList = append(definedMetadataList, MetadataToMap(item))
+	}
+	s.D.Set("defined_metadata_list", definedMetadataList)
 
 	if s.Res.DefinedTags != nil {
 		s.D.Set("defined_tags", definedTagsToMap(s.Res.DefinedTags))
@@ -407,6 +577,14 @@ func (s *DatascienceModelResourceCrud) SetData() error {
 
 	s.D.Set("freeform_tags", s.Res.FreeformTags)
 
+	if s.Res.InputSchema != nil {
+		s.D.Set("input_schema", *s.Res.InputSchema)
+	}
+
+	if s.Res.OutputSchema != nil {
+		s.D.Set("output_schema", *s.Res.OutputSchema)
+	}
+
 	if s.Res.ProjectId != nil {
 		s.D.Set("project_id", *s.Res.ProjectId)
 	}
@@ -420,6 +598,73 @@ func (s *DatascienceModelResourceCrud) SetData() error {
 	return s.SetArtifactData()
 }
 
+func (s *DatascienceModelResourceCrud) mapToMetadata(fieldKeyFormat string) (oci_datascience.Metadata, error) {
+	result := oci_datascience.Metadata{}
+
+	if category, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "category")); ok {
+		tmp := category.(string)
+		result.Category = &tmp
+	}
+
+	if description, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "description")); ok {
+		tmp := description.(string)
+		result.Description = &tmp
+	}
+
+	if key, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "key")); ok {
+		tmp := key.(string)
+		result.Key = &tmp
+	}
+
+	if value, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "value")); ok {
+		tmp := value.(string)
+		result.Value = &tmp
+	}
+
+	return result, nil
+}
+
+/*
+  The New Mapping method is created for DefinedMetadataList to pass null values explicitly for 'category' and 'description'.
+*/
+func (s *DatascienceModelResourceCrud) mapToMetadataDefined(fieldKeyFormat string) (oci_datascience.Metadata, error) {
+	result := oci_datascience.Metadata{}
+
+	if key, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "key")); ok {
+		tmp := key.(string)
+		result.Key = &tmp
+	}
+
+	if value, ok := s.D.GetOkExists(fmt.Sprintf(fieldKeyFormat, "value")); ok {
+		tmp := value.(string)
+		result.Value = &tmp
+	}
+
+	return result, nil
+}
+
+func MetadataToMap(obj oci_datascience.Metadata) map[string]interface{} {
+	result := map[string]interface{}{}
+
+	if obj.Category != nil {
+		result["category"] = string(*obj.Category)
+	}
+
+	if obj.Description != nil {
+		result["description"] = string(*obj.Description)
+	}
+
+	if obj.Key != nil {
+		result["key"] = string(*obj.Key)
+	}
+
+	if obj.Value != nil {
+		result["value"] = string(*obj.Value)
+	}
+
+	return result
+}
+
 func (s *DatascienceModelResourceCrud) updateCompartment(compartment interface{}) error {
 	changeCompartmentRequest := oci_datascience.ChangeModelCompartmentRequest{}
 
@@ -429,12 +674,17 @@ func (s *DatascienceModelResourceCrud) updateCompartment(compartment interface{}
 	idTmp := s.D.Id()
 	changeCompartmentRequest.ModelId = &idTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	_, err := s.Client.ChangeModelCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }
 
@@ -444,7 +694,7 @@ func (s *DatascienceModelResourceCrud) ActivateModel() error {
 	tmp := s.D.Id()
 	request.ModelId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	_, err := s.Client.ActivateModel(context.Background(), request)
 	if err != nil {
@@ -461,7 +711,7 @@ func (s *DatascienceModelResourceCrud) DeactivateModel() error {
 	tmp := s.D.Id()
 	request.ModelId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	_, err := s.Client.DeactivateModel(context.Background(), request)
 	if err != nil {
@@ -501,7 +751,7 @@ func (s *DatascienceModelResourceCrud) CreateArtifact() error {
 
 	request.ModelId = s.Res.Id
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "datascience")
 
 	_, err := s.Client.CreateModelArtifact(context.Background(), request)
 	if err != nil {
@@ -516,7 +766,7 @@ func (s *DatascienceModelResourceCrud) GetArtifactHead() error {
 	tmp := s.D.Id()
 	request.ModelId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(true, "datascience")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(true, "datascience")
 
 	response, err := s.Client.HeadModelArtifact(context.Background(), request)
 	if err != nil {

@@ -42,12 +42,13 @@ func (r *AutonomousDatabase) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &AutonomousDatabase{}
 
 var autonomousdatabaseForceNewList = map[string]bool{
-	"/autonomous_container_database_id": true,
-	"/autonomous_database_backup_id":    true,
-	"/autonomous_database_id":           true,
-	"/clone_type":                       true,
-	"/db_name":                          true,
-	"/is_dedicated":                     true,
+	"/autonomous_container_database_id":               true,
+	"/autonomous_database_backup_id":                  true,
+	"/autonomous_database_id":                         true,
+	"/autonomous_maintenance_schedule_type":           true,
+	"/clone_type":                                     true,
+	"/db_name":                                        true,
+	"/is_dedicated":                                   true,
 	"/is_preview_version_with_service_terms_accepted": true,
 	"/source":    true,
 	"/source_id": true,

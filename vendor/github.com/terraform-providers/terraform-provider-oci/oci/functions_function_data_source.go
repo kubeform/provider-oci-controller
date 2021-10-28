@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_functions "github.com/oracle/oci-go-sdk/v45/functions"
+	oci_functions "github.com/oracle/oci-go-sdk/v50/functions"
 )
 
 func init() {
@@ -50,7 +50,7 @@ func (s *FunctionsFunctionDataSourceCrud) Get() error {
 		request.FunctionId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "functions")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "functions")
 
 	response, err := s.Client.GetFunction(context.Background(), request)
 	if err != nil {

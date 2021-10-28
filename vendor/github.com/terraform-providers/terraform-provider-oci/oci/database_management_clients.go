@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_database_management "github.com/oracle/oci-go-sdk/v45/databasemanagement"
+	oci_database_management "github.com/oracle/oci-go-sdk/v50/databasemanagement"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_database_management.DbManagementClient", &OracleClient{initClientFn: initDatabasemanagementDbManagementClient})
+	RegisterOracleClient("oci_database_management.DbManagementClient", &OracleClient{InitClientFn: initDatabasemanagementDbManagementClient})
 }
 
 func initDatabasemanagementDbManagementClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -18,7 +18,7 @@ func DatabaseAutonomousDatabasesClonesDataSource() *schema.Resource {
 	return &schema.Resource{
 		Read: readDatabaseAutonomousDatabasesClones,
 		Schema: map[string]*schema.Schema{
-			"filter": dataSourceFiltersSchema(),
+			"filter": DataSourceFiltersSchema(),
 			"autonomous_database_id": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -77,6 +77,10 @@ func DatabaseAutonomousDatabasesClonesDataSource() *schema.Resource {
 							Computed: true,
 						},
 						"autonomous_container_database_id": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"autonomous_maintenance_schedule_type": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
@@ -146,6 +150,51 @@ func DatabaseAutonomousDatabasesClonesDataSource() *schema.Resource {
 									"medium": {
 										Type:     schema.TypeString,
 										Computed: true,
+									},
+									"profiles": {
+										Type:     schema.TypeList,
+										Computed: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+												// Required
+
+												// Optional
+
+												// Computed
+												"consumer_group": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+												"display_name": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+												"host_format": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+												"protocol": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+												"session_mode": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+												"syntax_format": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+												"tls_authentication": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+												"value": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+											},
+										},
 									},
 								},
 							},
@@ -269,6 +318,10 @@ func DatabaseAutonomousDatabasesClonesDataSource() *schema.Resource {
 							Computed: true,
 						},
 						"is_free_tier": {
+							Type:     schema.TypeBool,
+							Computed: true,
+						},
+						"is_mtls_connection_required": {
 							Type:     schema.TypeBool,
 							Computed: true,
 						},
@@ -529,7 +582,7 @@ func (s *DatabaseAutonomousDatabasesClonesDataSourceCrud) Get() error {
 		request.LifecycleState = oci_database.AutonomousDatabaseSummaryLifecycleStateEnum(state.(string))
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 
 	response, err := s.Client.ListAutonomousDatabaseClones(context.Background(), request)
 	if err != nil {
@@ -578,6 +631,8 @@ func (s *DatabaseAutonomousDatabasesClonesDataSourceCrud) SetData() error {
 		if r.AutonomousContainerDatabaseId != nil {
 			autonomousDatabasesClone["autonomous_container_database_id"] = *r.AutonomousContainerDatabaseId
 		}
+
+		autonomousDatabasesClone["autonomous_maintenance_schedule_type"] = r.AutonomousMaintenanceScheduleType
 
 		autonomousDatabasesClone["available_upgrade_versions"] = r.AvailableUpgradeVersions
 
@@ -667,6 +722,10 @@ func (s *DatabaseAutonomousDatabasesClonesDataSourceCrud) SetData() error {
 
 		if r.IsFreeTier != nil {
 			autonomousDatabasesClone["is_free_tier"] = *r.IsFreeTier
+		}
+
+		if r.IsMtlsConnectionRequired != nil {
+			autonomousDatabasesClone["is_mtls_connection_required"] = *r.IsMtlsConnectionRequired
 		}
 
 		if r.IsPreview != nil {

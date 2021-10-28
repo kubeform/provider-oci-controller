@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_marketplace "github.com/oracle/oci-go-sdk/v45/marketplace"
+	oci_marketplace "github.com/oracle/oci-go-sdk/v50/marketplace"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_marketplace.MarketplaceClient", &OracleClient{initClientFn: initMarketplaceMarketplaceClient})
+	RegisterOracleClient("oci_marketplace.MarketplaceClient", &OracleClient{InitClientFn: initMarketplaceMarketplaceClient})
 }
 
 func initMarketplaceMarketplaceClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

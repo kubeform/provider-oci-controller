@@ -19,6 +19,7 @@ limitations under the License.
 package scheme
 
 import (
+	aiv1alpha1 "kubeform.dev/provider-oci-api/apis/ai/v1alpha1"
 	analyticsv1alpha1 "kubeform.dev/provider-oci-api/apis/analytics/v1alpha1"
 	apigatewayv1alpha1 "kubeform.dev/provider-oci-api/apis/apigateway/v1alpha1"
 	apmv1alpha1 "kubeform.dev/provider-oci-api/apis/apm/v1alpha1"
@@ -29,6 +30,7 @@ import (
 	bdsv1alpha1 "kubeform.dev/provider-oci-api/apis/bds/v1alpha1"
 	blockchainv1alpha1 "kubeform.dev/provider-oci-api/apis/blockchain/v1alpha1"
 	budgetv1alpha1 "kubeform.dev/provider-oci-api/apis/budget/v1alpha1"
+	certificatesv1alpha1 "kubeform.dev/provider-oci-api/apis/certificates/v1alpha1"
 	cloudv1alpha1 "kubeform.dev/provider-oci-api/apis/cloud/v1alpha1"
 	containerenginev1alpha1 "kubeform.dev/provider-oci-api/apis/containerengine/v1alpha1"
 	corev1alpha1 "kubeform.dev/provider-oci-api/apis/core/v1alpha1"
@@ -75,6 +77,7 @@ import (
 	streamingv1alpha1 "kubeform.dev/provider-oci-api/apis/streaming/v1alpha1"
 	vulnerabilityv1alpha1 "kubeform.dev/provider-oci-api/apis/vulnerability/v1alpha1"
 	waasv1alpha1 "kubeform.dev/provider-oci-api/apis/waas/v1alpha1"
+	wafv1alpha1 "kubeform.dev/provider-oci-api/apis/waf/v1alpha1"
 
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -87,6 +90,7 @@ var Scheme = runtime.NewScheme()
 var Codecs = serializer.NewCodecFactory(Scheme)
 var ParameterCodec = runtime.NewParameterCodec(Scheme)
 var localSchemeBuilder = runtime.SchemeBuilder{
+	aiv1alpha1.AddToScheme,
 	analyticsv1alpha1.AddToScheme,
 	apigatewayv1alpha1.AddToScheme,
 	apmv1alpha1.AddToScheme,
@@ -97,6 +101,7 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	bdsv1alpha1.AddToScheme,
 	blockchainv1alpha1.AddToScheme,
 	budgetv1alpha1.AddToScheme,
+	certificatesv1alpha1.AddToScheme,
 	cloudv1alpha1.AddToScheme,
 	containerenginev1alpha1.AddToScheme,
 	corev1alpha1.AddToScheme,
@@ -143,6 +148,7 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	streamingv1alpha1.AddToScheme,
 	vulnerabilityv1alpha1.AddToScheme,
 	waasv1alpha1.AddToScheme,
+	wafv1alpha1.AddToScheme,
 }
 
 // AddToScheme adds all types of this clientset into the given scheme. This allows composition

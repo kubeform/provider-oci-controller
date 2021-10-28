@@ -41,6 +41,28 @@ type Model struct {
 	Status            ModelStatus `json:"status,omitempty"`
 }
 
+type ModelSpecCustomMetadataList struct {
+	// +optional
+	Category *string `json:"category,omitempty" tf:"category"`
+	// +optional
+	Description *string `json:"description,omitempty" tf:"description"`
+	// +optional
+	Key *string `json:"key,omitempty" tf:"key"`
+	// +optional
+	Value *string `json:"value,omitempty" tf:"value"`
+}
+
+type ModelSpecDefinedMetadataList struct {
+	// +optional
+	Category *string `json:"category,omitempty" tf:"category"`
+	// +optional
+	Description *string `json:"description,omitempty" tf:"description"`
+	// +optional
+	Key *string `json:"key,omitempty" tf:"key"`
+	// +optional
+	Value *string `json:"value,omitempty" tf:"value"`
+}
+
 type ModelSpec struct {
 	State *ModelSpecResource `json:"state,omitempty" tf:"-"`
 
@@ -71,6 +93,10 @@ type ModelSpecResource struct {
 	// +optional
 	CreatedBy *string `json:"createdBy,omitempty" tf:"created_by"`
 	// +optional
+	CustomMetadataList []ModelSpecCustomMetadataList `json:"customMetadataList,omitempty" tf:"custom_metadata_list"`
+	// +optional
+	DefinedMetadataList []ModelSpecDefinedMetadataList `json:"definedMetadataList,omitempty" tf:"defined_metadata_list"`
+	// +optional
 	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
 	// +optional
 	Description *string `json:"description,omitempty" tf:"description"`
@@ -79,9 +105,13 @@ type ModelSpecResource struct {
 	// +optional
 	EmptyModel *bool `json:"emptyModel,omitempty" tf:"empty_model"`
 	// +optional
-	FreeformTags  map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
-	ModelArtifact *string           `json:"modelArtifact" tf:"model_artifact"`
-	ProjectID     *string           `json:"projectID" tf:"project_id"`
+	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
+	// +optional
+	InputSchema   *string `json:"inputSchema,omitempty" tf:"input_schema"`
+	ModelArtifact *string `json:"modelArtifact" tf:"model_artifact"`
+	// +optional
+	OutputSchema *string `json:"outputSchema,omitempty" tf:"output_schema"`
+	ProjectID    *string `json:"projectID" tf:"project_id"`
 	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional

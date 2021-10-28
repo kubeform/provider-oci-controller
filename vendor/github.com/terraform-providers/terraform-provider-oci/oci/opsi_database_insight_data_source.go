@@ -8,7 +8,7 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_opsi "github.com/oracle/oci-go-sdk/v45/opsi"
+	oci_opsi "github.com/oracle/oci-go-sdk/v50/opsi"
 )
 
 func init() {
@@ -50,7 +50,7 @@ func (s *OpsiDatabaseInsightDataSourceCrud) Get() error {
 		request.DatabaseInsightId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "opsi")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "opsi")
 
 	response, err := s.Client.GetDatabaseInsight(context.Background(), request)
 	if err != nil {
@@ -128,6 +128,10 @@ func (s *OpsiDatabaseInsightDataSourceCrud) SetData() error {
 
 		if v.ProcessorCount != nil {
 			s.D.Set("processor_count", *v.ProcessorCount)
+		}
+
+		if v.ExadataInsightId != nil {
+			s.D.Set("exadata_insight_id", *v.ExadataInsightId)
 		}
 
 		s.D.Set("state", v.LifecycleState)

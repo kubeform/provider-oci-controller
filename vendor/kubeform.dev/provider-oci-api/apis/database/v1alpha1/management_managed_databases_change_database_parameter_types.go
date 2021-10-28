@@ -47,6 +47,8 @@ type ManagementManagedDatabasesChangeDatabaseParameterSpecCredentials struct {
 	// +optional
 	Role *string `json:"role,omitempty" tf:"role"`
 	// +optional
+	SecretID *string `json:"secretID,omitempty" tf:"secret_id"`
+	// +optional
 	UserName *string `json:"userName,omitempty" tf:"user_name"`
 }
 

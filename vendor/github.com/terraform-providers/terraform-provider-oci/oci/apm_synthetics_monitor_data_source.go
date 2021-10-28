@@ -8,7 +8,7 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_apm_synthetics "github.com/oracle/oci-go-sdk/v45/apmsynthetics"
+	oci_apm_synthetics "github.com/oracle/oci-go-sdk/v50/apmsynthetics"
 )
 
 func init() {
@@ -66,7 +66,7 @@ func (s *ApmSyntheticsMonitorDataSourceCrud) Get() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "apm_synthetics")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "apm_synthetics")
 
 	response, err := s.Client.GetMonitor(context.Background(), request)
 	if err != nil {
@@ -103,6 +103,10 @@ func (s *ApmSyntheticsMonitorDataSourceCrud) SetData() error {
 	}
 
 	s.D.Set("freeform_tags", s.Res.FreeformTags)
+
+	if s.Res.IsRunOnce != nil {
+		s.D.Set("is_run_once", *s.Res.IsRunOnce)
+	}
 
 	s.D.Set("monitor_type", s.Res.MonitorType)
 

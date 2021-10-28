@@ -41,6 +41,19 @@ type SyntheticsMonitor struct {
 	Status            SyntheticsMonitorStatus `json:"status,omitempty"`
 }
 
+type SyntheticsMonitorSpecConfigurationNetworkConfiguration struct {
+	// +optional
+	NumberOfHops *int64 `json:"numberOfHops,omitempty" tf:"number_of_hops"`
+	// +optional
+	ProbeMode *string `json:"probeMode,omitempty" tf:"probe_mode"`
+	// +optional
+	ProbePerHop *int64 `json:"probePerHop,omitempty" tf:"probe_per_hop"`
+	// +optional
+	Protocol *string `json:"protocol,omitempty" tf:"protocol"`
+	// +optional
+	TransmissionRate *int64 `json:"transmissionRate,omitempty" tf:"transmission_rate"`
+}
+
 type SyntheticsMonitorSpecConfigurationReqAuthenticationDetailsAuthHeaders struct {
 	// +optional
 	HeaderName *string `json:"headerName,omitempty" tf:"header_name"`
@@ -95,6 +108,8 @@ type SyntheticsMonitorSpecConfiguration struct {
 	IsFailureRetried *bool `json:"isFailureRetried,omitempty" tf:"is_failure_retried"`
 	// +optional
 	IsRedirectionEnabled *bool `json:"isRedirectionEnabled,omitempty" tf:"is_redirection_enabled"`
+	// +optional
+	NetworkConfiguration *SyntheticsMonitorSpecConfigurationNetworkConfiguration `json:"networkConfiguration,omitempty" tf:"network_configuration"`
 	// +optional
 	ReqAuthenticationDetails *SyntheticsMonitorSpecConfigurationReqAuthenticationDetails `json:"reqAuthenticationDetails,omitempty" tf:"req_authentication_details"`
 	// +optional
@@ -162,9 +177,11 @@ type SyntheticsMonitorSpecResource struct {
 	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
 	DisplayName *string           `json:"displayName" tf:"display_name"`
 	// +optional
-	FreeformTags            map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
-	MonitorType             *string           `json:"monitorType" tf:"monitor_type"`
-	RepeatIntervalInSeconds *int64            `json:"repeatIntervalInSeconds" tf:"repeat_interval_in_seconds"`
+	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
+	// +optional
+	IsRunOnce               *bool   `json:"isRunOnce,omitempty" tf:"is_run_once"`
+	MonitorType             *string `json:"monitorType" tf:"monitor_type"`
+	RepeatIntervalInSeconds *int64  `json:"repeatIntervalInSeconds" tf:"repeat_interval_in_seconds"`
 	// +optional
 	ScriptID *string `json:"scriptID,omitempty" tf:"script_id"`
 	// +optional

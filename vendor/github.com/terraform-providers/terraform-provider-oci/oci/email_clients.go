@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_email "github.com/oracle/oci-go-sdk/v45/email"
+	oci_email "github.com/oracle/oci-go-sdk/v50/email"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_email.EmailClient", &OracleClient{initClientFn: initEmailEmailClient})
+	RegisterOracleClient("oci_email.EmailClient", &OracleClient{InitClientFn: initEmailEmailClient})
 }
 
 func initEmailEmailClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

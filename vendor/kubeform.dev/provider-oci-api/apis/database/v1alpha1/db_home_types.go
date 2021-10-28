@@ -105,6 +105,8 @@ type DbHomeSpecDatabase struct {
 	// +optional
 	PdbName *string `json:"pdbName,omitempty" tf:"pdb_name"`
 	// +optional
+	SidPrefix *string `json:"sidPrefix,omitempty" tf:"sid_prefix"`
+	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional
 	TdeWalletPassword *string `json:"-" sensitive:"true" tf:"tde_wallet_password"`

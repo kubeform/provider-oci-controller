@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_monitoring "github.com/oracle/oci-go-sdk/v45/monitoring"
+	oci_monitoring "github.com/oracle/oci-go-sdk/v50/monitoring"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func (s *MonitoringAlarmDataSourceCrud) Get() error {
 		request.AlarmId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "monitoring")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "monitoring")
 
 	response, err := s.Client.GetAlarm(context.Background(), request)
 	if err != nil {
@@ -90,6 +90,8 @@ func (s *MonitoringAlarmDataSourceCrud) SetData() error {
 	if s.Res.IsEnabled != nil {
 		s.D.Set("is_enabled", *s.Res.IsEnabled)
 	}
+
+	s.D.Set("message_format", s.Res.MessageFormat)
 
 	if s.Res.MetricCompartmentId != nil {
 		s.D.Set("metric_compartment_id", *s.Res.MetricCompartmentId)

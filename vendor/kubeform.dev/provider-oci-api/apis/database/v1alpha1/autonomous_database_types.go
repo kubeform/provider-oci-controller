@@ -55,6 +55,25 @@ type AutonomousDatabaseSpecBackupConfig struct {
 	ManualBackupType *string `json:"manualBackupType,omitempty" tf:"manual_backup_type"`
 }
 
+type AutonomousDatabaseSpecConnectionStringsProfiles struct {
+	// +optional
+	ConsumerGroup *string `json:"consumerGroup,omitempty" tf:"consumer_group"`
+	// +optional
+	DisplayName *string `json:"displayName,omitempty" tf:"display_name"`
+	// +optional
+	HostFormat *string `json:"hostFormat,omitempty" tf:"host_format"`
+	// +optional
+	Protocol *string `json:"protocol,omitempty" tf:"protocol"`
+	// +optional
+	SessionMode *string `json:"sessionMode,omitempty" tf:"session_mode"`
+	// +optional
+	SyntaxFormat *string `json:"syntaxFormat,omitempty" tf:"syntax_format"`
+	// +optional
+	TlsAuthentication *string `json:"tlsAuthentication,omitempty" tf:"tls_authentication"`
+	// +optional
+	Value *string `json:"value,omitempty" tf:"value"`
+}
+
 type AutonomousDatabaseSpecConnectionStrings struct {
 	// +optional
 	AllConnectionStrings map[string]string `json:"allConnectionStrings,omitempty" tf:"all_connection_strings"`
@@ -66,6 +85,8 @@ type AutonomousDatabaseSpecConnectionStrings struct {
 	Low *string `json:"low,omitempty" tf:"low"`
 	// +optional
 	Medium *string `json:"medium,omitempty" tf:"medium"`
+	// +optional
+	Profiles []AutonomousDatabaseSpecConnectionStringsProfiles `json:"profiles,omitempty" tf:"profiles"`
 }
 
 type AutonomousDatabaseSpecConnectionUrls struct {
@@ -136,6 +157,8 @@ type AutonomousDatabaseSpecResource struct {
 	// +optional
 	AutonomousDatabaseID *string `json:"autonomousDatabaseID,omitempty" tf:"autonomous_database_id"`
 	// +optional
+	AutonomousMaintenanceScheduleType *string `json:"autonomousMaintenanceScheduleType,omitempty" tf:"autonomous_maintenance_schedule_type"`
+	// +optional
 	AvailableUpgradeVersions []string `json:"availableUpgradeVersions,omitempty" tf:"available_upgrade_versions"`
 	// +optional
 	BackupConfig *AutonomousDatabaseSpecBackupConfig `json:"backupConfig,omitempty" tf:"backup_config"`
@@ -181,6 +204,8 @@ type AutonomousDatabaseSpecResource struct {
 	IsDedicated *bool `json:"isDedicated,omitempty" tf:"is_dedicated"`
 	// +optional
 	IsFreeTier *bool `json:"isFreeTier,omitempty" tf:"is_free_tier"`
+	// +optional
+	IsMtlsConnectionRequired *bool `json:"isMtlsConnectionRequired,omitempty" tf:"is_mtls_connection_required"`
 	// +optional
 	IsPreview *bool `json:"isPreview,omitempty" tf:"is_preview"`
 	// +optional

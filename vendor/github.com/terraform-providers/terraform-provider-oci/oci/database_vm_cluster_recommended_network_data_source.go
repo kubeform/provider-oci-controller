@@ -8,7 +8,7 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -104,6 +104,14 @@ func DatabaseVmClusterRecommendedNetworkDataSource() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
+			"scan_listener_port_tcp": {
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
+			"scan_listener_port_tcp_ssl": {
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
 
 			// Computed
 			"scans": {
@@ -128,6 +136,14 @@ func DatabaseVmClusterRecommendedNetworkDataSource() *schema.Resource {
 							},
 						},
 						"port": {
+							Type:     schema.TypeInt,
+							Computed: true,
+						},
+						"scan_listener_port_tcp": {
+							Type:     schema.TypeInt,
+							Computed: true,
+						},
+						"scan_listener_port_tcp_ssl": {
 							Type:     schema.TypeInt,
 							Computed: true,
 						},
@@ -258,7 +274,7 @@ func (s *DatabaseVmClusterRecommendedNetworkDataSourceCrud) Get() error {
 	}
 
 	if freeformTags, ok := s.D.GetOkExists("freeform_tags"); ok {
-		request.FreeformTags = objectMapToStringMap(freeformTags.(map[string]interface{}))
+		request.FreeformTags = ObjectMapToStringMap(freeformTags.(map[string]interface{}))
 	}
 
 	if networks, ok := s.D.GetOkExists("networks"); ok {
@@ -291,7 +307,17 @@ func (s *DatabaseVmClusterRecommendedNetworkDataSourceCrud) Get() error {
 		}
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	if scanListenerPortTcp, ok := s.D.GetOkExists("scan_listener_port_tcp"); ok {
+		tmp := scanListenerPortTcp.(int)
+		request.ScanListenerPortTcp = &tmp
+	}
+
+	if scanListenerPortTcpSsl, ok := s.D.GetOkExists("scan_listener_port_tcp_ssl"); ok {
+		tmp := scanListenerPortTcpSsl.(int)
+		request.ScanListenerPortTcpSsl = &tmp
+	}
+
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 
 	response, err := s.Client.GenerateRecommendedVmClusterNetwork(context.Background(), request)
 	if err != nil {

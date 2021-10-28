@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_core "github.com/oracle/oci-go-sdk/v45/core"
+	oci_core "github.com/oracle/oci-go-sdk/v50/core"
 )
 
 func init() {
@@ -77,7 +77,7 @@ func (s *CoreLetterOfAuthorityDataSourceCrud) Get() error {
 		request.CrossConnectId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "core")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "core")
 
 	response, err := s.Client.GetCrossConnectLetterOfAuthority(context.Background(), request)
 	if err != nil {

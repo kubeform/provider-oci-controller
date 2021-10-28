@@ -52,6 +52,7 @@ var databaseForceNewList = map[string]bool{
 	"/database/*/db_workload":                                          true,
 	"/database/*/ncharacter_set":                                       true,
 	"/database/*/pdb_name":                                             true,
+	"/database/*/sid_prefix":                                           true,
 	"/db_home_id":                                                      true,
 	"/db_version":                                                      true,
 	"/source":                                                          true,

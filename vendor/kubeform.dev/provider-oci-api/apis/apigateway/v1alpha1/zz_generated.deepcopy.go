@@ -2384,6 +2384,11 @@ func (in *GatewaySpecResource) DeepCopyInto(out *GatewaySpecResource) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.NetworkSecurityGroupIDS != nil {
+		in, out := &in.NetworkSecurityGroupIDS, &out.NetworkSecurityGroupIDS
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	if in.ResponseCacheDetails != nil {
 		in, out := &in.ResponseCacheDetails, &out.ResponseCacheDetails
 		*out = new(GatewaySpecResponseCacheDetails)

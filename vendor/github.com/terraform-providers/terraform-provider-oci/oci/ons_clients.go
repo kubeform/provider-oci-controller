@@ -4,14 +4,14 @@
 package oci
 
 import (
-	oci_ons "github.com/oracle/oci-go-sdk/v45/ons"
+	oci_ons "github.com/oracle/oci-go-sdk/v50/ons"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_ons.NotificationControlPlaneClient", &OracleClient{initClientFn: initOnsNotificationControlPlaneClient})
-	RegisterOracleClient("oci_ons.NotificationDataPlaneClient", &OracleClient{initClientFn: initOnsNotificationDataPlaneClient})
+	RegisterOracleClient("oci_ons.NotificationControlPlaneClient", &OracleClient{InitClientFn: initOnsNotificationControlPlaneClient})
+	RegisterOracleClient("oci_ons.NotificationDataPlaneClient", &OracleClient{InitClientFn: initOnsNotificationDataPlaneClient})
 }
 
 func initOnsNotificationControlPlaneClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

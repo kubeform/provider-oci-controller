@@ -13,7 +13,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-	oci_database_management "github.com/oracle/oci-go-sdk/v45/databasemanagement"
+	oci_database_management "github.com/oracle/oci-go-sdk/v50/databasemanagement"
 )
 
 func init() {
@@ -70,6 +70,10 @@ func DatabaseManagementManagedDatabaseGroupResource() *schema.Resource {
 							Computed: true,
 						},
 						"database_sub_type": {
+							Type:     schema.TypeString,
+							Computed: true,
+						},
+						"deployment_type": {
 							Type:     schema.TypeString,
 							Computed: true,
 						},
@@ -217,7 +221,7 @@ func (s *DatabaseManagementManagedDatabaseGroupResourceCrud) Create() error {
 		request.Name = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database_management")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database_management")
 
 	response, err := s.Client.CreateManagedDatabaseGroup(context.Background(), request)
 	if err != nil {
@@ -283,7 +287,7 @@ func (s *DatabaseManagementManagedDatabaseGroupResourceCrud) GetManagedDatabaseG
 	request := oci_database_management.GetManagedDatabaseGroupRequest{}
 	request.ManagedDatabaseGroupId = &managedDatabaseGroupId
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database_management")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database_management")
 
 	response, err := s.Client.GetManagedDatabaseGroup(context.Background(), request)
 	if err != nil {
@@ -300,7 +304,7 @@ func (s *DatabaseManagementManagedDatabaseGroupResourceCrud) Get() error {
 	tmp := s.D.Id()
 	request.ManagedDatabaseGroupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database_management")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database_management")
 
 	response, err := s.Client.GetManagedDatabaseGroup(context.Background(), request)
 	if err != nil {
@@ -343,7 +347,7 @@ func (s *DatabaseManagementManagedDatabaseGroupResourceCrud) Update() error {
 	tmp := s.D.Id()
 	request.ManagedDatabaseGroupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database_management")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database_management")
 
 	response, err := s.Client.UpdateManagedDatabaseGroup(context.Background(), request)
 	if err != nil {
@@ -416,7 +420,7 @@ func (s *DatabaseManagementManagedDatabaseGroupResourceCrud) Delete() error {
 	tmp := s.D.Id()
 	request.ManagedDatabaseGroupId = &tmp
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database_management")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database_management")
 
 	mderr := s.removeAllManagedDatabases(request.ManagedDatabaseGroupId)
 	if mderr != nil {
@@ -476,6 +480,8 @@ func ChildDatabaseToMap(obj oci_database_management.ChildDatabase) map[string]in
 
 	result["database_type"] = string(obj.DatabaseType)
 
+	result["deployment_type"] = string(obj.DeploymentType)
+
 	if obj.Id != nil {
 		result["id"] = string(*obj.Id)
 	}
@@ -528,11 +534,16 @@ func (s *DatabaseManagementManagedDatabaseGroupResourceCrud) updateCompartment(c
 	idTmp := s.D.Id()
 	changeCompartmentRequest.ManagedDatabaseGroupId = &idTmp
 
-	changeCompartmentRequest.RequestMetadata.RetryPolicy = getRetryPolicy(s.DisableNotFoundRetries, "database_management")
+	changeCompartmentRequest.RequestMetadata.RetryPolicy = GetRetryPolicy(s.DisableNotFoundRetries, "database_management")
 
 	_, err := s.Client.ChangeManagedDatabaseGroupCompartment(context.Background(), changeCompartmentRequest)
 	if err != nil {
 		return err
 	}
+
+	if waitErr := waitForUpdatedState(s.D, s); waitErr != nil {
+		return waitErr
+	}
+
 	return nil
 }

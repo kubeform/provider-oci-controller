@@ -4,15 +4,15 @@
 package oci
 
 import (
-	oci_ocvp "github.com/oracle/oci-go-sdk/v45/ocvp"
+	oci_ocvp "github.com/oracle/oci-go-sdk/v50/ocvp"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_ocvp.EsxiHostClient", &OracleClient{initClientFn: initOcvpEsxiHostClient})
-	RegisterOracleClient("oci_ocvp.WorkRequestClient", &OracleClient{initClientFn: initOcvpWorkRequestClient})
-	RegisterOracleClient("oci_ocvp.SddcClient", &OracleClient{initClientFn: initOcvpSddcClient})
+	RegisterOracleClient("oci_ocvp.EsxiHostClient", &OracleClient{InitClientFn: initOcvpEsxiHostClient})
+	RegisterOracleClient("oci_ocvp.WorkRequestClient", &OracleClient{InitClientFn: initOcvpWorkRequestClient})
+	RegisterOracleClient("oci_ocvp.SddcClient", &OracleClient{InitClientFn: initOcvpSddcClient})
 }
 
 func initOcvpEsxiHostClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

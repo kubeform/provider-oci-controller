@@ -27,6 +27,13 @@ import (
 
 func GetEncoder() map[string]jsoniter.ValEncoder {
 	return map[string]jsoniter.ValEncoder{
+		jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobConfigurationDetails{}).Type1()):                                                                       JobSpecJobConfigurationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobInfrastructureConfigurationDetails{}).Type1()):                                                         JobSpecJobInfrastructureConfigurationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobLogConfigurationDetails{}).Type1()):                                                                    JobSpecJobLogConfigurationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobConfigurationOverrideDetails{}).Type1()):                                                            JobRunSpecJobConfigurationOverrideDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobInfrastructureConfigurationDetails{}).Type1()):                                                      JobRunSpecJobInfrastructureConfigurationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobLogConfigurationOverrideDetails{}).Type1()):                                                         JobRunSpecJobLogConfigurationOverrideDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecLogDetails{}).Type1()):                                                                                 JobRunSpecLogDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecCategoryLogDetails{}).Type1()):                                                                ModelDeploymentSpecCategoryLogDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecCategoryLogDetailsAccess{}).Type1()):                                                          ModelDeploymentSpecCategoryLogDetailsAccessCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecCategoryLogDetailsPredict{}).Type1()):                                                         ModelDeploymentSpecCategoryLogDetailsPredictCodec{},
@@ -41,6 +48,13 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 
 func GetDecoder() map[string]jsoniter.ValDecoder {
 	return map[string]jsoniter.ValDecoder{
+		jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobConfigurationDetails{}).Type1()):                                                                       JobSpecJobConfigurationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobInfrastructureConfigurationDetails{}).Type1()):                                                         JobSpecJobInfrastructureConfigurationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobLogConfigurationDetails{}).Type1()):                                                                    JobSpecJobLogConfigurationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobConfigurationOverrideDetails{}).Type1()):                                                            JobRunSpecJobConfigurationOverrideDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobInfrastructureConfigurationDetails{}).Type1()):                                                      JobRunSpecJobInfrastructureConfigurationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobLogConfigurationOverrideDetails{}).Type1()):                                                         JobRunSpecJobLogConfigurationOverrideDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecLogDetails{}).Type1()):                                                                                 JobRunSpecLogDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecCategoryLogDetails{}).Type1()):                                                                ModelDeploymentSpecCategoryLogDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecCategoryLogDetailsAccess{}).Type1()):                                                          ModelDeploymentSpecCategoryLogDetailsAccessCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecCategoryLogDetailsPredict{}).Type1()):                                                         ModelDeploymentSpecCategoryLogDetailsPredictCodec{},
@@ -63,6 +77,559 @@ func getDecodersWithout(typ string) map[string]jsoniter.ValDecoder {
 	origMap := GetDecoder()
 	delete(origMap, typ)
 	return origMap
+}
+
+// +k8s:deepcopy-gen=false
+type JobSpecJobConfigurationDetailsCodec struct {
+}
+
+func (JobSpecJobConfigurationDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*JobSpecJobConfigurationDetails)(ptr) == nil
+}
+
+func (JobSpecJobConfigurationDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*JobSpecJobConfigurationDetails)(ptr)
+	var objs []JobSpecJobConfigurationDetails
+	if obj != nil {
+		objs = []JobSpecJobConfigurationDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobConfigurationDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (JobSpecJobConfigurationDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*JobSpecJobConfigurationDetails)(ptr) = JobSpecJobConfigurationDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []JobSpecJobConfigurationDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobConfigurationDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*JobSpecJobConfigurationDetails)(ptr) = objs[0]
+			} else {
+				*(*JobSpecJobConfigurationDetails)(ptr) = JobSpecJobConfigurationDetails{}
+			}
+		} else {
+			*(*JobSpecJobConfigurationDetails)(ptr) = JobSpecJobConfigurationDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj JobSpecJobConfigurationDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobConfigurationDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*JobSpecJobConfigurationDetails)(ptr) = obj
+		} else {
+			*(*JobSpecJobConfigurationDetails)(ptr) = JobSpecJobConfigurationDetails{}
+		}
+	default:
+		iter.ReportError("decode JobSpecJobConfigurationDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type JobSpecJobInfrastructureConfigurationDetailsCodec struct {
+}
+
+func (JobSpecJobInfrastructureConfigurationDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*JobSpecJobInfrastructureConfigurationDetails)(ptr) == nil
+}
+
+func (JobSpecJobInfrastructureConfigurationDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*JobSpecJobInfrastructureConfigurationDetails)(ptr)
+	var objs []JobSpecJobInfrastructureConfigurationDetails
+	if obj != nil {
+		objs = []JobSpecJobInfrastructureConfigurationDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobInfrastructureConfigurationDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (JobSpecJobInfrastructureConfigurationDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*JobSpecJobInfrastructureConfigurationDetails)(ptr) = JobSpecJobInfrastructureConfigurationDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []JobSpecJobInfrastructureConfigurationDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobInfrastructureConfigurationDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*JobSpecJobInfrastructureConfigurationDetails)(ptr) = objs[0]
+			} else {
+				*(*JobSpecJobInfrastructureConfigurationDetails)(ptr) = JobSpecJobInfrastructureConfigurationDetails{}
+			}
+		} else {
+			*(*JobSpecJobInfrastructureConfigurationDetails)(ptr) = JobSpecJobInfrastructureConfigurationDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj JobSpecJobInfrastructureConfigurationDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobInfrastructureConfigurationDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*JobSpecJobInfrastructureConfigurationDetails)(ptr) = obj
+		} else {
+			*(*JobSpecJobInfrastructureConfigurationDetails)(ptr) = JobSpecJobInfrastructureConfigurationDetails{}
+		}
+	default:
+		iter.ReportError("decode JobSpecJobInfrastructureConfigurationDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type JobSpecJobLogConfigurationDetailsCodec struct {
+}
+
+func (JobSpecJobLogConfigurationDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*JobSpecJobLogConfigurationDetails)(ptr) == nil
+}
+
+func (JobSpecJobLogConfigurationDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*JobSpecJobLogConfigurationDetails)(ptr)
+	var objs []JobSpecJobLogConfigurationDetails
+	if obj != nil {
+		objs = []JobSpecJobLogConfigurationDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobLogConfigurationDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (JobSpecJobLogConfigurationDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*JobSpecJobLogConfigurationDetails)(ptr) = JobSpecJobLogConfigurationDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []JobSpecJobLogConfigurationDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobLogConfigurationDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*JobSpecJobLogConfigurationDetails)(ptr) = objs[0]
+			} else {
+				*(*JobSpecJobLogConfigurationDetails)(ptr) = JobSpecJobLogConfigurationDetails{}
+			}
+		} else {
+			*(*JobSpecJobLogConfigurationDetails)(ptr) = JobSpecJobLogConfigurationDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj JobSpecJobLogConfigurationDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobSpecJobLogConfigurationDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*JobSpecJobLogConfigurationDetails)(ptr) = obj
+		} else {
+			*(*JobSpecJobLogConfigurationDetails)(ptr) = JobSpecJobLogConfigurationDetails{}
+		}
+	default:
+		iter.ReportError("decode JobSpecJobLogConfigurationDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type JobRunSpecJobConfigurationOverrideDetailsCodec struct {
+}
+
+func (JobRunSpecJobConfigurationOverrideDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*JobRunSpecJobConfigurationOverrideDetails)(ptr) == nil
+}
+
+func (JobRunSpecJobConfigurationOverrideDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*JobRunSpecJobConfigurationOverrideDetails)(ptr)
+	var objs []JobRunSpecJobConfigurationOverrideDetails
+	if obj != nil {
+		objs = []JobRunSpecJobConfigurationOverrideDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobConfigurationOverrideDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (JobRunSpecJobConfigurationOverrideDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*JobRunSpecJobConfigurationOverrideDetails)(ptr) = JobRunSpecJobConfigurationOverrideDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []JobRunSpecJobConfigurationOverrideDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobConfigurationOverrideDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*JobRunSpecJobConfigurationOverrideDetails)(ptr) = objs[0]
+			} else {
+				*(*JobRunSpecJobConfigurationOverrideDetails)(ptr) = JobRunSpecJobConfigurationOverrideDetails{}
+			}
+		} else {
+			*(*JobRunSpecJobConfigurationOverrideDetails)(ptr) = JobRunSpecJobConfigurationOverrideDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj JobRunSpecJobConfigurationOverrideDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobConfigurationOverrideDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*JobRunSpecJobConfigurationOverrideDetails)(ptr) = obj
+		} else {
+			*(*JobRunSpecJobConfigurationOverrideDetails)(ptr) = JobRunSpecJobConfigurationOverrideDetails{}
+		}
+	default:
+		iter.ReportError("decode JobRunSpecJobConfigurationOverrideDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type JobRunSpecJobInfrastructureConfigurationDetailsCodec struct {
+}
+
+func (JobRunSpecJobInfrastructureConfigurationDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*JobRunSpecJobInfrastructureConfigurationDetails)(ptr) == nil
+}
+
+func (JobRunSpecJobInfrastructureConfigurationDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*JobRunSpecJobInfrastructureConfigurationDetails)(ptr)
+	var objs []JobRunSpecJobInfrastructureConfigurationDetails
+	if obj != nil {
+		objs = []JobRunSpecJobInfrastructureConfigurationDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobInfrastructureConfigurationDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (JobRunSpecJobInfrastructureConfigurationDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*JobRunSpecJobInfrastructureConfigurationDetails)(ptr) = JobRunSpecJobInfrastructureConfigurationDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []JobRunSpecJobInfrastructureConfigurationDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobInfrastructureConfigurationDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*JobRunSpecJobInfrastructureConfigurationDetails)(ptr) = objs[0]
+			} else {
+				*(*JobRunSpecJobInfrastructureConfigurationDetails)(ptr) = JobRunSpecJobInfrastructureConfigurationDetails{}
+			}
+		} else {
+			*(*JobRunSpecJobInfrastructureConfigurationDetails)(ptr) = JobRunSpecJobInfrastructureConfigurationDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj JobRunSpecJobInfrastructureConfigurationDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobInfrastructureConfigurationDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*JobRunSpecJobInfrastructureConfigurationDetails)(ptr) = obj
+		} else {
+			*(*JobRunSpecJobInfrastructureConfigurationDetails)(ptr) = JobRunSpecJobInfrastructureConfigurationDetails{}
+		}
+	default:
+		iter.ReportError("decode JobRunSpecJobInfrastructureConfigurationDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type JobRunSpecJobLogConfigurationOverrideDetailsCodec struct {
+}
+
+func (JobRunSpecJobLogConfigurationOverrideDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*JobRunSpecJobLogConfigurationOverrideDetails)(ptr) == nil
+}
+
+func (JobRunSpecJobLogConfigurationOverrideDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*JobRunSpecJobLogConfigurationOverrideDetails)(ptr)
+	var objs []JobRunSpecJobLogConfigurationOverrideDetails
+	if obj != nil {
+		objs = []JobRunSpecJobLogConfigurationOverrideDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobLogConfigurationOverrideDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (JobRunSpecJobLogConfigurationOverrideDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*JobRunSpecJobLogConfigurationOverrideDetails)(ptr) = JobRunSpecJobLogConfigurationOverrideDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []JobRunSpecJobLogConfigurationOverrideDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobLogConfigurationOverrideDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*JobRunSpecJobLogConfigurationOverrideDetails)(ptr) = objs[0]
+			} else {
+				*(*JobRunSpecJobLogConfigurationOverrideDetails)(ptr) = JobRunSpecJobLogConfigurationOverrideDetails{}
+			}
+		} else {
+			*(*JobRunSpecJobLogConfigurationOverrideDetails)(ptr) = JobRunSpecJobLogConfigurationOverrideDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj JobRunSpecJobLogConfigurationOverrideDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecJobLogConfigurationOverrideDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*JobRunSpecJobLogConfigurationOverrideDetails)(ptr) = obj
+		} else {
+			*(*JobRunSpecJobLogConfigurationOverrideDetails)(ptr) = JobRunSpecJobLogConfigurationOverrideDetails{}
+		}
+	default:
+		iter.ReportError("decode JobRunSpecJobLogConfigurationOverrideDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type JobRunSpecLogDetailsCodec struct {
+}
+
+func (JobRunSpecLogDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*JobRunSpecLogDetails)(ptr) == nil
+}
+
+func (JobRunSpecLogDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*JobRunSpecLogDetails)(ptr)
+	var objs []JobRunSpecLogDetails
+	if obj != nil {
+		objs = []JobRunSpecLogDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecLogDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (JobRunSpecLogDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*JobRunSpecLogDetails)(ptr) = JobRunSpecLogDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []JobRunSpecLogDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecLogDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*JobRunSpecLogDetails)(ptr) = objs[0]
+			} else {
+				*(*JobRunSpecLogDetails)(ptr) = JobRunSpecLogDetails{}
+			}
+		} else {
+			*(*JobRunSpecLogDetails)(ptr) = JobRunSpecLogDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj JobRunSpecLogDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(JobRunSpecLogDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*JobRunSpecLogDetails)(ptr) = obj
+		} else {
+			*(*JobRunSpecLogDetails)(ptr) = JobRunSpecLogDetails{}
+		}
+	default:
+		iter.ReportError("decode JobRunSpecLogDetails", "unexpected JSON type")
+	}
 }
 
 // +k8s:deepcopy-gen=false

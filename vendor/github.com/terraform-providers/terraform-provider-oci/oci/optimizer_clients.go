@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_optimizer "github.com/oracle/oci-go-sdk/v45/optimizer"
+	oci_optimizer "github.com/oracle/oci-go-sdk/v50/optimizer"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_optimizer.OptimizerClient", &OracleClient{initClientFn: initOptimizerOptimizerClient})
+	RegisterOracleClient("oci_optimizer.OptimizerClient", &OracleClient{InitClientFn: initOptimizerOptimizerClient})
 }
 
 func initOptimizerOptimizerClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

@@ -99,6 +99,8 @@ type ObjectSpecResource struct {
 	Namespace *string           `json:"namespace" tf:"namespace"`
 	Object    *string           `json:"object" tf:"object"`
 	// +optional
+	OpcSseKmsKeyID *string `json:"opcSseKmsKeyID,omitempty" tf:"opc_sse_kms_key_id"`
+	// +optional
 	Source *string `json:"source,omitempty" tf:"source"`
 	// +optional
 	SourceURIDetails *ObjectSpecSourceURIDetails `json:"sourceURIDetails,omitempty" tf:"source_uri_details"`

@@ -27,6 +27,22 @@ import (
 
 func GetEncoder() map[string]jsoniter.ValEncoder {
 	return map[string]jsoniter.ValEncoder{
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineSpecBuildPipelineParameters{}).Type1()):                              BuildPipelineSpecBuildPipelineParametersCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{}).Type1()):         BuildPipelineStageSpecBuildPipelineStagePredecessorCollectionCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildSourceCollection{}).Type1()):                           BuildPipelineStageSpecBuildSourceCollectionCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecDeliverArtifactCollection{}).Type1()):                       BuildPipelineStageSpecDeliverArtifactCollectionCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecWaitCriteria{}).Type1()):                                    BuildPipelineStageSpecWaitCriteriaCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputs{}).Type1()):                                              BuildRunSpecBuildOutputsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsArtifactOverrideParameters{}).Type1()):                    BuildRunSpecBuildOutputsArtifactOverrideParametersCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsDeliveredArtifacts{}).Type1()):                            BuildRunSpecBuildOutputsDeliveredArtifactsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsExportedVariables{}).Type1()):                             BuildRunSpecBuildOutputsExportedVariablesCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunArguments{}).Type1()):                                         BuildRunSpecBuildRunArgumentsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunProgress{}).Type1()):                                          BuildRunSpecBuildRunProgressCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSource{}).Type1()):                                            BuildRunSpecBuildRunSourceCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfo{}).Type1()):                                 BuildRunSpecBuildRunSourceTriggerInfoCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{}).Type1()):                    BuildRunSpecBuildRunSourceTriggerInfoActionsFilterCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{}).Type1()):             BuildRunSpecBuildRunSourceTriggerInfoActionsFilterIncludeCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecCommitInfo{}).Type1()):                                                BuildRunSpecCommitInfoCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeployArtifactSpecDeployArtifactSource{}).Type1()):                                DeployArtifactSpecDeployArtifactSourceCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeployEnvironmentSpecComputeInstanceGroupSelectors{}).Type1()):                    DeployEnvironmentSpecComputeInstanceGroupSelectorsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeployPipelineSpecDeployPipelineArtifacts{}).Type1()):                             DeployPipelineSpecDeployPipelineArtifactsCodec{},
@@ -51,11 +67,31 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecDeploymentArguments{}).Type1()):                                     DeploymentSpecDeploymentArgumentsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecDeploymentExecutionProgress{}).Type1()):                             DeploymentSpecDeploymentExecutionProgressCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ProjectSpecNotificationConfig{}).Type1()):                                         ProjectSpecNotificationConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfig{}).Type1()):                                  RepositorySpecMirrorRepositoryConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfigTriggerSchedule{}).Type1()):                   RepositorySpecMirrorRepositoryConfigTriggerScheduleCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilter{}).Type1()):                                              TriggerSpecActionsFilterCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilterInclude{}).Type1()):                                       TriggerSpecActionsFilterIncludeCodec{},
 	}
 }
 
 func GetDecoder() map[string]jsoniter.ValDecoder {
 	return map[string]jsoniter.ValDecoder{
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineSpecBuildPipelineParameters{}).Type1()):                              BuildPipelineSpecBuildPipelineParametersCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{}).Type1()):         BuildPipelineStageSpecBuildPipelineStagePredecessorCollectionCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildSourceCollection{}).Type1()):                           BuildPipelineStageSpecBuildSourceCollectionCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecDeliverArtifactCollection{}).Type1()):                       BuildPipelineStageSpecDeliverArtifactCollectionCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecWaitCriteria{}).Type1()):                                    BuildPipelineStageSpecWaitCriteriaCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputs{}).Type1()):                                              BuildRunSpecBuildOutputsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsArtifactOverrideParameters{}).Type1()):                    BuildRunSpecBuildOutputsArtifactOverrideParametersCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsDeliveredArtifacts{}).Type1()):                            BuildRunSpecBuildOutputsDeliveredArtifactsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsExportedVariables{}).Type1()):                             BuildRunSpecBuildOutputsExportedVariablesCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunArguments{}).Type1()):                                         BuildRunSpecBuildRunArgumentsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunProgress{}).Type1()):                                          BuildRunSpecBuildRunProgressCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSource{}).Type1()):                                            BuildRunSpecBuildRunSourceCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfo{}).Type1()):                                 BuildRunSpecBuildRunSourceTriggerInfoCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{}).Type1()):                    BuildRunSpecBuildRunSourceTriggerInfoActionsFilterCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{}).Type1()):             BuildRunSpecBuildRunSourceTriggerInfoActionsFilterIncludeCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecCommitInfo{}).Type1()):                                                BuildRunSpecCommitInfoCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeployArtifactSpecDeployArtifactSource{}).Type1()):                                DeployArtifactSpecDeployArtifactSourceCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeployEnvironmentSpecComputeInstanceGroupSelectors{}).Type1()):                    DeployEnvironmentSpecComputeInstanceGroupSelectorsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeployPipelineSpecDeployPipelineArtifacts{}).Type1()):                             DeployPipelineSpecDeployPipelineArtifactsCodec{},
@@ -80,6 +116,10 @@ func GetDecoder() map[string]jsoniter.ValDecoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecDeploymentArguments{}).Type1()):                                     DeploymentSpecDeploymentArgumentsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecDeploymentExecutionProgress{}).Type1()):                             DeploymentSpecDeploymentExecutionProgressCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ProjectSpecNotificationConfig{}).Type1()):                                         ProjectSpecNotificationConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfig{}).Type1()):                                  RepositorySpecMirrorRepositoryConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfigTriggerSchedule{}).Type1()):                   RepositorySpecMirrorRepositoryConfigTriggerScheduleCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilter{}).Type1()):                                              TriggerSpecActionsFilterCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilterInclude{}).Type1()):                                       TriggerSpecActionsFilterIncludeCodec{},
 	}
 }
 
@@ -93,6 +133,1270 @@ func getDecodersWithout(typ string) map[string]jsoniter.ValDecoder {
 	origMap := GetDecoder()
 	delete(origMap, typ)
 	return origMap
+}
+
+// +k8s:deepcopy-gen=false
+type BuildPipelineSpecBuildPipelineParametersCodec struct {
+}
+
+func (BuildPipelineSpecBuildPipelineParametersCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildPipelineSpecBuildPipelineParameters)(ptr) == nil
+}
+
+func (BuildPipelineSpecBuildPipelineParametersCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildPipelineSpecBuildPipelineParameters)(ptr)
+	var objs []BuildPipelineSpecBuildPipelineParameters
+	if obj != nil {
+		objs = []BuildPipelineSpecBuildPipelineParameters{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineSpecBuildPipelineParameters{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildPipelineSpecBuildPipelineParametersCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildPipelineSpecBuildPipelineParameters)(ptr) = BuildPipelineSpecBuildPipelineParameters{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildPipelineSpecBuildPipelineParameters
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineSpecBuildPipelineParameters{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildPipelineSpecBuildPipelineParameters)(ptr) = objs[0]
+			} else {
+				*(*BuildPipelineSpecBuildPipelineParameters)(ptr) = BuildPipelineSpecBuildPipelineParameters{}
+			}
+		} else {
+			*(*BuildPipelineSpecBuildPipelineParameters)(ptr) = BuildPipelineSpecBuildPipelineParameters{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildPipelineSpecBuildPipelineParameters
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineSpecBuildPipelineParameters{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildPipelineSpecBuildPipelineParameters)(ptr) = obj
+		} else {
+			*(*BuildPipelineSpecBuildPipelineParameters)(ptr) = BuildPipelineSpecBuildPipelineParameters{}
+		}
+	default:
+		iter.ReportError("decode BuildPipelineSpecBuildPipelineParameters", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildPipelineStageSpecBuildPipelineStagePredecessorCollectionCodec struct {
+}
+
+func (BuildPipelineStageSpecBuildPipelineStagePredecessorCollectionCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildPipelineStageSpecBuildPipelineStagePredecessorCollection)(ptr) == nil
+}
+
+func (BuildPipelineStageSpecBuildPipelineStagePredecessorCollectionCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildPipelineStageSpecBuildPipelineStagePredecessorCollection)(ptr)
+	var objs []BuildPipelineStageSpecBuildPipelineStagePredecessorCollection
+	if obj != nil {
+		objs = []BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildPipelineStageSpecBuildPipelineStagePredecessorCollectionCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildPipelineStageSpecBuildPipelineStagePredecessorCollection)(ptr) = BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildPipelineStageSpecBuildPipelineStagePredecessorCollection
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildPipelineStageSpecBuildPipelineStagePredecessorCollection)(ptr) = objs[0]
+			} else {
+				*(*BuildPipelineStageSpecBuildPipelineStagePredecessorCollection)(ptr) = BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{}
+			}
+		} else {
+			*(*BuildPipelineStageSpecBuildPipelineStagePredecessorCollection)(ptr) = BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildPipelineStageSpecBuildPipelineStagePredecessorCollection
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildPipelineStageSpecBuildPipelineStagePredecessorCollection)(ptr) = obj
+		} else {
+			*(*BuildPipelineStageSpecBuildPipelineStagePredecessorCollection)(ptr) = BuildPipelineStageSpecBuildPipelineStagePredecessorCollection{}
+		}
+	default:
+		iter.ReportError("decode BuildPipelineStageSpecBuildPipelineStagePredecessorCollection", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildPipelineStageSpecBuildSourceCollectionCodec struct {
+}
+
+func (BuildPipelineStageSpecBuildSourceCollectionCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildPipelineStageSpecBuildSourceCollection)(ptr) == nil
+}
+
+func (BuildPipelineStageSpecBuildSourceCollectionCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildPipelineStageSpecBuildSourceCollection)(ptr)
+	var objs []BuildPipelineStageSpecBuildSourceCollection
+	if obj != nil {
+		objs = []BuildPipelineStageSpecBuildSourceCollection{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildSourceCollection{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildPipelineStageSpecBuildSourceCollectionCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildPipelineStageSpecBuildSourceCollection)(ptr) = BuildPipelineStageSpecBuildSourceCollection{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildPipelineStageSpecBuildSourceCollection
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildSourceCollection{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildPipelineStageSpecBuildSourceCollection)(ptr) = objs[0]
+			} else {
+				*(*BuildPipelineStageSpecBuildSourceCollection)(ptr) = BuildPipelineStageSpecBuildSourceCollection{}
+			}
+		} else {
+			*(*BuildPipelineStageSpecBuildSourceCollection)(ptr) = BuildPipelineStageSpecBuildSourceCollection{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildPipelineStageSpecBuildSourceCollection
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecBuildSourceCollection{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildPipelineStageSpecBuildSourceCollection)(ptr) = obj
+		} else {
+			*(*BuildPipelineStageSpecBuildSourceCollection)(ptr) = BuildPipelineStageSpecBuildSourceCollection{}
+		}
+	default:
+		iter.ReportError("decode BuildPipelineStageSpecBuildSourceCollection", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildPipelineStageSpecDeliverArtifactCollectionCodec struct {
+}
+
+func (BuildPipelineStageSpecDeliverArtifactCollectionCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildPipelineStageSpecDeliverArtifactCollection)(ptr) == nil
+}
+
+func (BuildPipelineStageSpecDeliverArtifactCollectionCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildPipelineStageSpecDeliverArtifactCollection)(ptr)
+	var objs []BuildPipelineStageSpecDeliverArtifactCollection
+	if obj != nil {
+		objs = []BuildPipelineStageSpecDeliverArtifactCollection{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecDeliverArtifactCollection{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildPipelineStageSpecDeliverArtifactCollectionCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildPipelineStageSpecDeliverArtifactCollection)(ptr) = BuildPipelineStageSpecDeliverArtifactCollection{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildPipelineStageSpecDeliverArtifactCollection
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecDeliverArtifactCollection{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildPipelineStageSpecDeliverArtifactCollection)(ptr) = objs[0]
+			} else {
+				*(*BuildPipelineStageSpecDeliverArtifactCollection)(ptr) = BuildPipelineStageSpecDeliverArtifactCollection{}
+			}
+		} else {
+			*(*BuildPipelineStageSpecDeliverArtifactCollection)(ptr) = BuildPipelineStageSpecDeliverArtifactCollection{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildPipelineStageSpecDeliverArtifactCollection
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecDeliverArtifactCollection{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildPipelineStageSpecDeliverArtifactCollection)(ptr) = obj
+		} else {
+			*(*BuildPipelineStageSpecDeliverArtifactCollection)(ptr) = BuildPipelineStageSpecDeliverArtifactCollection{}
+		}
+	default:
+		iter.ReportError("decode BuildPipelineStageSpecDeliverArtifactCollection", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildPipelineStageSpecWaitCriteriaCodec struct {
+}
+
+func (BuildPipelineStageSpecWaitCriteriaCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildPipelineStageSpecWaitCriteria)(ptr) == nil
+}
+
+func (BuildPipelineStageSpecWaitCriteriaCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildPipelineStageSpecWaitCriteria)(ptr)
+	var objs []BuildPipelineStageSpecWaitCriteria
+	if obj != nil {
+		objs = []BuildPipelineStageSpecWaitCriteria{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecWaitCriteria{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildPipelineStageSpecWaitCriteriaCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildPipelineStageSpecWaitCriteria)(ptr) = BuildPipelineStageSpecWaitCriteria{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildPipelineStageSpecWaitCriteria
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecWaitCriteria{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildPipelineStageSpecWaitCriteria)(ptr) = objs[0]
+			} else {
+				*(*BuildPipelineStageSpecWaitCriteria)(ptr) = BuildPipelineStageSpecWaitCriteria{}
+			}
+		} else {
+			*(*BuildPipelineStageSpecWaitCriteria)(ptr) = BuildPipelineStageSpecWaitCriteria{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildPipelineStageSpecWaitCriteria
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildPipelineStageSpecWaitCriteria{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildPipelineStageSpecWaitCriteria)(ptr) = obj
+		} else {
+			*(*BuildPipelineStageSpecWaitCriteria)(ptr) = BuildPipelineStageSpecWaitCriteria{}
+		}
+	default:
+		iter.ReportError("decode BuildPipelineStageSpecWaitCriteria", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildOutputsCodec struct {
+}
+
+func (BuildRunSpecBuildOutputsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildOutputs)(ptr) == nil
+}
+
+func (BuildRunSpecBuildOutputsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildOutputs)(ptr)
+	var objs []BuildRunSpecBuildOutputs
+	if obj != nil {
+		objs = []BuildRunSpecBuildOutputs{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputs{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildOutputsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildOutputs)(ptr) = BuildRunSpecBuildOutputs{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildOutputs
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputs{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildOutputs)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildOutputs)(ptr) = BuildRunSpecBuildOutputs{}
+			}
+		} else {
+			*(*BuildRunSpecBuildOutputs)(ptr) = BuildRunSpecBuildOutputs{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildOutputs
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputs{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildOutputs)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildOutputs)(ptr) = BuildRunSpecBuildOutputs{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildOutputs", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildOutputsArtifactOverrideParametersCodec struct {
+}
+
+func (BuildRunSpecBuildOutputsArtifactOverrideParametersCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildOutputsArtifactOverrideParameters)(ptr) == nil
+}
+
+func (BuildRunSpecBuildOutputsArtifactOverrideParametersCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildOutputsArtifactOverrideParameters)(ptr)
+	var objs []BuildRunSpecBuildOutputsArtifactOverrideParameters
+	if obj != nil {
+		objs = []BuildRunSpecBuildOutputsArtifactOverrideParameters{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsArtifactOverrideParameters{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildOutputsArtifactOverrideParametersCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildOutputsArtifactOverrideParameters)(ptr) = BuildRunSpecBuildOutputsArtifactOverrideParameters{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildOutputsArtifactOverrideParameters
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsArtifactOverrideParameters{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildOutputsArtifactOverrideParameters)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildOutputsArtifactOverrideParameters)(ptr) = BuildRunSpecBuildOutputsArtifactOverrideParameters{}
+			}
+		} else {
+			*(*BuildRunSpecBuildOutputsArtifactOverrideParameters)(ptr) = BuildRunSpecBuildOutputsArtifactOverrideParameters{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildOutputsArtifactOverrideParameters
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsArtifactOverrideParameters{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildOutputsArtifactOverrideParameters)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildOutputsArtifactOverrideParameters)(ptr) = BuildRunSpecBuildOutputsArtifactOverrideParameters{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildOutputsArtifactOverrideParameters", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildOutputsDeliveredArtifactsCodec struct {
+}
+
+func (BuildRunSpecBuildOutputsDeliveredArtifactsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildOutputsDeliveredArtifacts)(ptr) == nil
+}
+
+func (BuildRunSpecBuildOutputsDeliveredArtifactsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildOutputsDeliveredArtifacts)(ptr)
+	var objs []BuildRunSpecBuildOutputsDeliveredArtifacts
+	if obj != nil {
+		objs = []BuildRunSpecBuildOutputsDeliveredArtifacts{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsDeliveredArtifacts{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildOutputsDeliveredArtifactsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildOutputsDeliveredArtifacts)(ptr) = BuildRunSpecBuildOutputsDeliveredArtifacts{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildOutputsDeliveredArtifacts
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsDeliveredArtifacts{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildOutputsDeliveredArtifacts)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildOutputsDeliveredArtifacts)(ptr) = BuildRunSpecBuildOutputsDeliveredArtifacts{}
+			}
+		} else {
+			*(*BuildRunSpecBuildOutputsDeliveredArtifacts)(ptr) = BuildRunSpecBuildOutputsDeliveredArtifacts{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildOutputsDeliveredArtifacts
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsDeliveredArtifacts{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildOutputsDeliveredArtifacts)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildOutputsDeliveredArtifacts)(ptr) = BuildRunSpecBuildOutputsDeliveredArtifacts{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildOutputsDeliveredArtifacts", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildOutputsExportedVariablesCodec struct {
+}
+
+func (BuildRunSpecBuildOutputsExportedVariablesCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildOutputsExportedVariables)(ptr) == nil
+}
+
+func (BuildRunSpecBuildOutputsExportedVariablesCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildOutputsExportedVariables)(ptr)
+	var objs []BuildRunSpecBuildOutputsExportedVariables
+	if obj != nil {
+		objs = []BuildRunSpecBuildOutputsExportedVariables{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsExportedVariables{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildOutputsExportedVariablesCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildOutputsExportedVariables)(ptr) = BuildRunSpecBuildOutputsExportedVariables{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildOutputsExportedVariables
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsExportedVariables{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildOutputsExportedVariables)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildOutputsExportedVariables)(ptr) = BuildRunSpecBuildOutputsExportedVariables{}
+			}
+		} else {
+			*(*BuildRunSpecBuildOutputsExportedVariables)(ptr) = BuildRunSpecBuildOutputsExportedVariables{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildOutputsExportedVariables
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildOutputsExportedVariables{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildOutputsExportedVariables)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildOutputsExportedVariables)(ptr) = BuildRunSpecBuildOutputsExportedVariables{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildOutputsExportedVariables", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildRunArgumentsCodec struct {
+}
+
+func (BuildRunSpecBuildRunArgumentsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildRunArguments)(ptr) == nil
+}
+
+func (BuildRunSpecBuildRunArgumentsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildRunArguments)(ptr)
+	var objs []BuildRunSpecBuildRunArguments
+	if obj != nil {
+		objs = []BuildRunSpecBuildRunArguments{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunArguments{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildRunArgumentsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildRunArguments)(ptr) = BuildRunSpecBuildRunArguments{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildRunArguments
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunArguments{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildRunArguments)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildRunArguments)(ptr) = BuildRunSpecBuildRunArguments{}
+			}
+		} else {
+			*(*BuildRunSpecBuildRunArguments)(ptr) = BuildRunSpecBuildRunArguments{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildRunArguments
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunArguments{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildRunArguments)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildRunArguments)(ptr) = BuildRunSpecBuildRunArguments{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildRunArguments", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildRunProgressCodec struct {
+}
+
+func (BuildRunSpecBuildRunProgressCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildRunProgress)(ptr) == nil
+}
+
+func (BuildRunSpecBuildRunProgressCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildRunProgress)(ptr)
+	var objs []BuildRunSpecBuildRunProgress
+	if obj != nil {
+		objs = []BuildRunSpecBuildRunProgress{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunProgress{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildRunProgressCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildRunProgress)(ptr) = BuildRunSpecBuildRunProgress{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildRunProgress
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunProgress{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildRunProgress)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildRunProgress)(ptr) = BuildRunSpecBuildRunProgress{}
+			}
+		} else {
+			*(*BuildRunSpecBuildRunProgress)(ptr) = BuildRunSpecBuildRunProgress{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildRunProgress
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunProgress{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildRunProgress)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildRunProgress)(ptr) = BuildRunSpecBuildRunProgress{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildRunProgress", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildRunSourceCodec struct {
+}
+
+func (BuildRunSpecBuildRunSourceCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildRunSource)(ptr) == nil
+}
+
+func (BuildRunSpecBuildRunSourceCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildRunSource)(ptr)
+	var objs []BuildRunSpecBuildRunSource
+	if obj != nil {
+		objs = []BuildRunSpecBuildRunSource{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSource{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildRunSourceCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildRunSource)(ptr) = BuildRunSpecBuildRunSource{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildRunSource
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSource{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildRunSource)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildRunSource)(ptr) = BuildRunSpecBuildRunSource{}
+			}
+		} else {
+			*(*BuildRunSpecBuildRunSource)(ptr) = BuildRunSpecBuildRunSource{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildRunSource
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSource{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildRunSource)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildRunSource)(ptr) = BuildRunSpecBuildRunSource{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildRunSource", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildRunSourceTriggerInfoCodec struct {
+}
+
+func (BuildRunSpecBuildRunSourceTriggerInfoCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildRunSourceTriggerInfo)(ptr) == nil
+}
+
+func (BuildRunSpecBuildRunSourceTriggerInfoCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildRunSourceTriggerInfo)(ptr)
+	var objs []BuildRunSpecBuildRunSourceTriggerInfo
+	if obj != nil {
+		objs = []BuildRunSpecBuildRunSourceTriggerInfo{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfo{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildRunSourceTriggerInfoCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildRunSourceTriggerInfo)(ptr) = BuildRunSpecBuildRunSourceTriggerInfo{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildRunSourceTriggerInfo
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfo{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildRunSourceTriggerInfo)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildRunSourceTriggerInfo)(ptr) = BuildRunSpecBuildRunSourceTriggerInfo{}
+			}
+		} else {
+			*(*BuildRunSpecBuildRunSourceTriggerInfo)(ptr) = BuildRunSpecBuildRunSourceTriggerInfo{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildRunSourceTriggerInfo
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfo{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildRunSourceTriggerInfo)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildRunSourceTriggerInfo)(ptr) = BuildRunSpecBuildRunSourceTriggerInfo{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildRunSourceTriggerInfo", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildRunSourceTriggerInfoActionsFilterCodec struct {
+}
+
+func (BuildRunSpecBuildRunSourceTriggerInfoActionsFilterCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildRunSourceTriggerInfoActionsFilter)(ptr) == nil
+}
+
+func (BuildRunSpecBuildRunSourceTriggerInfoActionsFilterCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildRunSourceTriggerInfoActionsFilter)(ptr)
+	var objs []BuildRunSpecBuildRunSourceTriggerInfoActionsFilter
+	if obj != nil {
+		objs = []BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildRunSourceTriggerInfoActionsFilterCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilter)(ptr) = BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildRunSourceTriggerInfoActionsFilter
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilter)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilter)(ptr) = BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{}
+			}
+		} else {
+			*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilter)(ptr) = BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildRunSourceTriggerInfoActionsFilter
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilter)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilter)(ptr) = BuildRunSpecBuildRunSourceTriggerInfoActionsFilter{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildRunSourceTriggerInfoActionsFilter", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecBuildRunSourceTriggerInfoActionsFilterIncludeCodec struct {
+}
+
+func (BuildRunSpecBuildRunSourceTriggerInfoActionsFilterIncludeCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude)(ptr) == nil
+}
+
+func (BuildRunSpecBuildRunSourceTriggerInfoActionsFilterIncludeCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude)(ptr)
+	var objs []BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude
+	if obj != nil {
+		objs = []BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecBuildRunSourceTriggerInfoActionsFilterIncludeCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude)(ptr) = BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude)(ptr) = BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{}
+			}
+		} else {
+			*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude)(ptr) = BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude)(ptr) = obj
+		} else {
+			*(*BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude)(ptr) = BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecBuildRunSourceTriggerInfoActionsFilterInclude", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type BuildRunSpecCommitInfoCodec struct {
+}
+
+func (BuildRunSpecCommitInfoCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*BuildRunSpecCommitInfo)(ptr) == nil
+}
+
+func (BuildRunSpecCommitInfoCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*BuildRunSpecCommitInfo)(ptr)
+	var objs []BuildRunSpecCommitInfo
+	if obj != nil {
+		objs = []BuildRunSpecCommitInfo{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecCommitInfo{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (BuildRunSpecCommitInfoCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*BuildRunSpecCommitInfo)(ptr) = BuildRunSpecCommitInfo{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []BuildRunSpecCommitInfo
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecCommitInfo{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*BuildRunSpecCommitInfo)(ptr) = objs[0]
+			} else {
+				*(*BuildRunSpecCommitInfo)(ptr) = BuildRunSpecCommitInfo{}
+			}
+		} else {
+			*(*BuildRunSpecCommitInfo)(ptr) = BuildRunSpecCommitInfo{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj BuildRunSpecCommitInfo
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(BuildRunSpecCommitInfo{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*BuildRunSpecCommitInfo)(ptr) = obj
+		} else {
+			*(*BuildRunSpecCommitInfo)(ptr) = BuildRunSpecCommitInfo{}
+		}
+	default:
+		iter.ReportError("decode BuildRunSpecCommitInfo", "unexpected JSON type")
+	}
 }
 
 // +k8s:deepcopy-gen=false
@@ -1988,5 +3292,321 @@ func (ProjectSpecNotificationConfigCodec) Decode(ptr unsafe.Pointer, iter *jsoni
 		}
 	default:
 		iter.ReportError("decode ProjectSpecNotificationConfig", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type RepositorySpecMirrorRepositoryConfigCodec struct {
+}
+
+func (RepositorySpecMirrorRepositoryConfigCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*RepositorySpecMirrorRepositoryConfig)(ptr) == nil
+}
+
+func (RepositorySpecMirrorRepositoryConfigCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*RepositorySpecMirrorRepositoryConfig)(ptr)
+	var objs []RepositorySpecMirrorRepositoryConfig
+	if obj != nil {
+		objs = []RepositorySpecMirrorRepositoryConfig{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfig{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (RepositorySpecMirrorRepositoryConfigCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*RepositorySpecMirrorRepositoryConfig)(ptr) = RepositorySpecMirrorRepositoryConfig{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []RepositorySpecMirrorRepositoryConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*RepositorySpecMirrorRepositoryConfig)(ptr) = objs[0]
+			} else {
+				*(*RepositorySpecMirrorRepositoryConfig)(ptr) = RepositorySpecMirrorRepositoryConfig{}
+			}
+		} else {
+			*(*RepositorySpecMirrorRepositoryConfig)(ptr) = RepositorySpecMirrorRepositoryConfig{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj RepositorySpecMirrorRepositoryConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*RepositorySpecMirrorRepositoryConfig)(ptr) = obj
+		} else {
+			*(*RepositorySpecMirrorRepositoryConfig)(ptr) = RepositorySpecMirrorRepositoryConfig{}
+		}
+	default:
+		iter.ReportError("decode RepositorySpecMirrorRepositoryConfig", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type RepositorySpecMirrorRepositoryConfigTriggerScheduleCodec struct {
+}
+
+func (RepositorySpecMirrorRepositoryConfigTriggerScheduleCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*RepositorySpecMirrorRepositoryConfigTriggerSchedule)(ptr) == nil
+}
+
+func (RepositorySpecMirrorRepositoryConfigTriggerScheduleCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*RepositorySpecMirrorRepositoryConfigTriggerSchedule)(ptr)
+	var objs []RepositorySpecMirrorRepositoryConfigTriggerSchedule
+	if obj != nil {
+		objs = []RepositorySpecMirrorRepositoryConfigTriggerSchedule{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfigTriggerSchedule{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (RepositorySpecMirrorRepositoryConfigTriggerScheduleCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*RepositorySpecMirrorRepositoryConfigTriggerSchedule)(ptr) = RepositorySpecMirrorRepositoryConfigTriggerSchedule{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []RepositorySpecMirrorRepositoryConfigTriggerSchedule
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfigTriggerSchedule{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*RepositorySpecMirrorRepositoryConfigTriggerSchedule)(ptr) = objs[0]
+			} else {
+				*(*RepositorySpecMirrorRepositoryConfigTriggerSchedule)(ptr) = RepositorySpecMirrorRepositoryConfigTriggerSchedule{}
+			}
+		} else {
+			*(*RepositorySpecMirrorRepositoryConfigTriggerSchedule)(ptr) = RepositorySpecMirrorRepositoryConfigTriggerSchedule{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj RepositorySpecMirrorRepositoryConfigTriggerSchedule
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(RepositorySpecMirrorRepositoryConfigTriggerSchedule{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*RepositorySpecMirrorRepositoryConfigTriggerSchedule)(ptr) = obj
+		} else {
+			*(*RepositorySpecMirrorRepositoryConfigTriggerSchedule)(ptr) = RepositorySpecMirrorRepositoryConfigTriggerSchedule{}
+		}
+	default:
+		iter.ReportError("decode RepositorySpecMirrorRepositoryConfigTriggerSchedule", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type TriggerSpecActionsFilterCodec struct {
+}
+
+func (TriggerSpecActionsFilterCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*TriggerSpecActionsFilter)(ptr) == nil
+}
+
+func (TriggerSpecActionsFilterCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*TriggerSpecActionsFilter)(ptr)
+	var objs []TriggerSpecActionsFilter
+	if obj != nil {
+		objs = []TriggerSpecActionsFilter{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilter{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (TriggerSpecActionsFilterCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*TriggerSpecActionsFilter)(ptr) = TriggerSpecActionsFilter{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []TriggerSpecActionsFilter
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilter{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*TriggerSpecActionsFilter)(ptr) = objs[0]
+			} else {
+				*(*TriggerSpecActionsFilter)(ptr) = TriggerSpecActionsFilter{}
+			}
+		} else {
+			*(*TriggerSpecActionsFilter)(ptr) = TriggerSpecActionsFilter{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj TriggerSpecActionsFilter
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilter{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*TriggerSpecActionsFilter)(ptr) = obj
+		} else {
+			*(*TriggerSpecActionsFilter)(ptr) = TriggerSpecActionsFilter{}
+		}
+	default:
+		iter.ReportError("decode TriggerSpecActionsFilter", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type TriggerSpecActionsFilterIncludeCodec struct {
+}
+
+func (TriggerSpecActionsFilterIncludeCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*TriggerSpecActionsFilterInclude)(ptr) == nil
+}
+
+func (TriggerSpecActionsFilterIncludeCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*TriggerSpecActionsFilterInclude)(ptr)
+	var objs []TriggerSpecActionsFilterInclude
+	if obj != nil {
+		objs = []TriggerSpecActionsFilterInclude{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilterInclude{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (TriggerSpecActionsFilterIncludeCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*TriggerSpecActionsFilterInclude)(ptr) = TriggerSpecActionsFilterInclude{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []TriggerSpecActionsFilterInclude
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilterInclude{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*TriggerSpecActionsFilterInclude)(ptr) = objs[0]
+			} else {
+				*(*TriggerSpecActionsFilterInclude)(ptr) = TriggerSpecActionsFilterInclude{}
+			}
+		} else {
+			*(*TriggerSpecActionsFilterInclude)(ptr) = TriggerSpecActionsFilterInclude{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj TriggerSpecActionsFilterInclude
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(TriggerSpecActionsFilterInclude{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*TriggerSpecActionsFilterInclude)(ptr) = obj
+		} else {
+			*(*TriggerSpecActionsFilterInclude)(ptr) = TriggerSpecActionsFilterInclude{}
+		}
+	default:
+		iter.ReportError("decode TriggerSpecActionsFilterInclude", "unexpected JSON type")
 	}
 }

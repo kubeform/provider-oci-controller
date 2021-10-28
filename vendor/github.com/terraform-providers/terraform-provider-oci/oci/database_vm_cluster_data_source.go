@@ -7,7 +7,7 @@ import (
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	oci_database "github.com/oracle/oci-go-sdk/v45/database"
+	oci_database "github.com/oracle/oci-go-sdk/v50/database"
 )
 
 func init() {
@@ -49,7 +49,7 @@ func (s *DatabaseVmClusterDataSourceCrud) Get() error {
 		request.VmClusterId = &tmp
 	}
 
-	request.RequestMetadata.RetryPolicy = getRetryPolicy(false, "database")
+	request.RequestMetadata.RetryPolicy = GetRetryPolicy(false, "database")
 
 	response, err := s.Client.GetVmCluster(context.Background(), request)
 	if err != nil {
@@ -82,6 +82,8 @@ func (s *DatabaseVmClusterDataSourceCrud) SetData() error {
 	if s.Res.DbNodeStorageSizeInGBs != nil {
 		s.D.Set("db_node_storage_size_in_gbs", *s.Res.DbNodeStorageSizeInGBs)
 	}
+
+	s.D.Set("db_servers", s.Res.DbServers)
 
 	if s.Res.DefinedTags != nil {
 		s.D.Set("defined_tags", definedTagsToMap(s.Res.DefinedTags))

@@ -43,6 +43,8 @@ type AgentManagementAgent struct {
 
 type AgentManagementAgentSpecPluginList struct {
 	// +optional
+	IsEnabled *bool `json:"isEnabled,omitempty" tf:"is_enabled"`
+	// +optional
 	PluginDisplayName *string `json:"pluginDisplayName,omitempty" tf:"plugin_display_name"`
 	// +optional
 	PluginID *string `json:"pluginID,omitempty" tf:"plugin_id"`
@@ -86,11 +88,17 @@ type AgentManagementAgentSpecResource struct {
 	// +optional
 	Host *string `json:"host,omitempty" tf:"host"`
 	// +optional
+	HostID *string `json:"hostID,omitempty" tf:"host_id"`
+	// +optional
 	InstallKeyID *string `json:"installKeyID,omitempty" tf:"install_key_id"`
 	// +optional
 	InstallPath *string `json:"installPath,omitempty" tf:"install_path"`
 	// +optional
+	InstallType *string `json:"installType,omitempty" tf:"install_type"`
+	// +optional
 	IsAgentAutoUpgradable *bool `json:"isAgentAutoUpgradable,omitempty" tf:"is_agent_auto_upgradable"`
+	// +optional
+	IsCustomerDeployed *bool `json:"isCustomerDeployed,omitempty" tf:"is_customer_deployed"`
 	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	ManagedAgentID   *string `json:"managedAgentID" tf:"managed_agent_id"`
@@ -102,6 +110,8 @@ type AgentManagementAgentSpecResource struct {
 	PlatformVersion *string `json:"platformVersion,omitempty" tf:"platform_version"`
 	// +optional
 	PluginList []AgentManagementAgentSpecPluginList `json:"pluginList,omitempty" tf:"plugin_list"`
+	// +optional
+	ResourceArtifactVersion *string `json:"resourceArtifactVersion,omitempty" tf:"resource_artifact_version"`
 	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional

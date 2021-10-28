@@ -41,6 +41,16 @@ type Application struct {
 	Status            ApplicationStatus `json:"status,omitempty"`
 }
 
+type ApplicationSpecImagePolicyConfigKeyDetails struct {
+	KmsKeyID *string `json:"kmsKeyID" tf:"kms_key_id"`
+}
+
+type ApplicationSpecImagePolicyConfig struct {
+	IsPolicyEnabled *bool `json:"isPolicyEnabled" tf:"is_policy_enabled"`
+	// +optional
+	KeyDetails []ApplicationSpecImagePolicyConfigKeyDetails `json:"keyDetails,omitempty" tf:"key_details"`
+}
+
 type ApplicationSpecTraceConfig struct {
 	// +optional
 	DomainID *string `json:"domainID,omitempty" tf:"domain_id"`
@@ -75,6 +85,10 @@ type ApplicationSpecResource struct {
 	DisplayName *string           `json:"displayName" tf:"display_name"`
 	// +optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
+	// +optional
+	ImagePolicyConfig *ApplicationSpecImagePolicyConfig `json:"imagePolicyConfig,omitempty" tf:"image_policy_config"`
+	// +optional
+	NetworkSecurityGroupIDS []string `json:"networkSecurityGroupIDS,omitempty" tf:"network_security_group_ids"`
 	// +optional
 	State     *string  `json:"state,omitempty" tf:"state"`
 	SubnetIDS []string `json:"subnetIDS" tf:"subnet_ids"`

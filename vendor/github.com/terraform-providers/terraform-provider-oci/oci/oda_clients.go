@@ -4,13 +4,13 @@
 package oci
 
 import (
-	oci_oda "github.com/oracle/oci-go-sdk/v45/oda"
+	oci_oda "github.com/oracle/oci-go-sdk/v50/oda"
 
-	oci_common "github.com/oracle/oci-go-sdk/v45/common"
+	oci_common "github.com/oracle/oci-go-sdk/v50/common"
 )
 
 func init() {
-	RegisterOracleClient("oci_oda.OdaClient", &OracleClient{initClientFn: initOdaOdaClient})
+	RegisterOracleClient("oci_oda.OdaClient", &OracleClient{InitClientFn: initOdaOdaClient})
 }
 
 func initOdaOdaClient(configProvider oci_common.ConfigurationProvider, configureClient ConfigureClient, serviceClientOverrides ServiceClientOverrides) (interface{}, error) {

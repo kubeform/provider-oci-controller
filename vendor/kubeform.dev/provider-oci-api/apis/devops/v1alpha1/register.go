@@ -56,6 +56,14 @@ func Resource(resource string) schema.GroupResource {
 // Adds the list of known types to api.Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
+		&BuildPipeline{},
+		&BuildPipelineList{},
+		&BuildPipelineStage{},
+		&BuildPipelineStageList{},
+		&BuildRun{},
+		&BuildRunList{},
+		&Connection{},
+		&ConnectionList{},
 		&DeployArtifact{},
 		&DeployArtifactList{},
 		&DeployEnvironment{},
@@ -68,6 +76,14 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&DeploymentList{},
 		&Project{},
 		&ProjectList{},
+		&Repository{},
+		&RepositoryList{},
+		&RepositoryMirror{},
+		&RepositoryMirrorList{},
+		&RepositoryRef{},
+		&RepositoryRefList{},
+		&Trigger{},
+		&TriggerList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

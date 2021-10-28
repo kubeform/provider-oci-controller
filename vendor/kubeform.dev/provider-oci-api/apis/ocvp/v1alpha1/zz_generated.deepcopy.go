@@ -136,6 +136,11 @@ func (in *EsxiHostSpecResource) DeepCopyInto(out *EsxiHostSpecResource) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ComputeAvailabilityDomain != nil {
+		in, out := &in.ComputeAvailabilityDomain, &out.ComputeAvailabilityDomain
+		*out = new(string)
+		**out = **in
+	}
 	if in.ComputeInstanceID != nil {
 		in, out := &in.ComputeInstanceID, &out.ComputeInstanceID
 		*out = new(string)

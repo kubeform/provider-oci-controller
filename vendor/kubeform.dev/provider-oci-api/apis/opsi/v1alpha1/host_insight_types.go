@@ -62,8 +62,22 @@ type HostInsightSpecResource struct {
 
 	CompartmentID *string `json:"compartmentID" tf:"compartment_id"`
 	// +optional
-	DefinedTags  map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
-	EntitySource *string           `json:"entitySource" tf:"entity_source"`
+	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
+	// +optional
+	EnterpriseManagerBridgeID *string `json:"enterpriseManagerBridgeID,omitempty" tf:"enterprise_manager_bridge_id"`
+	// +optional
+	EnterpriseManagerEntityDisplayName *string `json:"enterpriseManagerEntityDisplayName,omitempty" tf:"enterprise_manager_entity_display_name"`
+	// +optional
+	EnterpriseManagerEntityIdentifier *string `json:"enterpriseManagerEntityIdentifier,omitempty" tf:"enterprise_manager_entity_identifier"`
+	// +optional
+	EnterpriseManagerEntityName *string `json:"enterpriseManagerEntityName,omitempty" tf:"enterprise_manager_entity_name"`
+	// +optional
+	EnterpriseManagerEntityType *string `json:"enterpriseManagerEntityType,omitempty" tf:"enterprise_manager_entity_type"`
+	// +optional
+	EnterpriseManagerIdentifier *string `json:"enterpriseManagerIdentifier,omitempty" tf:"enterprise_manager_identifier"`
+	EntitySource                *string `json:"entitySource" tf:"entity_source"`
+	// +optional
+	ExadataInsightID *string `json:"exadataInsightID,omitempty" tf:"exadata_insight_id"`
 	// +optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
@@ -73,8 +87,9 @@ type HostInsightSpecResource struct {
 	// +optional
 	HostType *string `json:"hostType,omitempty" tf:"host_type"`
 	// +optional
-	LifecycleDetails  *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
-	ManagementAgentID *string `json:"managementAgentID" tf:"management_agent_id"`
+	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
+	// +optional
+	ManagementAgentID *string `json:"managementAgentID,omitempty" tf:"management_agent_id"`
 	// +optional
 	PlatformName *string `json:"platformName,omitempty" tf:"platform_name"`
 	// +optional

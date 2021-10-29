@@ -1385,7 +1385,7 @@ kmodules.xyz/resource-metrics/api
 ## explicit
 kubeform.dev/apimachinery/api/v1alpha1
 kubeform.dev/apimachinery/pkg/util
-# kubeform.dev/provider-oci-api v0.0.0-20211028194639-16b9018e2611
+# kubeform.dev/provider-oci-api v0.4.0
 ## explicit
 kubeform.dev/provider-oci-api/api/provider
 kubeform.dev/provider-oci-api/apis/ai

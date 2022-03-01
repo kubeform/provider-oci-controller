@@ -88,2786 +88,2784 @@ type Data struct {
 	ResourceType string
 }
 
-var (
-	allJsonIt = map[schema.GroupVersionResource]Data{
-		{
-			Group:    "ai.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "anomalydetectionaiprivateendpoints",
-		}: {
-			JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
-			ResourceType: "oci_ai_anomaly_detection_ai_private_endpoint",
-		},
-		{
-			Group:    "ai.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "anomalydetectiondataassets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
-			ResourceType: "oci_ai_anomaly_detection_data_asset",
-		},
-		{
-			Group:    "ai.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "anomalydetectionmodels",
-		}: {
-			JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
-			ResourceType: "oci_ai_anomaly_detection_model",
-		},
-		{
-			Group:    "ai.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "anomalydetectionprojects",
-		}: {
-			JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
-			ResourceType: "oci_ai_anomaly_detection_project",
-		},
-		{
-			Group:    "analytics.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsinstances",
-		}: {
-			JsonIt:       controllers.GetJSONItr(analyticsv1alpha1.GetEncoder(), analyticsv1alpha1.GetDecoder()),
-			ResourceType: "oci_analytics_analytics_instance",
-		},
-		{
-			Group:    "analytics.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsinstanceprivateaccesschannels",
-		}: {
-			JsonIt:       controllers.GetJSONItr(analyticsv1alpha1.GetEncoder(), analyticsv1alpha1.GetDecoder()),
-			ResourceType: "oci_analytics_analytics_instance_private_access_channel",
-		},
-		{
-			Group:    "analytics.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsinstancevanityurls",
-		}: {
-			JsonIt:       controllers.GetJSONItr(analyticsv1alpha1.GetEncoder(), analyticsv1alpha1.GetDecoder()),
-			ResourceType: "oci_analytics_analytics_instance_vanity_url",
-		},
-		{
-			Group:    "apigateway.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "apis",
-		}: {
-			JsonIt:       controllers.GetJSONItr(apigatewayv1alpha1.GetEncoder(), apigatewayv1alpha1.GetDecoder()),
-			ResourceType: "oci_apigateway_api",
-		},
-		{
-			Group:    "apigateway.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "certificates",
-		}: {
-			JsonIt:       controllers.GetJSONItr(apigatewayv1alpha1.GetEncoder(), apigatewayv1alpha1.GetDecoder()),
-			ResourceType: "oci_apigateway_certificate",
-		},
-		{
-			Group:    "apigateway.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "deployments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(apigatewayv1alpha1.GetEncoder(), apigatewayv1alpha1.GetDecoder()),
-			ResourceType: "oci_apigateway_deployment",
-		},
-		{
-			Group:    "apigateway.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "gateways",
-		}: {
-			JsonIt:       controllers.GetJSONItr(apigatewayv1alpha1.GetEncoder(), apigatewayv1alpha1.GetDecoder()),
-			ResourceType: "oci_apigateway_gateway",
-		},
-		{
-			Group:    "apm.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "apmdomains",
-		}: {
-			JsonIt:       controllers.GetJSONItr(apmv1alpha1.GetEncoder(), apmv1alpha1.GetDecoder()),
-			ResourceType: "oci_apm_apm_domain",
-		},
-		{
-			Group:    "apm.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "configconfigs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(apmv1alpha1.GetEncoder(), apmv1alpha1.GetDecoder()),
-			ResourceType: "oci_apm_config_config",
-		},
-		{
-			Group:    "apm.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "syntheticsmonitors",
-		}: {
-			JsonIt:       controllers.GetJSONItr(apmv1alpha1.GetEncoder(), apmv1alpha1.GetDecoder()),
-			ResourceType: "oci_apm_synthetics_monitor",
-		},
-		{
-			Group:    "apm.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "syntheticsscripts",
-		}: {
-			JsonIt:       controllers.GetJSONItr(apmv1alpha1.GetEncoder(), apmv1alpha1.GetDecoder()),
-			ResourceType: "oci_apm_synthetics_script",
-		},
-		{
-			Group:    "artifacts.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "containerconfigurations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
-			ResourceType: "oci_artifacts_container_configuration",
-		},
-		{
-			Group:    "artifacts.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "containerimagesignatures",
-		}: {
-			JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
-			ResourceType: "oci_artifacts_container_image_signature",
-		},
-		{
-			Group:    "artifacts.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "containerrepositories",
-		}: {
-			JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
-			ResourceType: "oci_artifacts_container_repository",
-		},
-		{
-			Group:    "artifacts.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "genericartifacts",
-		}: {
-			JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
-			ResourceType: "oci_artifacts_generic_artifact",
-		},
-		{
-			Group:    "artifacts.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "repositories",
-		}: {
-			JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
-			ResourceType: "oci_artifacts_repository",
-		},
-		{
-			Group:    "audit.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "configurations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(auditv1alpha1.GetEncoder(), auditv1alpha1.GetDecoder()),
-			ResourceType: "oci_audit_configuration",
-		},
-		{
-			Group:    "autoscaling.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autoscalingconfigurations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(autoscalingv1alpha1.GetEncoder(), autoscalingv1alpha1.GetDecoder()),
-			ResourceType: "oci_autoscaling_auto_scaling_configuration",
-		},
-		{
-			Group:    "bastion.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "bastions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(bastionv1alpha1.GetEncoder(), bastionv1alpha1.GetDecoder()),
-			ResourceType: "oci_bastion_bastion",
-		},
-		{
-			Group:    "bastion.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "sessions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(bastionv1alpha1.GetEncoder(), bastionv1alpha1.GetDecoder()),
-			ResourceType: "oci_bastion_session",
-		},
-		{
-			Group:    "bds.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autoscalingconfigurations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(bdsv1alpha1.GetEncoder(), bdsv1alpha1.GetDecoder()),
-			ResourceType: "oci_bds_auto_scaling_configuration",
-		},
-		{
-			Group:    "bds.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "bdsinstances",
-		}: {
-			JsonIt:       controllers.GetJSONItr(bdsv1alpha1.GetEncoder(), bdsv1alpha1.GetDecoder()),
-			ResourceType: "oci_bds_bds_instance",
-		},
-		{
-			Group:    "blockchain.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "blockchainplatforms",
-		}: {
-			JsonIt:       controllers.GetJSONItr(blockchainv1alpha1.GetEncoder(), blockchainv1alpha1.GetDecoder()),
-			ResourceType: "oci_blockchain_blockchain_platform",
-		},
-		{
-			Group:    "blockchain.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "osns",
-		}: {
-			JsonIt:       controllers.GetJSONItr(blockchainv1alpha1.GetEncoder(), blockchainv1alpha1.GetDecoder()),
-			ResourceType: "oci_blockchain_osn",
-		},
-		{
-			Group:    "blockchain.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "peers",
-		}: {
-			JsonIt:       controllers.GetJSONItr(blockchainv1alpha1.GetEncoder(), blockchainv1alpha1.GetDecoder()),
-			ResourceType: "oci_blockchain_peer",
-		},
-		{
-			Group:    "budget.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "alertrules",
-		}: {
-			JsonIt:       controllers.GetJSONItr(budgetv1alpha1.GetEncoder(), budgetv1alpha1.GetDecoder()),
-			ResourceType: "oci_budget_alert_rule",
-		},
-		{
-			Group:    "budget.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "budgets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(budgetv1alpha1.GetEncoder(), budgetv1alpha1.GetDecoder()),
-			ResourceType: "oci_budget_budget",
-		},
-		{
-			Group:    "certificates.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managementcabundles",
-		}: {
-			JsonIt:       controllers.GetJSONItr(certificatesv1alpha1.GetEncoder(), certificatesv1alpha1.GetDecoder()),
-			ResourceType: "oci_certificates_management_ca_bundle",
-		},
-		{
-			Group:    "certificates.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managementcertificates",
-		}: {
-			JsonIt:       controllers.GetJSONItr(certificatesv1alpha1.GetEncoder(), certificatesv1alpha1.GetDecoder()),
-			ResourceType: "oci_certificates_management_certificate",
-		},
-		{
-			Group:    "certificates.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managementcertificateauthorities",
-		}: {
-			JsonIt:       controllers.GetJSONItr(certificatesv1alpha1.GetEncoder(), certificatesv1alpha1.GetDecoder()),
-			ResourceType: "oci_certificates_management_certificate_authority",
-		},
-		{
-			Group:    "cloud.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "guardcloudguardconfigurations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
-			ResourceType: "oci_cloud_guard_cloud_guard_configuration",
-		},
-		{
-			Group:    "cloud.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "guarddatamaskrules",
-		}: {
-			JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
-			ResourceType: "oci_cloud_guard_data_mask_rule",
-		},
-		{
-			Group:    "cloud.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "guarddetectorrecipes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
-			ResourceType: "oci_cloud_guard_detector_recipe",
-		},
-		{
-			Group:    "cloud.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "guardmanagedlists",
-		}: {
-			JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
-			ResourceType: "oci_cloud_guard_managed_list",
-		},
-		{
-			Group:    "cloud.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "guardresponderrecipes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
-			ResourceType: "oci_cloud_guard_responder_recipe",
-		},
-		{
-			Group:    "cloud.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "guardtargets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
-			ResourceType: "oci_cloud_guard_target",
-		},
-		{
-			Group:    "containerengine.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "clusters",
-		}: {
-			JsonIt:       controllers.GetJSONItr(containerenginev1alpha1.GetEncoder(), containerenginev1alpha1.GetDecoder()),
-			ResourceType: "oci_containerengine_cluster",
-		},
-		{
-			Group:    "containerengine.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "nodepools",
-		}: {
-			JsonIt:       controllers.GetJSONItr(containerenginev1alpha1.GetEncoder(), containerenginev1alpha1.GetDecoder()),
-			ResourceType: "oci_containerengine_node_pool",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "appcataloglistingresourceversionagreements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_app_catalog_listing_resource_version_agreement",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "appcatalogsubscriptions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_app_catalog_subscription",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "bootvolumes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_boot_volume",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "bootvolumebackups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_boot_volume_backup",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "clusternetworks",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_cluster_network",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "computecapacityreservations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_compute_capacity_reservation",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "computeimagecapabilityschemas",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_compute_image_capability_schema",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "consolehistories",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_console_history",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "cpes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_cpe",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "crossconnects",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_cross_connect",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "crossconnectgroups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_cross_connect_group",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dedicatedvmhosts",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_dedicated_vm_host",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "defaultdhcpoptions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_default_dhcp_options",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "defaultroutetables",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_default_route_table",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "defaultsecuritylists",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_default_security_list",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dhcpoptions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_dhcp_options",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "drgs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_drg",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "drgattachments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_drg_attachment",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "drgattachmentmanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_drg_attachment_management",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "drgattachmentslists",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_drg_attachments_list",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "drgroutedistributions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_drg_route_distribution",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "drgroutedistributionstatements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_drg_route_distribution_statement",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "drgroutetables",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_drg_route_table",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "drgroutetablerouterules",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_drg_route_table_route_rule",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "images",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_image",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "instances",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_instance",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "instanceconfigurations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_instance_configuration",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "instanceconsoleconnections",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_instance_console_connection",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "instancepools",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_instance_pool",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "instancepoolinstances",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_instance_pool_instance",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "internetgateways",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_internet_gateway",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "ipsecs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_ipsec",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "ipsecconnectiontunnelmanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_ipsec_connection_tunnel_management",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "ipv6s",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_ipv6",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "listingresourceversionagreements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_listing_resource_version_agreement",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "localpeeringgateways",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_local_peering_gateway",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "natgateways",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_nat_gateway",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "networksecuritygroups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_network_security_group",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "networksecuritygroupsecurityrules",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_network_security_group_security_rule",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "privateips",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_private_ip",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "publicips",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_public_ip",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "publicippools",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_public_ip_pool",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "publicippoolcapacities",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_public_ip_pool_capacity",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "remotepeeringconnections",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_remote_peering_connection",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "routetables",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_route_table",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "routetableattachments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_route_table_attachment",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "securitylists",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_security_list",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "servicegateways",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_service_gateway",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "shapemanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_shape_management",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "subnets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_subnet",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "vcns",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_vcn",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "virtualcircuits",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_virtual_circuit",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "virtualnetworks",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_virtual_network",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "vlans",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_vlan",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "vnicattachments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_vnic_attachment",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "volumes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_volume",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "volumeattachments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_volume_attachment",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "volumebackups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_volume_backup",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "volumebackuppolicies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_volume_backup_policy",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "volumebackuppolicyassignments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_volume_backup_policy_assignment",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "volumegroups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_volume_group",
-		},
-		{
-			Group:    "core.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "volumegroupbackups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
-			ResourceType: "oci_core_volume_group_backup",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "labelingservicedatasets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_labeling_service_dataset",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safecomparesecurityassessments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_compare_security_assessment",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safecompareuserassessments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_compare_user_assessment",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safedatasafeconfigurations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_data_safe_configuration",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safedatasafeprivateendpoints",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_data_safe_private_endpoint",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safeonpremconnectors",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_on_prem_connector",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safesecurityassessments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_security_assessment",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safesetsecurityassessmentbaselines",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_set_security_assessment_baseline",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safesetuserassessmentbaselines",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_set_user_assessment_baseline",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safetargetdatabases",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_target_database",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safeunsetsecurityassessmentbaselines",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_unset_security_assessment_baseline",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safeunsetuserassessmentbaselines",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_unset_user_assessment_baseline",
-		},
-		{
-			Group:    "data.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "safeuserassessments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
-			ResourceType: "oci_data_safe_user_assessment",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autonomouscontainerdatabases",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_autonomous_container_database",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autonomouscontainerdatabasedataguardassociationoperations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_autonomous_container_database_dataguard_association_operation",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autonomousdatabases",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_autonomous_database",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autonomousdatabasebackups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_autonomous_database_backup",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autonomousdatabaseinstancewalletmanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_autonomous_database_instance_wallet_management",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autonomousdatabaseregionalwalletmanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_autonomous_database_regional_wallet_management",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autonomousdatabasewallets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_autonomous_database_wallet",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autonomousexadatainfrastructures",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_autonomous_exadata_infrastructure",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "autonomousvmclusters",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_autonomous_vm_cluster",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "backups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_backup",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "backupdestinations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_backup_destination",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "clouddatabasemanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_cloud_database_management",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "cloudexadatainfrastructures",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_cloud_exadata_infrastructure",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "cloudvmclusters",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_cloud_vm_cluster",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dataguardassociations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_data_guard_association",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "databases",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_database",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "databasesoftwareimages",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_database_software_image",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "databaseupgrades",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_database_upgrade",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dbhomes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_db_home",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dbnodeconsoleconnections",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_db_node_console_connection",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dbsystems",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_db_system",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "exadatainfrastructures",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_exadata_infrastructure",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "exadatainfrastructurestorages",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_exadata_infrastructure_storage",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "exadataiormconfigs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_exadata_iorm_config",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "externalcontainerdatabases",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_external_container_database",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "externalcontainerdatabasemanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_external_container_database_management",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "externaldatabaseconnectors",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_external_database_connector",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "externalnoncontainerdatabases",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_external_non_container_database",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "externalnoncontainerdatabasemanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_external_non_container_database_management",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "externalnoncontainerdatabaseoperationsinsightsmanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_external_non_container_database_operations_insights_management",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "externalpluggabledatabases",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_external_pluggable_database",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "externalpluggabledatabasemanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_external_pluggable_database_management",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "externalpluggabledatabaseoperationsinsightsmanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_external_pluggable_database_operations_insights_management",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "keystores",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_key_store",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "maintenanceruns",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_maintenance_run",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managementdbmanagementprivateendpoints",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_management_db_management_private_endpoint",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managementmanageddatabasegroups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_management_managed_database_group",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managementmanageddatabaseschangedatabaseparameters",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_management_managed_databases_change_database_parameter",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managementmanageddatabasesresetdatabaseparameters",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_management_managed_databases_reset_database_parameter",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "migrations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_migration",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "migrationagents",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_migration_agent",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "migrationconnections",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_migration_connection",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "migrationjobs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_migration_job",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "migrationmigrations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_migration_migration",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "pluggabledatabases",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_pluggable_database",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "pluggabledatabaseslocalclones",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_pluggable_databases_local_clone",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "pluggabledatabasesremoteclones",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_pluggable_databases_remote_clone",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "vmclusters",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_vm_cluster",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "vmclusteraddvirtualmachines",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_vm_cluster_add_virtual_machine",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "vmclusternetworks",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_vm_cluster_network",
-		},
-		{
-			Group:    "database.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "vmclusterremovevirtualmachines",
-		}: {
-			JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
-			ResourceType: "oci_database_vm_cluster_remove_virtual_machine",
-		},
-		{
-			Group:    "datacatalog.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "catalogs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
-			ResourceType: "oci_datacatalog_catalog",
-		},
-		{
-			Group:    "datacatalog.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "catalogprivateendpoints",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
-			ResourceType: "oci_datacatalog_catalog_private_endpoint",
-		},
-		{
-			Group:    "datacatalog.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "connections",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
-			ResourceType: "oci_datacatalog_connection",
-		},
-		{
-			Group:    "datacatalog.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dataassets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
-			ResourceType: "oci_datacatalog_data_asset",
-		},
-		{
-			Group:    "datacatalog.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "metastores",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
-			ResourceType: "oci_datacatalog_metastore",
-		},
-		{
-			Group:    "dataflow.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "applications",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dataflowv1alpha1.GetEncoder(), dataflowv1alpha1.GetDecoder()),
-			ResourceType: "oci_dataflow_application",
-		},
-		{
-			Group:    "dataflow.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "invokeruns",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dataflowv1alpha1.GetEncoder(), dataflowv1alpha1.GetDecoder()),
-			ResourceType: "oci_dataflow_invoke_run",
-		},
-		{
-			Group:    "dataflow.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "privateendpoints",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dataflowv1alpha1.GetEncoder(), dataflowv1alpha1.GetDecoder()),
-			ResourceType: "oci_dataflow_private_endpoint",
-		},
-		{
-			Group:    "dataintegration.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "workspaces",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dataintegrationv1alpha1.GetEncoder(), dataintegrationv1alpha1.GetDecoder()),
-			ResourceType: "oci_dataintegration_workspace",
-		},
-		{
-			Group:    "datascience.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "jobs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
-			ResourceType: "oci_datascience_job",
-		},
-		{
-			Group:    "datascience.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "jobruns",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
-			ResourceType: "oci_datascience_job_run",
-		},
-		{
-			Group:    "datascience.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "models",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
-			ResourceType: "oci_datascience_model",
-		},
-		{
-			Group:    "datascience.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "modeldeployments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
-			ResourceType: "oci_datascience_model_deployment",
-		},
-		{
-			Group:    "datascience.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "modelprovenances",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
-			ResourceType: "oci_datascience_model_provenance",
-		},
-		{
-			Group:    "datascience.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "notebooksessions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
-			ResourceType: "oci_datascience_notebook_session",
-		},
-		{
-			Group:    "datascience.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "projects",
-		}: {
-			JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
-			ResourceType: "oci_datascience_project",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "buildpipelines",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_build_pipeline",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "buildpipelinestages",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_build_pipeline_stage",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "buildruns",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_build_run",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "connections",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_connection",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "deployartifacts",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_deploy_artifact",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "deployenvironments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_deploy_environment",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "deploypipelines",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_deploy_pipeline",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "deploystages",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_deploy_stage",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "deployments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_deployment",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "projects",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_project",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "repositories",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_repository",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "repositorymirrors",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_repository_mirror",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "repositoryrefs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_repository_ref",
-		},
-		{
-			Group:    "devops.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "triggers",
-		}: {
-			JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
-			ResourceType: "oci_devops_trigger",
-		},
-		{
-			Group:    "dns.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "records",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
-			ResourceType: "oci_dns_record",
-		},
-		{
-			Group:    "dns.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "resolvers",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
-			ResourceType: "oci_dns_resolver",
-		},
-		{
-			Group:    "dns.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "resolverendpoints",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
-			ResourceType: "oci_dns_resolver_endpoint",
-		},
-		{
-			Group:    "dns.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "rrsets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
-			ResourceType: "oci_dns_rrset",
-		},
-		{
-			Group:    "dns.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "steeringpolicies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
-			ResourceType: "oci_dns_steering_policy",
-		},
-		{
-			Group:    "dns.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "steeringpolicyattachments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
-			ResourceType: "oci_dns_steering_policy_attachment",
-		},
-		{
-			Group:    "dns.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "tsigkeys",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
-			ResourceType: "oci_dns_tsig_key",
-		},
-		{
-			Group:    "dns.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "views",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
-			ResourceType: "oci_dns_view",
-		},
-		{
-			Group:    "dns.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "zones",
-		}: {
-			JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
-			ResourceType: "oci_dns_zone",
-		},
-		{
-			Group:    "email.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dkims",
-		}: {
-			JsonIt:       controllers.GetJSONItr(emailv1alpha1.GetEncoder(), emailv1alpha1.GetDecoder()),
-			ResourceType: "oci_email_dkim",
-		},
-		{
-			Group:    "email.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "emaildomains",
-		}: {
-			JsonIt:       controllers.GetJSONItr(emailv1alpha1.GetEncoder(), emailv1alpha1.GetDecoder()),
-			ResourceType: "oci_email_email_domain",
-		},
-		{
-			Group:    "email.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "senders",
-		}: {
-			JsonIt:       controllers.GetJSONItr(emailv1alpha1.GetEncoder(), emailv1alpha1.GetDecoder()),
-			ResourceType: "oci_email_sender",
-		},
-		{
-			Group:    "email.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "suppressions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(emailv1alpha1.GetEncoder(), emailv1alpha1.GetDecoder()),
-			ResourceType: "oci_email_suppression",
-		},
-		{
-			Group:    "events.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "rules",
-		}: {
-			JsonIt:       controllers.GetJSONItr(eventsv1alpha1.GetEncoder(), eventsv1alpha1.GetDecoder()),
-			ResourceType: "oci_events_rule",
-		},
-		{
-			Group:    "file.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "storageexports",
-		}: {
-			JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
-			ResourceType: "oci_file_storage_export",
-		},
-		{
-			Group:    "file.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "storageexportsets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
-			ResourceType: "oci_file_storage_export_set",
-		},
-		{
-			Group:    "file.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "storagefilesystems",
-		}: {
-			JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
-			ResourceType: "oci_file_storage_file_system",
-		},
-		{
-			Group:    "file.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "storagemounttargets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
-			ResourceType: "oci_file_storage_mount_target",
-		},
-		{
-			Group:    "file.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "storagesnapshots",
-		}: {
-			JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
-			ResourceType: "oci_file_storage_snapshot",
-		},
-		{
-			Group:    "functions.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "applications",
-		}: {
-			JsonIt:       controllers.GetJSONItr(functionsv1alpha1.GetEncoder(), functionsv1alpha1.GetDecoder()),
-			ResourceType: "oci_functions_application",
-		},
-		{
-			Group:    "functions.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "functions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(functionsv1alpha1.GetEncoder(), functionsv1alpha1.GetDecoder()),
-			ResourceType: "oci_functions_function",
-		},
-		{
-			Group:    "functions.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "invokefunctions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(functionsv1alpha1.GetEncoder(), functionsv1alpha1.GetDecoder()),
-			ResourceType: "oci_functions_invoke_function",
-		},
-		{
-			Group:    "generic.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "artifactscontentartifactbypaths",
-		}: {
-			JsonIt:       controllers.GetJSONItr(genericv1alpha1.GetEncoder(), genericv1alpha1.GetDecoder()),
-			ResourceType: "oci_generic_artifacts_content_artifact_by_path",
-		},
-		{
-			Group:    "golden.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "gatedatabaseregistrations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(goldenv1alpha1.GetEncoder(), goldenv1alpha1.GetDecoder()),
-			ResourceType: "oci_golden_gate_database_registration",
-		},
-		{
-			Group:    "golden.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "gatedeployments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(goldenv1alpha1.GetEncoder(), goldenv1alpha1.GetDecoder()),
-			ResourceType: "oci_golden_gate_deployment",
-		},
-		{
-			Group:    "golden.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "gatedeploymentbackups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(goldenv1alpha1.GetEncoder(), goldenv1alpha1.GetDecoder()),
-			ResourceType: "oci_golden_gate_deployment_backup",
-		},
-		{
-			Group:    "health.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "checkshttpmonitors",
-		}: {
-			JsonIt:       controllers.GetJSONItr(healthv1alpha1.GetEncoder(), healthv1alpha1.GetDecoder()),
-			ResourceType: "oci_health_checks_http_monitor",
-		},
-		{
-			Group:    "health.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "checkshttpprobes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(healthv1alpha1.GetEncoder(), healthv1alpha1.GetDecoder()),
-			ResourceType: "oci_health_checks_http_probe",
-		},
-		{
-			Group:    "health.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "checkspingmonitors",
-		}: {
-			JsonIt:       controllers.GetJSONItr(healthv1alpha1.GetEncoder(), healthv1alpha1.GetDecoder()),
-			ResourceType: "oci_health_checks_ping_monitor",
-		},
-		{
-			Group:    "health.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "checkspingprobes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(healthv1alpha1.GetEncoder(), healthv1alpha1.GetDecoder()),
-			ResourceType: "oci_health_checks_ping_probe",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "apikeys",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_api_key",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "authtokens",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_auth_token",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "authenticationpolicies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_authentication_policy",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "compartments",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_compartment",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "customersecretkeys",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_customer_secret_key",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dynamicgroups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_dynamic_group",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "groups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_group",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "identityproviders",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_identity_provider",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "idpgroupmappings",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_idp_group_mapping",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "networksources",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_network_source",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "policies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_policy",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "smtpcredentials",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_smtp_credential",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "swiftpasswords",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_swift_password",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "tags",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_tag",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "tagdefaults",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_tag_default",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "tagnamespaces",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_tag_namespace",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "uipasswords",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_ui_password",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "users",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_user",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "usercapabilitiesmanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_user_capabilities_management",
-		},
-		{
-			Group:    "identity.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "usergroupmemberships",
-		}: {
-			JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
-			ResourceType: "oci_identity_user_group_membership",
-		},
-		{
-			Group:    "integration.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "integrationinstances",
-		}: {
-			JsonIt:       controllers.GetJSONItr(integrationv1alpha1.GetEncoder(), integrationv1alpha1.GetDecoder()),
-			ResourceType: "oci_integration_integration_instance",
-		},
-		{
-			Group:    "jms.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "fleet",
-		}: {
-			JsonIt:       controllers.GetJSONItr(jmsv1alpha1.GetEncoder(), jmsv1alpha1.GetDecoder()),
-			ResourceType: "oci_jms_fleet",
-		},
-		{
-			Group:    "kms.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "encrypteddata",
-		}: {
-			JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
-			ResourceType: "oci_kms_encrypted_data",
-		},
-		{
-			Group:    "kms.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "generatedkeys",
-		}: {
-			JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
-			ResourceType: "oci_kms_generated_key",
-		},
-		{
-			Group:    "kms.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "keys",
-		}: {
-			JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
-			ResourceType: "oci_kms_key",
-		},
-		{
-			Group:    "kms.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "keyversions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
-			ResourceType: "oci_kms_key_version",
-		},
-		{
-			Group:    "kms.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "signs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
-			ResourceType: "oci_kms_sign",
-		},
-		{
-			Group:    "kms.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "vaults",
-		}: {
-			JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
-			ResourceType: "oci_kms_vault",
-		},
-		{
-			Group:    "kms.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "vaultreplications",
-		}: {
-			JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
-			ResourceType: "oci_kms_vault_replication",
-		},
-		{
-			Group:    "kms.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "verifies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
-			ResourceType: "oci_kms_verify",
-		},
-		{
-			Group:    "limits.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "quotas",
-		}: {
-			JsonIt:       controllers.GetJSONItr(limitsv1alpha1.GetEncoder(), limitsv1alpha1.GetDecoder()),
-			ResourceType: "oci_limits_quota",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "backends",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_backend",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "backendsets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_backend_set",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "certificates",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_certificate",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "hostnames",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_hostname",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "listeners",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_listener",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "loadbalancers",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_load_balancer",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "loadbalancerroutingpolicies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_load_balancer_routing_policy",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "pathroutesets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_path_route_set",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "rulesets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_rule_set",
-		},
-		{
-			Group:    "loadbalancer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "sslciphersuites",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
-			ResourceType: "oci_load_balancer_ssl_cipher_suite",
-		},
-		{
-			Group:    "log.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsloganalyticsentities",
-		}: {
-			JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
-			ResourceType: "oci_log_analytics_log_analytics_entity",
-		},
-		{
-			Group:    "log.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsloganalyticsimportcustomcontents",
-		}: {
-			JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
-			ResourceType: "oci_log_analytics_log_analytics_import_custom_content",
-		},
-		{
-			Group:    "log.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsloganalyticsloggroups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
-			ResourceType: "oci_log_analytics_log_analytics_log_group",
-		},
-		{
-			Group:    "log.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsloganalyticsobjectcollectionrules",
-		}: {
-			JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
-			ResourceType: "oci_log_analytics_log_analytics_object_collection_rule",
-		},
-		{
-			Group:    "log.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsloganalyticspreferencesmanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
-			ResourceType: "oci_log_analytics_log_analytics_preferences_management",
-		},
-		{
-			Group:    "log.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsloganalyticsunprocesseddatabucketmanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
-			ResourceType: "oci_log_analytics_log_analytics_unprocessed_data_bucket_management",
-		},
-		{
-			Group:    "log.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsnamespaces",
-		}: {
-			JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
-			ResourceType: "oci_log_analytics_namespace",
-		},
-		{
-			Group:    "log.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsnamespacescheduledtasks",
-		}: {
-			JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
-			ResourceType: "oci_log_analytics_namespace_scheduled_task",
-		},
-		{
-			Group:    "logging.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "logs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loggingv1alpha1.GetEncoder(), loggingv1alpha1.GetDecoder()),
-			ResourceType: "oci_logging_log",
-		},
-		{
-			Group:    "logging.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "loggroups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loggingv1alpha1.GetEncoder(), loggingv1alpha1.GetDecoder()),
-			ResourceType: "oci_logging_log_group",
-		},
-		{
-			Group:    "logging.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "logsavedsearches",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loggingv1alpha1.GetEncoder(), loggingv1alpha1.GetDecoder()),
-			ResourceType: "oci_logging_log_saved_search",
-		},
-		{
-			Group:    "logging.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "unifiedagentconfigurations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(loggingv1alpha1.GetEncoder(), loggingv1alpha1.GetDecoder()),
-			ResourceType: "oci_logging_unified_agent_configuration",
-		},
-		{
-			Group:    "management.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "agentmanagementagents",
-		}: {
-			JsonIt:       controllers.GetJSONItr(managementv1alpha1.GetEncoder(), managementv1alpha1.GetDecoder()),
-			ResourceType: "oci_management_agent_management_agent",
-		},
-		{
-			Group:    "management.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "agentmanagementagentinstallkeys",
-		}: {
-			JsonIt:       controllers.GetJSONItr(managementv1alpha1.GetEncoder(), managementv1alpha1.GetDecoder()),
-			ResourceType: "oci_management_agent_management_agent_install_key",
-		},
-		{
-			Group:    "management.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "dashboardmanagementdashboardsimports",
-		}: {
-			JsonIt:       controllers.GetJSONItr(managementv1alpha1.GetEncoder(), managementv1alpha1.GetDecoder()),
-			ResourceType: "oci_management_dashboard_management_dashboards_import",
-		},
-		{
-			Group:    "marketplace.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "acceptedagreements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(marketplacev1alpha1.GetEncoder(), marketplacev1alpha1.GetDecoder()),
-			ResourceType: "oci_marketplace_accepted_agreement",
-		},
-		{
-			Group:    "marketplace.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "listingpackageagreements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(marketplacev1alpha1.GetEncoder(), marketplacev1alpha1.GetDecoder()),
-			ResourceType: "oci_marketplace_listing_package_agreement",
-		},
-		{
-			Group:    "marketplace.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "publications",
-		}: {
-			JsonIt:       controllers.GetJSONItr(marketplacev1alpha1.GetEncoder(), marketplacev1alpha1.GetDecoder()),
-			ResourceType: "oci_marketplace_publication",
-		},
-		{
-			Group:    "metering.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "computationcustomtables",
-		}: {
-			JsonIt:       controllers.GetJSONItr(meteringv1alpha1.GetEncoder(), meteringv1alpha1.GetDecoder()),
-			ResourceType: "oci_metering_computation_custom_table",
-		},
-		{
-			Group:    "metering.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "computationqueries",
-		}: {
-			JsonIt:       controllers.GetJSONItr(meteringv1alpha1.GetEncoder(), meteringv1alpha1.GetDecoder()),
-			ResourceType: "oci_metering_computation_query",
-		},
-		{
-			Group:    "metering.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "computationusages",
-		}: {
-			JsonIt:       controllers.GetJSONItr(meteringv1alpha1.GetEncoder(), meteringv1alpha1.GetDecoder()),
-			ResourceType: "oci_metering_computation_usage",
-		},
-		{
-			Group:    "monitoring.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "alarms",
-		}: {
-			JsonIt:       controllers.GetJSONItr(monitoringv1alpha1.GetEncoder(), monitoringv1alpha1.GetDecoder()),
-			ResourceType: "oci_monitoring_alarm",
-		},
-		{
-			Group:    "mysql.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "analyticsclusters",
-		}: {
-			JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
-			ResourceType: "oci_mysql_analytics_cluster",
-		},
-		{
-			Group:    "mysql.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "channels",
-		}: {
-			JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
-			ResourceType: "oci_mysql_channel",
-		},
-		{
-			Group:    "mysql.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "heatwaveclusters",
-		}: {
-			JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
-			ResourceType: "oci_mysql_heat_wave_cluster",
-		},
-		{
-			Group:    "mysql.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "mysqlbackups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
-			ResourceType: "oci_mysql_mysql_backup",
-		},
-		{
-			Group:    "mysql.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "mysqldbsystems",
-		}: {
-			JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
-			ResourceType: "oci_mysql_mysql_db_system",
-		},
-		{
-			Group:    "network.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "loadbalancerbackends",
-		}: {
-			JsonIt:       controllers.GetJSONItr(networkv1alpha1.GetEncoder(), networkv1alpha1.GetDecoder()),
-			ResourceType: "oci_network_load_balancer_backend",
-		},
-		{
-			Group:    "network.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "loadbalancerbackendsets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(networkv1alpha1.GetEncoder(), networkv1alpha1.GetDecoder()),
-			ResourceType: "oci_network_load_balancer_backend_set",
-		},
-		{
-			Group:    "network.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "loadbalancerlisteners",
-		}: {
-			JsonIt:       controllers.GetJSONItr(networkv1alpha1.GetEncoder(), networkv1alpha1.GetDecoder()),
-			ResourceType: "oci_network_load_balancer_listener",
-		},
-		{
-			Group:    "network.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "loadbalancernetworkloadbalancers",
-		}: {
-			JsonIt:       controllers.GetJSONItr(networkv1alpha1.GetEncoder(), networkv1alpha1.GetDecoder()),
-			ResourceType: "oci_network_load_balancer_network_load_balancer",
-		},
-		{
-			Group:    "nosql.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "indices",
-		}: {
-			JsonIt:       controllers.GetJSONItr(nosqlv1alpha1.GetEncoder(), nosqlv1alpha1.GetDecoder()),
-			ResourceType: "oci_nosql_index",
-		},
-		{
-			Group:    "nosql.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "tables",
-		}: {
-			JsonIt:       controllers.GetJSONItr(nosqlv1alpha1.GetEncoder(), nosqlv1alpha1.GetDecoder()),
-			ResourceType: "oci_nosql_table",
-		},
-		{
-			Group:    "objectstorage.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "buckets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
-			ResourceType: "oci_objectstorage_bucket",
-		},
-		{
-			Group:    "objectstorage.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "namespacemetadata",
-		}: {
-			JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
-			ResourceType: "oci_objectstorage_namespace_metadata",
-		},
-		{
-			Group:    "objectstorage.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "objects",
-		}: {
-			JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
-			ResourceType: "oci_objectstorage_object",
-		},
-		{
-			Group:    "objectstorage.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "objectlifecyclepolicies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
-			ResourceType: "oci_objectstorage_object_lifecycle_policy",
-		},
-		{
-			Group:    "objectstorage.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "preauthrequests",
-		}: {
-			JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
-			ResourceType: "oci_objectstorage_preauthrequest",
-		},
-		{
-			Group:    "objectstorage.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "replicationpolicies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
-			ResourceType: "oci_objectstorage_replication_policy",
-		},
-		{
-			Group:    "oce.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "oceinstances",
-		}: {
-			JsonIt:       controllers.GetJSONItr(ocev1alpha1.GetEncoder(), ocev1alpha1.GetDecoder()),
-			ResourceType: "oci_oce_oce_instance",
-		},
-		{
-			Group:    "ocvp.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "esxihosts",
-		}: {
-			JsonIt:       controllers.GetJSONItr(ocvpv1alpha1.GetEncoder(), ocvpv1alpha1.GetDecoder()),
-			ResourceType: "oci_ocvp_esxi_host",
-		},
-		{
-			Group:    "ocvp.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "sddcs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(ocvpv1alpha1.GetEncoder(), ocvpv1alpha1.GetDecoder()),
-			ResourceType: "oci_ocvp_sddc",
-		},
-		{
-			Group:    "oda.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "odainstances",
-		}: {
-			JsonIt:       controllers.GetJSONItr(odav1alpha1.GetEncoder(), odav1alpha1.GetDecoder()),
-			ResourceType: "oci_oda_oda_instance",
-		},
-		{
-			Group:    "ons.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "notificationtopics",
-		}: {
-			JsonIt:       controllers.GetJSONItr(onsv1alpha1.GetEncoder(), onsv1alpha1.GetDecoder()),
-			ResourceType: "oci_ons_notification_topic",
-		},
-		{
-			Group:    "ons.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "subscriptions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(onsv1alpha1.GetEncoder(), onsv1alpha1.GetDecoder()),
-			ResourceType: "oci_ons_subscription",
-		},
-		{
-			Group:    "opsi.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "databaseinsights",
-		}: {
-			JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
-			ResourceType: "oci_opsi_database_insight",
-		},
-		{
-			Group:    "opsi.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "enterprisemanagerbridges",
-		}: {
-			JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
-			ResourceType: "oci_opsi_enterprise_manager_bridge",
-		},
-		{
-			Group:    "opsi.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "exadatainsights",
-		}: {
-			JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
-			ResourceType: "oci_opsi_exadata_insight",
-		},
-		{
-			Group:    "opsi.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "hostinsights",
-		}: {
-			JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
-			ResourceType: "oci_opsi_host_insight",
-		},
-		{
-			Group:    "optimizer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "enrollmentstatuses",
-		}: {
-			JsonIt:       controllers.GetJSONItr(optimizerv1alpha1.GetEncoder(), optimizerv1alpha1.GetDecoder()),
-			ResourceType: "oci_optimizer_enrollment_status",
-		},
-		{
-			Group:    "optimizer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "profiles",
-		}: {
-			JsonIt:       controllers.GetJSONItr(optimizerv1alpha1.GetEncoder(), optimizerv1alpha1.GetDecoder()),
-			ResourceType: "oci_optimizer_profile",
-		},
-		{
-			Group:    "optimizer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "recommendations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(optimizerv1alpha1.GetEncoder(), optimizerv1alpha1.GetDecoder()),
-			ResourceType: "oci_optimizer_recommendation",
-		},
-		{
-			Group:    "optimizer.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "resourceactions",
-		}: {
-			JsonIt:       controllers.GetJSONItr(optimizerv1alpha1.GetEncoder(), optimizerv1alpha1.GetDecoder()),
-			ResourceType: "oci_optimizer_resource_action",
-		},
-		{
-			Group:    "osmanagement.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managedinstances",
-		}: {
-			JsonIt:       controllers.GetJSONItr(osmanagementv1alpha1.GetEncoder(), osmanagementv1alpha1.GetDecoder()),
-			ResourceType: "oci_osmanagement_managed_instance",
-		},
-		{
-			Group:    "osmanagement.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managedinstancegroups",
-		}: {
-			JsonIt:       controllers.GetJSONItr(osmanagementv1alpha1.GetEncoder(), osmanagementv1alpha1.GetDecoder()),
-			ResourceType: "oci_osmanagement_managed_instance_group",
-		},
-		{
-			Group:    "osmanagement.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "managedinstancemanagements",
-		}: {
-			JsonIt:       controllers.GetJSONItr(osmanagementv1alpha1.GetEncoder(), osmanagementv1alpha1.GetDecoder()),
-			ResourceType: "oci_osmanagement_managed_instance_management",
-		},
-		{
-			Group:    "osmanagement.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "softwaresources",
-		}: {
-			JsonIt:       controllers.GetJSONItr(osmanagementv1alpha1.GetEncoder(), osmanagementv1alpha1.GetDecoder()),
-			ResourceType: "oci_osmanagement_software_source",
-		},
-		{
-			Group:    "sch.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "serviceconnectors",
-		}: {
-			JsonIt:       controllers.GetJSONItr(schv1alpha1.GetEncoder(), schv1alpha1.GetDecoder()),
-			ResourceType: "oci_sch_service_connector",
-		},
-		{
-			Group:    "service.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "catalogprivateapplications",
-		}: {
-			JsonIt:       controllers.GetJSONItr(servicev1alpha1.GetEncoder(), servicev1alpha1.GetDecoder()),
-			ResourceType: "oci_service_catalog_private_application",
-		},
-		{
-			Group:    "service.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "catalogservicecatalogs",
-		}: {
-			JsonIt:       controllers.GetJSONItr(servicev1alpha1.GetEncoder(), servicev1alpha1.GetDecoder()),
-			ResourceType: "oci_service_catalog_service_catalog",
-		},
-		{
-			Group:    "service.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "catalogservicecatalogassociations",
-		}: {
-			JsonIt:       controllers.GetJSONItr(servicev1alpha1.GetEncoder(), servicev1alpha1.GetDecoder()),
-			ResourceType: "oci_service_catalog_service_catalog_association",
-		},
-		{
-			Group:    "streaming.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "connectharnesses",
-		}: {
-			JsonIt:       controllers.GetJSONItr(streamingv1alpha1.GetEncoder(), streamingv1alpha1.GetDecoder()),
-			ResourceType: "oci_streaming_connect_harness",
-		},
-		{
-			Group:    "streaming.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "streams",
-		}: {
-			JsonIt:       controllers.GetJSONItr(streamingv1alpha1.GetEncoder(), streamingv1alpha1.GetDecoder()),
-			ResourceType: "oci_streaming_stream",
-		},
-		{
-			Group:    "streaming.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "streampools",
-		}: {
-			JsonIt:       controllers.GetJSONItr(streamingv1alpha1.GetEncoder(), streamingv1alpha1.GetDecoder()),
-			ResourceType: "oci_streaming_stream_pool",
-		},
-		{
-			Group:    "vulnerability.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "scanningcontainerscanrecipes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(vulnerabilityv1alpha1.GetEncoder(), vulnerabilityv1alpha1.GetDecoder()),
-			ResourceType: "oci_vulnerability_scanning_container_scan_recipe",
-		},
-		{
-			Group:    "vulnerability.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "scanningcontainerscantargets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(vulnerabilityv1alpha1.GetEncoder(), vulnerabilityv1alpha1.GetDecoder()),
-			ResourceType: "oci_vulnerability_scanning_container_scan_target",
-		},
-		{
-			Group:    "vulnerability.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "scanninghostscanrecipes",
-		}: {
-			JsonIt:       controllers.GetJSONItr(vulnerabilityv1alpha1.GetEncoder(), vulnerabilityv1alpha1.GetDecoder()),
-			ResourceType: "oci_vulnerability_scanning_host_scan_recipe",
-		},
-		{
-			Group:    "vulnerability.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "scanninghostscantargets",
-		}: {
-			JsonIt:       controllers.GetJSONItr(vulnerabilityv1alpha1.GetEncoder(), vulnerabilityv1alpha1.GetDecoder()),
-			ResourceType: "oci_vulnerability_scanning_host_scan_target",
-		},
-		{
-			Group:    "waas.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "addresslists",
-		}: {
-			JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
-			ResourceType: "oci_waas_address_list",
-		},
-		{
-			Group:    "waas.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "certificates",
-		}: {
-			JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
-			ResourceType: "oci_waas_certificate",
-		},
-		{
-			Group:    "waas.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "customprotectionrules",
-		}: {
-			JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
-			ResourceType: "oci_waas_custom_protection_rule",
-		},
-		{
-			Group:    "waas.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "httpredirects",
-		}: {
-			JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
-			ResourceType: "oci_waas_http_redirect",
-		},
-		{
-			Group:    "waas.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "protectionrules",
-		}: {
-			JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
-			ResourceType: "oci_waas_protection_rule",
-		},
-		{
-			Group:    "waas.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "purgecaches",
-		}: {
-			JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
-			ResourceType: "oci_waas_purge_cache",
-		},
-		{
-			Group:    "waas.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "waaspolicies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
-			ResourceType: "oci_waas_waas_policy",
-		},
-		{
-			Group:    "waf.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "networkaddresslists",
-		}: {
-			JsonIt:       controllers.GetJSONItr(wafv1alpha1.GetEncoder(), wafv1alpha1.GetDecoder()),
-			ResourceType: "oci_waf_network_address_list",
-		},
-		{
-			Group:    "waf.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "webappfirewalls",
-		}: {
-			JsonIt:       controllers.GetJSONItr(wafv1alpha1.GetEncoder(), wafv1alpha1.GetDecoder()),
-			ResourceType: "oci_waf_web_app_firewall",
-		},
-		{
-			Group:    "waf.oci.kubeform.com",
-			Version:  "v1alpha1",
-			Resource: "webappfirewallpolicies",
-		}: {
-			JsonIt:       controllers.GetJSONItr(wafv1alpha1.GetEncoder(), wafv1alpha1.GetDecoder()),
-			ResourceType: "oci_waf_web_app_firewall_policy",
-		},
-	}
-)
+var allJsonIt = map[schema.GroupVersionResource]Data{
+	{
+		Group:    "ai.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "anomalydetectionaiprivateendpoints",
+	}: {
+		JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
+		ResourceType: "oci_ai_anomaly_detection_ai_private_endpoint",
+	},
+	{
+		Group:    "ai.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "anomalydetectiondataassets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
+		ResourceType: "oci_ai_anomaly_detection_data_asset",
+	},
+	{
+		Group:    "ai.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "anomalydetectionmodels",
+	}: {
+		JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
+		ResourceType: "oci_ai_anomaly_detection_model",
+	},
+	{
+		Group:    "ai.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "anomalydetectionprojects",
+	}: {
+		JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
+		ResourceType: "oci_ai_anomaly_detection_project",
+	},
+	{
+		Group:    "analytics.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsinstances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(analyticsv1alpha1.GetEncoder(), analyticsv1alpha1.GetDecoder()),
+		ResourceType: "oci_analytics_analytics_instance",
+	},
+	{
+		Group:    "analytics.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsinstanceprivateaccesschannels",
+	}: {
+		JsonIt:       controllers.GetJSONItr(analyticsv1alpha1.GetEncoder(), analyticsv1alpha1.GetDecoder()),
+		ResourceType: "oci_analytics_analytics_instance_private_access_channel",
+	},
+	{
+		Group:    "analytics.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsinstancevanityurls",
+	}: {
+		JsonIt:       controllers.GetJSONItr(analyticsv1alpha1.GetEncoder(), analyticsv1alpha1.GetDecoder()),
+		ResourceType: "oci_analytics_analytics_instance_vanity_url",
+	},
+	{
+		Group:    "apigateway.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "apis",
+	}: {
+		JsonIt:       controllers.GetJSONItr(apigatewayv1alpha1.GetEncoder(), apigatewayv1alpha1.GetDecoder()),
+		ResourceType: "oci_apigateway_api",
+	},
+	{
+		Group:    "apigateway.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "certificates",
+	}: {
+		JsonIt:       controllers.GetJSONItr(apigatewayv1alpha1.GetEncoder(), apigatewayv1alpha1.GetDecoder()),
+		ResourceType: "oci_apigateway_certificate",
+	},
+	{
+		Group:    "apigateway.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "deployments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(apigatewayv1alpha1.GetEncoder(), apigatewayv1alpha1.GetDecoder()),
+		ResourceType: "oci_apigateway_deployment",
+	},
+	{
+		Group:    "apigateway.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "gateways",
+	}: {
+		JsonIt:       controllers.GetJSONItr(apigatewayv1alpha1.GetEncoder(), apigatewayv1alpha1.GetDecoder()),
+		ResourceType: "oci_apigateway_gateway",
+	},
+	{
+		Group:    "apm.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "apmdomains",
+	}: {
+		JsonIt:       controllers.GetJSONItr(apmv1alpha1.GetEncoder(), apmv1alpha1.GetDecoder()),
+		ResourceType: "oci_apm_apm_domain",
+	},
+	{
+		Group:    "apm.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "configconfigs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(apmv1alpha1.GetEncoder(), apmv1alpha1.GetDecoder()),
+		ResourceType: "oci_apm_config_config",
+	},
+	{
+		Group:    "apm.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "syntheticsmonitors",
+	}: {
+		JsonIt:       controllers.GetJSONItr(apmv1alpha1.GetEncoder(), apmv1alpha1.GetDecoder()),
+		ResourceType: "oci_apm_synthetics_monitor",
+	},
+	{
+		Group:    "apm.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "syntheticsscripts",
+	}: {
+		JsonIt:       controllers.GetJSONItr(apmv1alpha1.GetEncoder(), apmv1alpha1.GetDecoder()),
+		ResourceType: "oci_apm_synthetics_script",
+	},
+	{
+		Group:    "artifacts.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "containerconfigurations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
+		ResourceType: "oci_artifacts_container_configuration",
+	},
+	{
+		Group:    "artifacts.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "containerimagesignatures",
+	}: {
+		JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
+		ResourceType: "oci_artifacts_container_image_signature",
+	},
+	{
+		Group:    "artifacts.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "containerrepositories",
+	}: {
+		JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
+		ResourceType: "oci_artifacts_container_repository",
+	},
+	{
+		Group:    "artifacts.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "genericartifacts",
+	}: {
+		JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
+		ResourceType: "oci_artifacts_generic_artifact",
+	},
+	{
+		Group:    "artifacts.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "repositories",
+	}: {
+		JsonIt:       controllers.GetJSONItr(artifactsv1alpha1.GetEncoder(), artifactsv1alpha1.GetDecoder()),
+		ResourceType: "oci_artifacts_repository",
+	},
+	{
+		Group:    "audit.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "configurations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(auditv1alpha1.GetEncoder(), auditv1alpha1.GetDecoder()),
+		ResourceType: "oci_audit_configuration",
+	},
+	{
+		Group:    "autoscaling.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autoscalingconfigurations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(autoscalingv1alpha1.GetEncoder(), autoscalingv1alpha1.GetDecoder()),
+		ResourceType: "oci_autoscaling_auto_scaling_configuration",
+	},
+	{
+		Group:    "bastion.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "bastions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(bastionv1alpha1.GetEncoder(), bastionv1alpha1.GetDecoder()),
+		ResourceType: "oci_bastion_bastion",
+	},
+	{
+		Group:    "bastion.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "sessions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(bastionv1alpha1.GetEncoder(), bastionv1alpha1.GetDecoder()),
+		ResourceType: "oci_bastion_session",
+	},
+	{
+		Group:    "bds.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autoscalingconfigurations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(bdsv1alpha1.GetEncoder(), bdsv1alpha1.GetDecoder()),
+		ResourceType: "oci_bds_auto_scaling_configuration",
+	},
+	{
+		Group:    "bds.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "bdsinstances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(bdsv1alpha1.GetEncoder(), bdsv1alpha1.GetDecoder()),
+		ResourceType: "oci_bds_bds_instance",
+	},
+	{
+		Group:    "blockchain.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "blockchainplatforms",
+	}: {
+		JsonIt:       controllers.GetJSONItr(blockchainv1alpha1.GetEncoder(), blockchainv1alpha1.GetDecoder()),
+		ResourceType: "oci_blockchain_blockchain_platform",
+	},
+	{
+		Group:    "blockchain.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "osns",
+	}: {
+		JsonIt:       controllers.GetJSONItr(blockchainv1alpha1.GetEncoder(), blockchainv1alpha1.GetDecoder()),
+		ResourceType: "oci_blockchain_osn",
+	},
+	{
+		Group:    "blockchain.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "peers",
+	}: {
+		JsonIt:       controllers.GetJSONItr(blockchainv1alpha1.GetEncoder(), blockchainv1alpha1.GetDecoder()),
+		ResourceType: "oci_blockchain_peer",
+	},
+	{
+		Group:    "budget.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "alertrules",
+	}: {
+		JsonIt:       controllers.GetJSONItr(budgetv1alpha1.GetEncoder(), budgetv1alpha1.GetDecoder()),
+		ResourceType: "oci_budget_alert_rule",
+	},
+	{
+		Group:    "budget.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "budgets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(budgetv1alpha1.GetEncoder(), budgetv1alpha1.GetDecoder()),
+		ResourceType: "oci_budget_budget",
+	},
+	{
+		Group:    "certificates.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managementcabundles",
+	}: {
+		JsonIt:       controllers.GetJSONItr(certificatesv1alpha1.GetEncoder(), certificatesv1alpha1.GetDecoder()),
+		ResourceType: "oci_certificates_management_ca_bundle",
+	},
+	{
+		Group:    "certificates.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managementcertificates",
+	}: {
+		JsonIt:       controllers.GetJSONItr(certificatesv1alpha1.GetEncoder(), certificatesv1alpha1.GetDecoder()),
+		ResourceType: "oci_certificates_management_certificate",
+	},
+	{
+		Group:    "certificates.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managementcertificateauthorities",
+	}: {
+		JsonIt:       controllers.GetJSONItr(certificatesv1alpha1.GetEncoder(), certificatesv1alpha1.GetDecoder()),
+		ResourceType: "oci_certificates_management_certificate_authority",
+	},
+	{
+		Group:    "cloud.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "guardcloudguardconfigurations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
+		ResourceType: "oci_cloud_guard_cloud_guard_configuration",
+	},
+	{
+		Group:    "cloud.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "guarddatamaskrules",
+	}: {
+		JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
+		ResourceType: "oci_cloud_guard_data_mask_rule",
+	},
+	{
+		Group:    "cloud.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "guarddetectorrecipes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
+		ResourceType: "oci_cloud_guard_detector_recipe",
+	},
+	{
+		Group:    "cloud.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "guardmanagedlists",
+	}: {
+		JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
+		ResourceType: "oci_cloud_guard_managed_list",
+	},
+	{
+		Group:    "cloud.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "guardresponderrecipes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
+		ResourceType: "oci_cloud_guard_responder_recipe",
+	},
+	{
+		Group:    "cloud.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "guardtargets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(cloudv1alpha1.GetEncoder(), cloudv1alpha1.GetDecoder()),
+		ResourceType: "oci_cloud_guard_target",
+	},
+	{
+		Group:    "containerengine.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "clusters",
+	}: {
+		JsonIt:       controllers.GetJSONItr(containerenginev1alpha1.GetEncoder(), containerenginev1alpha1.GetDecoder()),
+		ResourceType: "oci_containerengine_cluster",
+	},
+	{
+		Group:    "containerengine.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "nodepools",
+	}: {
+		JsonIt:       controllers.GetJSONItr(containerenginev1alpha1.GetEncoder(), containerenginev1alpha1.GetDecoder()),
+		ResourceType: "oci_containerengine_node_pool",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "appcataloglistingresourceversionagreements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_app_catalog_listing_resource_version_agreement",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "appcatalogsubscriptions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_app_catalog_subscription",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "bootvolumes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_boot_volume",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "bootvolumebackups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_boot_volume_backup",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "clusternetworks",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_cluster_network",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "computecapacityreservations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_compute_capacity_reservation",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "computeimagecapabilityschemas",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_compute_image_capability_schema",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "consolehistories",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_console_history",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "cpes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_cpe",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "crossconnects",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_cross_connect",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "crossconnectgroups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_cross_connect_group",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dedicatedvmhosts",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_dedicated_vm_host",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "defaultdhcpoptions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_default_dhcp_options",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "defaultroutetables",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_default_route_table",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "defaultsecuritylists",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_default_security_list",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dhcpoptions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_dhcp_options",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "drgs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_drg",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "drgattachments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_drg_attachment",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "drgattachmentmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_drg_attachment_management",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "drgattachmentslists",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_drg_attachments_list",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "drgroutedistributions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_drg_route_distribution",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "drgroutedistributionstatements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_drg_route_distribution_statement",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "drgroutetables",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_drg_route_table",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "drgroutetablerouterules",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_drg_route_table_route_rule",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "images",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_image",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "instances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_instance",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "instanceconfigurations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_instance_configuration",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "instanceconsoleconnections",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_instance_console_connection",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "instancepools",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_instance_pool",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "instancepoolinstances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_instance_pool_instance",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "internetgateways",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_internet_gateway",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "ipsecs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_ipsec",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "ipsecconnectiontunnelmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_ipsec_connection_tunnel_management",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "ipv6s",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_ipv6",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "listingresourceversionagreements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_listing_resource_version_agreement",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "localpeeringgateways",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_local_peering_gateway",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "natgateways",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_nat_gateway",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "networksecuritygroups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_network_security_group",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "networksecuritygroupsecurityrules",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_network_security_group_security_rule",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "privateips",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_private_ip",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "publicips",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_public_ip",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "publicippools",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_public_ip_pool",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "publicippoolcapacities",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_public_ip_pool_capacity",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "remotepeeringconnections",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_remote_peering_connection",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "routetables",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_route_table",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "routetableattachments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_route_table_attachment",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "securitylists",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_security_list",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "servicegateways",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_service_gateway",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "shapemanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_shape_management",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "subnets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_subnet",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "vcns",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_vcn",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "virtualcircuits",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_virtual_circuit",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "virtualnetworks",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_virtual_network",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "vlans",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_vlan",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "vnicattachments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_vnic_attachment",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "volumes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_volume",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "volumeattachments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_volume_attachment",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "volumebackups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_volume_backup",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "volumebackuppolicies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_volume_backup_policy",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "volumebackuppolicyassignments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_volume_backup_policy_assignment",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "volumegroups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_volume_group",
+	},
+	{
+		Group:    "core.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "volumegroupbackups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(corev1alpha1.GetEncoder(), corev1alpha1.GetDecoder()),
+		ResourceType: "oci_core_volume_group_backup",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "labelingservicedatasets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_labeling_service_dataset",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safecomparesecurityassessments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_compare_security_assessment",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safecompareuserassessments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_compare_user_assessment",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safedatasafeconfigurations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_data_safe_configuration",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safedatasafeprivateendpoints",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_data_safe_private_endpoint",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safeonpremconnectors",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_on_prem_connector",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safesecurityassessments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_security_assessment",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safesetsecurityassessmentbaselines",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_set_security_assessment_baseline",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safesetuserassessmentbaselines",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_set_user_assessment_baseline",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safetargetdatabases",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_target_database",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safeunsetsecurityassessmentbaselines",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_unset_security_assessment_baseline",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safeunsetuserassessmentbaselines",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_unset_user_assessment_baseline",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "safeuserassessments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_safe_user_assessment",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autonomouscontainerdatabases",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_container_database",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autonomouscontainerdatabasedataguardassociationoperations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_container_database_dataguard_association_operation",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autonomousdatabases",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_database",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autonomousdatabasebackups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_database_backup",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autonomousdatabaseinstancewalletmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_database_instance_wallet_management",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autonomousdatabaseregionalwalletmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_database_regional_wallet_management",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autonomousdatabasewallets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_database_wallet",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autonomousexadatainfrastructures",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_exadata_infrastructure",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "autonomousvmclusters",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_vm_cluster",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "backups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_backup",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "backupdestinations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_backup_destination",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "clouddatabasemanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_cloud_database_management",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "cloudexadatainfrastructures",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_cloud_exadata_infrastructure",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "cloudvmclusters",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_cloud_vm_cluster",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dataguardassociations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_data_guard_association",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "databases",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_database",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "databasesoftwareimages",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_database_software_image",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "databaseupgrades",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_database_upgrade",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dbhomes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_db_home",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dbnodeconsoleconnections",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_db_node_console_connection",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dbsystems",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_db_system",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "exadatainfrastructures",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_exadata_infrastructure",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "exadatainfrastructurestorages",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_exadata_infrastructure_storage",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "exadataiormconfigs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_exadata_iorm_config",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "externalcontainerdatabases",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_external_container_database",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "externalcontainerdatabasemanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_external_container_database_management",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "externaldatabaseconnectors",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_external_database_connector",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "externalnoncontainerdatabases",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_external_non_container_database",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "externalnoncontainerdatabasemanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_external_non_container_database_management",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "externalnoncontainerdatabaseoperationsinsightsmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_external_non_container_database_operations_insights_management",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "externalpluggabledatabases",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_external_pluggable_database",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "externalpluggabledatabasemanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_external_pluggable_database_management",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "externalpluggabledatabaseoperationsinsightsmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_external_pluggable_database_operations_insights_management",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "keystores",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_key_store",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "maintenanceruns",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_maintenance_run",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managementdbmanagementprivateendpoints",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_management_db_management_private_endpoint",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managementmanageddatabasegroups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_management_managed_database_group",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managementmanageddatabaseschangedatabaseparameters",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_management_managed_databases_change_database_parameter",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managementmanageddatabasesresetdatabaseparameters",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_management_managed_databases_reset_database_parameter",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "migrations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_migration",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "migrationagents",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_migration_agent",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "migrationconnections",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_migration_connection",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "migrationjobs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_migration_job",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "migrationmigrations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_migration_migration",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "pluggabledatabases",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_pluggable_database",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "pluggabledatabaseslocalclones",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_pluggable_databases_local_clone",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "pluggabledatabasesremoteclones",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_pluggable_databases_remote_clone",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "vmclusters",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_vm_cluster",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "vmclusteraddvirtualmachines",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_vm_cluster_add_virtual_machine",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "vmclusternetworks",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_vm_cluster_network",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "vmclusterremovevirtualmachines",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_vm_cluster_remove_virtual_machine",
+	},
+	{
+		Group:    "datacatalog.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "catalogs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
+		ResourceType: "oci_datacatalog_catalog",
+	},
+	{
+		Group:    "datacatalog.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "catalogprivateendpoints",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
+		ResourceType: "oci_datacatalog_catalog_private_endpoint",
+	},
+	{
+		Group:    "datacatalog.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "connections",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
+		ResourceType: "oci_datacatalog_connection",
+	},
+	{
+		Group:    "datacatalog.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dataassets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
+		ResourceType: "oci_datacatalog_data_asset",
+	},
+	{
+		Group:    "datacatalog.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "metastores",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datacatalogv1alpha1.GetEncoder(), datacatalogv1alpha1.GetDecoder()),
+		ResourceType: "oci_datacatalog_metastore",
+	},
+	{
+		Group:    "dataflow.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "applications",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dataflowv1alpha1.GetEncoder(), dataflowv1alpha1.GetDecoder()),
+		ResourceType: "oci_dataflow_application",
+	},
+	{
+		Group:    "dataflow.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "invokeruns",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dataflowv1alpha1.GetEncoder(), dataflowv1alpha1.GetDecoder()),
+		ResourceType: "oci_dataflow_invoke_run",
+	},
+	{
+		Group:    "dataflow.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "privateendpoints",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dataflowv1alpha1.GetEncoder(), dataflowv1alpha1.GetDecoder()),
+		ResourceType: "oci_dataflow_private_endpoint",
+	},
+	{
+		Group:    "dataintegration.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "workspaces",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dataintegrationv1alpha1.GetEncoder(), dataintegrationv1alpha1.GetDecoder()),
+		ResourceType: "oci_dataintegration_workspace",
+	},
+	{
+		Group:    "datascience.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "jobs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
+		ResourceType: "oci_datascience_job",
+	},
+	{
+		Group:    "datascience.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "jobruns",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
+		ResourceType: "oci_datascience_job_run",
+	},
+	{
+		Group:    "datascience.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "models",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
+		ResourceType: "oci_datascience_model",
+	},
+	{
+		Group:    "datascience.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "modeldeployments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
+		ResourceType: "oci_datascience_model_deployment",
+	},
+	{
+		Group:    "datascience.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "modelprovenances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
+		ResourceType: "oci_datascience_model_provenance",
+	},
+	{
+		Group:    "datascience.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "notebooksessions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
+		ResourceType: "oci_datascience_notebook_session",
+	},
+	{
+		Group:    "datascience.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "projects",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datasciencev1alpha1.GetEncoder(), datasciencev1alpha1.GetDecoder()),
+		ResourceType: "oci_datascience_project",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "buildpipelines",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_build_pipeline",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "buildpipelinestages",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_build_pipeline_stage",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "buildruns",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_build_run",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "connections",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_connection",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "deployartifacts",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_deploy_artifact",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "deployenvironments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_deploy_environment",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "deploypipelines",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_deploy_pipeline",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "deploystages",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_deploy_stage",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "deployments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_deployment",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "projects",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_project",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "repositories",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_repository",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "repositorymirrors",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_repository_mirror",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "repositoryrefs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_repository_ref",
+	},
+	{
+		Group:    "devops.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "triggers",
+	}: {
+		JsonIt:       controllers.GetJSONItr(devopsv1alpha1.GetEncoder(), devopsv1alpha1.GetDecoder()),
+		ResourceType: "oci_devops_trigger",
+	},
+	{
+		Group:    "dns.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "records",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
+		ResourceType: "oci_dns_record",
+	},
+	{
+		Group:    "dns.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "resolvers",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
+		ResourceType: "oci_dns_resolver",
+	},
+	{
+		Group:    "dns.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "resolverendpoints",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
+		ResourceType: "oci_dns_resolver_endpoint",
+	},
+	{
+		Group:    "dns.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "rrsets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
+		ResourceType: "oci_dns_rrset",
+	},
+	{
+		Group:    "dns.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "steeringpolicies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
+		ResourceType: "oci_dns_steering_policy",
+	},
+	{
+		Group:    "dns.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "steeringpolicyattachments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
+		ResourceType: "oci_dns_steering_policy_attachment",
+	},
+	{
+		Group:    "dns.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "tsigkeys",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
+		ResourceType: "oci_dns_tsig_key",
+	},
+	{
+		Group:    "dns.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "views",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
+		ResourceType: "oci_dns_view",
+	},
+	{
+		Group:    "dns.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "zones",
+	}: {
+		JsonIt:       controllers.GetJSONItr(dnsv1alpha1.GetEncoder(), dnsv1alpha1.GetDecoder()),
+		ResourceType: "oci_dns_zone",
+	},
+	{
+		Group:    "email.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dkims",
+	}: {
+		JsonIt:       controllers.GetJSONItr(emailv1alpha1.GetEncoder(), emailv1alpha1.GetDecoder()),
+		ResourceType: "oci_email_dkim",
+	},
+	{
+		Group:    "email.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "emaildomains",
+	}: {
+		JsonIt:       controllers.GetJSONItr(emailv1alpha1.GetEncoder(), emailv1alpha1.GetDecoder()),
+		ResourceType: "oci_email_email_domain",
+	},
+	{
+		Group:    "email.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "senders",
+	}: {
+		JsonIt:       controllers.GetJSONItr(emailv1alpha1.GetEncoder(), emailv1alpha1.GetDecoder()),
+		ResourceType: "oci_email_sender",
+	},
+	{
+		Group:    "email.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "suppressions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(emailv1alpha1.GetEncoder(), emailv1alpha1.GetDecoder()),
+		ResourceType: "oci_email_suppression",
+	},
+	{
+		Group:    "events.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "rules",
+	}: {
+		JsonIt:       controllers.GetJSONItr(eventsv1alpha1.GetEncoder(), eventsv1alpha1.GetDecoder()),
+		ResourceType: "oci_events_rule",
+	},
+	{
+		Group:    "file.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "storageexports",
+	}: {
+		JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
+		ResourceType: "oci_file_storage_export",
+	},
+	{
+		Group:    "file.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "storageexportsets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
+		ResourceType: "oci_file_storage_export_set",
+	},
+	{
+		Group:    "file.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "storagefilesystems",
+	}: {
+		JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
+		ResourceType: "oci_file_storage_file_system",
+	},
+	{
+		Group:    "file.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "storagemounttargets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
+		ResourceType: "oci_file_storage_mount_target",
+	},
+	{
+		Group:    "file.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "storagesnapshots",
+	}: {
+		JsonIt:       controllers.GetJSONItr(filev1alpha1.GetEncoder(), filev1alpha1.GetDecoder()),
+		ResourceType: "oci_file_storage_snapshot",
+	},
+	{
+		Group:    "functions.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "applications",
+	}: {
+		JsonIt:       controllers.GetJSONItr(functionsv1alpha1.GetEncoder(), functionsv1alpha1.GetDecoder()),
+		ResourceType: "oci_functions_application",
+	},
+	{
+		Group:    "functions.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "functions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(functionsv1alpha1.GetEncoder(), functionsv1alpha1.GetDecoder()),
+		ResourceType: "oci_functions_function",
+	},
+	{
+		Group:    "functions.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "invokefunctions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(functionsv1alpha1.GetEncoder(), functionsv1alpha1.GetDecoder()),
+		ResourceType: "oci_functions_invoke_function",
+	},
+	{
+		Group:    "generic.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "artifactscontentartifactbypaths",
+	}: {
+		JsonIt:       controllers.GetJSONItr(genericv1alpha1.GetEncoder(), genericv1alpha1.GetDecoder()),
+		ResourceType: "oci_generic_artifacts_content_artifact_by_path",
+	},
+	{
+		Group:    "golden.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "gatedatabaseregistrations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(goldenv1alpha1.GetEncoder(), goldenv1alpha1.GetDecoder()),
+		ResourceType: "oci_golden_gate_database_registration",
+	},
+	{
+		Group:    "golden.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "gatedeployments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(goldenv1alpha1.GetEncoder(), goldenv1alpha1.GetDecoder()),
+		ResourceType: "oci_golden_gate_deployment",
+	},
+	{
+		Group:    "golden.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "gatedeploymentbackups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(goldenv1alpha1.GetEncoder(), goldenv1alpha1.GetDecoder()),
+		ResourceType: "oci_golden_gate_deployment_backup",
+	},
+	{
+		Group:    "health.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "checkshttpmonitors",
+	}: {
+		JsonIt:       controllers.GetJSONItr(healthv1alpha1.GetEncoder(), healthv1alpha1.GetDecoder()),
+		ResourceType: "oci_health_checks_http_monitor",
+	},
+	{
+		Group:    "health.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "checkshttpprobes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(healthv1alpha1.GetEncoder(), healthv1alpha1.GetDecoder()),
+		ResourceType: "oci_health_checks_http_probe",
+	},
+	{
+		Group:    "health.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "checkspingmonitors",
+	}: {
+		JsonIt:       controllers.GetJSONItr(healthv1alpha1.GetEncoder(), healthv1alpha1.GetDecoder()),
+		ResourceType: "oci_health_checks_ping_monitor",
+	},
+	{
+		Group:    "health.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "checkspingprobes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(healthv1alpha1.GetEncoder(), healthv1alpha1.GetDecoder()),
+		ResourceType: "oci_health_checks_ping_probe",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "apikeys",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_api_key",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "authtokens",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_auth_token",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "authenticationpolicies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_authentication_policy",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "compartments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_compartment",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "customersecretkeys",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_customer_secret_key",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dynamicgroups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_dynamic_group",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "groups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_group",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "identityproviders",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_identity_provider",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "idpgroupmappings",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_idp_group_mapping",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "networksources",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_network_source",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "policies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_policy",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "smtpcredentials",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_smtp_credential",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "swiftpasswords",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_swift_password",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "tags",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_tag",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "tagdefaults",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_tag_default",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "tagnamespaces",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_tag_namespace",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "uipasswords",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_ui_password",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "users",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_user",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "usercapabilitiesmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_user_capabilities_management",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "usergroupmemberships",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_user_group_membership",
+	},
+	{
+		Group:    "integration.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "integrationinstances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(integrationv1alpha1.GetEncoder(), integrationv1alpha1.GetDecoder()),
+		ResourceType: "oci_integration_integration_instance",
+	},
+	{
+		Group:    "jms.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "fleet",
+	}: {
+		JsonIt:       controllers.GetJSONItr(jmsv1alpha1.GetEncoder(), jmsv1alpha1.GetDecoder()),
+		ResourceType: "oci_jms_fleet",
+	},
+	{
+		Group:    "kms.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "encrypteddata",
+	}: {
+		JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
+		ResourceType: "oci_kms_encrypted_data",
+	},
+	{
+		Group:    "kms.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "generatedkeys",
+	}: {
+		JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
+		ResourceType: "oci_kms_generated_key",
+	},
+	{
+		Group:    "kms.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "keys",
+	}: {
+		JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
+		ResourceType: "oci_kms_key",
+	},
+	{
+		Group:    "kms.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "keyversions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
+		ResourceType: "oci_kms_key_version",
+	},
+	{
+		Group:    "kms.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "signs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
+		ResourceType: "oci_kms_sign",
+	},
+	{
+		Group:    "kms.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "vaults",
+	}: {
+		JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
+		ResourceType: "oci_kms_vault",
+	},
+	{
+		Group:    "kms.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "vaultreplications",
+	}: {
+		JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
+		ResourceType: "oci_kms_vault_replication",
+	},
+	{
+		Group:    "kms.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "verifies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(kmsv1alpha1.GetEncoder(), kmsv1alpha1.GetDecoder()),
+		ResourceType: "oci_kms_verify",
+	},
+	{
+		Group:    "limits.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "quotas",
+	}: {
+		JsonIt:       controllers.GetJSONItr(limitsv1alpha1.GetEncoder(), limitsv1alpha1.GetDecoder()),
+		ResourceType: "oci_limits_quota",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "backends",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_backend",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "backendsets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_backend_set",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "certificates",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_certificate",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "hostnames",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_hostname",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "listeners",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_listener",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "loadbalancers",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_load_balancer",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "loadbalancerroutingpolicies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_load_balancer_routing_policy",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "pathroutesets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_path_route_set",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "rulesets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_rule_set",
+	},
+	{
+		Group:    "loadbalancer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "sslciphersuites",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loadbalancerv1alpha1.GetEncoder(), loadbalancerv1alpha1.GetDecoder()),
+		ResourceType: "oci_load_balancer_ssl_cipher_suite",
+	},
+	{
+		Group:    "log.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsloganalyticsentities",
+	}: {
+		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
+		ResourceType: "oci_log_analytics_log_analytics_entity",
+	},
+	{
+		Group:    "log.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsloganalyticsimportcustomcontents",
+	}: {
+		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
+		ResourceType: "oci_log_analytics_log_analytics_import_custom_content",
+	},
+	{
+		Group:    "log.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsloganalyticsloggroups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
+		ResourceType: "oci_log_analytics_log_analytics_log_group",
+	},
+	{
+		Group:    "log.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsloganalyticsobjectcollectionrules",
+	}: {
+		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
+		ResourceType: "oci_log_analytics_log_analytics_object_collection_rule",
+	},
+	{
+		Group:    "log.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsloganalyticspreferencesmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
+		ResourceType: "oci_log_analytics_log_analytics_preferences_management",
+	},
+	{
+		Group:    "log.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsloganalyticsunprocesseddatabucketmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
+		ResourceType: "oci_log_analytics_log_analytics_unprocessed_data_bucket_management",
+	},
+	{
+		Group:    "log.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsnamespaces",
+	}: {
+		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
+		ResourceType: "oci_log_analytics_namespace",
+	},
+	{
+		Group:    "log.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsnamespacescheduledtasks",
+	}: {
+		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
+		ResourceType: "oci_log_analytics_namespace_scheduled_task",
+	},
+	{
+		Group:    "logging.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "logs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loggingv1alpha1.GetEncoder(), loggingv1alpha1.GetDecoder()),
+		ResourceType: "oci_logging_log",
+	},
+	{
+		Group:    "logging.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "loggroups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loggingv1alpha1.GetEncoder(), loggingv1alpha1.GetDecoder()),
+		ResourceType: "oci_logging_log_group",
+	},
+	{
+		Group:    "logging.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "logsavedsearches",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loggingv1alpha1.GetEncoder(), loggingv1alpha1.GetDecoder()),
+		ResourceType: "oci_logging_log_saved_search",
+	},
+	{
+		Group:    "logging.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "unifiedagentconfigurations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(loggingv1alpha1.GetEncoder(), loggingv1alpha1.GetDecoder()),
+		ResourceType: "oci_logging_unified_agent_configuration",
+	},
+	{
+		Group:    "management.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "agentmanagementagents",
+	}: {
+		JsonIt:       controllers.GetJSONItr(managementv1alpha1.GetEncoder(), managementv1alpha1.GetDecoder()),
+		ResourceType: "oci_management_agent_management_agent",
+	},
+	{
+		Group:    "management.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "agentmanagementagentinstallkeys",
+	}: {
+		JsonIt:       controllers.GetJSONItr(managementv1alpha1.GetEncoder(), managementv1alpha1.GetDecoder()),
+		ResourceType: "oci_management_agent_management_agent_install_key",
+	},
+	{
+		Group:    "management.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dashboardmanagementdashboardsimports",
+	}: {
+		JsonIt:       controllers.GetJSONItr(managementv1alpha1.GetEncoder(), managementv1alpha1.GetDecoder()),
+		ResourceType: "oci_management_dashboard_management_dashboards_import",
+	},
+	{
+		Group:    "marketplace.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "acceptedagreements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(marketplacev1alpha1.GetEncoder(), marketplacev1alpha1.GetDecoder()),
+		ResourceType: "oci_marketplace_accepted_agreement",
+	},
+	{
+		Group:    "marketplace.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "listingpackageagreements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(marketplacev1alpha1.GetEncoder(), marketplacev1alpha1.GetDecoder()),
+		ResourceType: "oci_marketplace_listing_package_agreement",
+	},
+	{
+		Group:    "marketplace.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "publications",
+	}: {
+		JsonIt:       controllers.GetJSONItr(marketplacev1alpha1.GetEncoder(), marketplacev1alpha1.GetDecoder()),
+		ResourceType: "oci_marketplace_publication",
+	},
+	{
+		Group:    "metering.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "computationcustomtables",
+	}: {
+		JsonIt:       controllers.GetJSONItr(meteringv1alpha1.GetEncoder(), meteringv1alpha1.GetDecoder()),
+		ResourceType: "oci_metering_computation_custom_table",
+	},
+	{
+		Group:    "metering.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "computationqueries",
+	}: {
+		JsonIt:       controllers.GetJSONItr(meteringv1alpha1.GetEncoder(), meteringv1alpha1.GetDecoder()),
+		ResourceType: "oci_metering_computation_query",
+	},
+	{
+		Group:    "metering.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "computationusages",
+	}: {
+		JsonIt:       controllers.GetJSONItr(meteringv1alpha1.GetEncoder(), meteringv1alpha1.GetDecoder()),
+		ResourceType: "oci_metering_computation_usage",
+	},
+	{
+		Group:    "monitoring.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "alarms",
+	}: {
+		JsonIt:       controllers.GetJSONItr(monitoringv1alpha1.GetEncoder(), monitoringv1alpha1.GetDecoder()),
+		ResourceType: "oci_monitoring_alarm",
+	},
+	{
+		Group:    "mysql.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsclusters",
+	}: {
+		JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
+		ResourceType: "oci_mysql_analytics_cluster",
+	},
+	{
+		Group:    "mysql.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "channels",
+	}: {
+		JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
+		ResourceType: "oci_mysql_channel",
+	},
+	{
+		Group:    "mysql.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "heatwaveclusters",
+	}: {
+		JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
+		ResourceType: "oci_mysql_heat_wave_cluster",
+	},
+	{
+		Group:    "mysql.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "mysqlbackups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
+		ResourceType: "oci_mysql_mysql_backup",
+	},
+	{
+		Group:    "mysql.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "mysqldbsystems",
+	}: {
+		JsonIt:       controllers.GetJSONItr(mysqlv1alpha1.GetEncoder(), mysqlv1alpha1.GetDecoder()),
+		ResourceType: "oci_mysql_mysql_db_system",
+	},
+	{
+		Group:    "network.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "loadbalancerbackends",
+	}: {
+		JsonIt:       controllers.GetJSONItr(networkv1alpha1.GetEncoder(), networkv1alpha1.GetDecoder()),
+		ResourceType: "oci_network_load_balancer_backend",
+	},
+	{
+		Group:    "network.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "loadbalancerbackendsets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(networkv1alpha1.GetEncoder(), networkv1alpha1.GetDecoder()),
+		ResourceType: "oci_network_load_balancer_backend_set",
+	},
+	{
+		Group:    "network.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "loadbalancerlisteners",
+	}: {
+		JsonIt:       controllers.GetJSONItr(networkv1alpha1.GetEncoder(), networkv1alpha1.GetDecoder()),
+		ResourceType: "oci_network_load_balancer_listener",
+	},
+	{
+		Group:    "network.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "loadbalancernetworkloadbalancers",
+	}: {
+		JsonIt:       controllers.GetJSONItr(networkv1alpha1.GetEncoder(), networkv1alpha1.GetDecoder()),
+		ResourceType: "oci_network_load_balancer_network_load_balancer",
+	},
+	{
+		Group:    "nosql.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "indices",
+	}: {
+		JsonIt:       controllers.GetJSONItr(nosqlv1alpha1.GetEncoder(), nosqlv1alpha1.GetDecoder()),
+		ResourceType: "oci_nosql_index",
+	},
+	{
+		Group:    "nosql.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "tables",
+	}: {
+		JsonIt:       controllers.GetJSONItr(nosqlv1alpha1.GetEncoder(), nosqlv1alpha1.GetDecoder()),
+		ResourceType: "oci_nosql_table",
+	},
+	{
+		Group:    "objectstorage.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "buckets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
+		ResourceType: "oci_objectstorage_bucket",
+	},
+	{
+		Group:    "objectstorage.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "namespacemetadata",
+	}: {
+		JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
+		ResourceType: "oci_objectstorage_namespace_metadata",
+	},
+	{
+		Group:    "objectstorage.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "objects",
+	}: {
+		JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
+		ResourceType: "oci_objectstorage_object",
+	},
+	{
+		Group:    "objectstorage.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "objectlifecyclepolicies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
+		ResourceType: "oci_objectstorage_object_lifecycle_policy",
+	},
+	{
+		Group:    "objectstorage.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "preauthrequests",
+	}: {
+		JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
+		ResourceType: "oci_objectstorage_preauthrequest",
+	},
+	{
+		Group:    "objectstorage.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "replicationpolicies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(objectstoragev1alpha1.GetEncoder(), objectstoragev1alpha1.GetDecoder()),
+		ResourceType: "oci_objectstorage_replication_policy",
+	},
+	{
+		Group:    "oce.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "oceinstances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(ocev1alpha1.GetEncoder(), ocev1alpha1.GetDecoder()),
+		ResourceType: "oci_oce_oce_instance",
+	},
+	{
+		Group:    "ocvp.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "esxihosts",
+	}: {
+		JsonIt:       controllers.GetJSONItr(ocvpv1alpha1.GetEncoder(), ocvpv1alpha1.GetDecoder()),
+		ResourceType: "oci_ocvp_esxi_host",
+	},
+	{
+		Group:    "ocvp.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "sddcs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(ocvpv1alpha1.GetEncoder(), ocvpv1alpha1.GetDecoder()),
+		ResourceType: "oci_ocvp_sddc",
+	},
+	{
+		Group:    "oda.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "odainstances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(odav1alpha1.GetEncoder(), odav1alpha1.GetDecoder()),
+		ResourceType: "oci_oda_oda_instance",
+	},
+	{
+		Group:    "ons.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "notificationtopics",
+	}: {
+		JsonIt:       controllers.GetJSONItr(onsv1alpha1.GetEncoder(), onsv1alpha1.GetDecoder()),
+		ResourceType: "oci_ons_notification_topic",
+	},
+	{
+		Group:    "ons.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "subscriptions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(onsv1alpha1.GetEncoder(), onsv1alpha1.GetDecoder()),
+		ResourceType: "oci_ons_subscription",
+	},
+	{
+		Group:    "opsi.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "databaseinsights",
+	}: {
+		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
+		ResourceType: "oci_opsi_database_insight",
+	},
+	{
+		Group:    "opsi.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "enterprisemanagerbridges",
+	}: {
+		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
+		ResourceType: "oci_opsi_enterprise_manager_bridge",
+	},
+	{
+		Group:    "opsi.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "exadatainsights",
+	}: {
+		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
+		ResourceType: "oci_opsi_exadata_insight",
+	},
+	{
+		Group:    "opsi.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "hostinsights",
+	}: {
+		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
+		ResourceType: "oci_opsi_host_insight",
+	},
+	{
+		Group:    "optimizer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "enrollmentstatuses",
+	}: {
+		JsonIt:       controllers.GetJSONItr(optimizerv1alpha1.GetEncoder(), optimizerv1alpha1.GetDecoder()),
+		ResourceType: "oci_optimizer_enrollment_status",
+	},
+	{
+		Group:    "optimizer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "profiles",
+	}: {
+		JsonIt:       controllers.GetJSONItr(optimizerv1alpha1.GetEncoder(), optimizerv1alpha1.GetDecoder()),
+		ResourceType: "oci_optimizer_profile",
+	},
+	{
+		Group:    "optimizer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "recommendations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(optimizerv1alpha1.GetEncoder(), optimizerv1alpha1.GetDecoder()),
+		ResourceType: "oci_optimizer_recommendation",
+	},
+	{
+		Group:    "optimizer.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "resourceactions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(optimizerv1alpha1.GetEncoder(), optimizerv1alpha1.GetDecoder()),
+		ResourceType: "oci_optimizer_resource_action",
+	},
+	{
+		Group:    "osmanagement.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managedinstances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(osmanagementv1alpha1.GetEncoder(), osmanagementv1alpha1.GetDecoder()),
+		ResourceType: "oci_osmanagement_managed_instance",
+	},
+	{
+		Group:    "osmanagement.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managedinstancegroups",
+	}: {
+		JsonIt:       controllers.GetJSONItr(osmanagementv1alpha1.GetEncoder(), osmanagementv1alpha1.GetDecoder()),
+		ResourceType: "oci_osmanagement_managed_instance_group",
+	},
+	{
+		Group:    "osmanagement.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "managedinstancemanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(osmanagementv1alpha1.GetEncoder(), osmanagementv1alpha1.GetDecoder()),
+		ResourceType: "oci_osmanagement_managed_instance_management",
+	},
+	{
+		Group:    "osmanagement.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "softwaresources",
+	}: {
+		JsonIt:       controllers.GetJSONItr(osmanagementv1alpha1.GetEncoder(), osmanagementv1alpha1.GetDecoder()),
+		ResourceType: "oci_osmanagement_software_source",
+	},
+	{
+		Group:    "sch.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "serviceconnectors",
+	}: {
+		JsonIt:       controllers.GetJSONItr(schv1alpha1.GetEncoder(), schv1alpha1.GetDecoder()),
+		ResourceType: "oci_sch_service_connector",
+	},
+	{
+		Group:    "service.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "catalogprivateapplications",
+	}: {
+		JsonIt:       controllers.GetJSONItr(servicev1alpha1.GetEncoder(), servicev1alpha1.GetDecoder()),
+		ResourceType: "oci_service_catalog_private_application",
+	},
+	{
+		Group:    "service.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "catalogservicecatalogs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(servicev1alpha1.GetEncoder(), servicev1alpha1.GetDecoder()),
+		ResourceType: "oci_service_catalog_service_catalog",
+	},
+	{
+		Group:    "service.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "catalogservicecatalogassociations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(servicev1alpha1.GetEncoder(), servicev1alpha1.GetDecoder()),
+		ResourceType: "oci_service_catalog_service_catalog_association",
+	},
+	{
+		Group:    "streaming.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "connectharnesses",
+	}: {
+		JsonIt:       controllers.GetJSONItr(streamingv1alpha1.GetEncoder(), streamingv1alpha1.GetDecoder()),
+		ResourceType: "oci_streaming_connect_harness",
+	},
+	{
+		Group:    "streaming.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "streams",
+	}: {
+		JsonIt:       controllers.GetJSONItr(streamingv1alpha1.GetEncoder(), streamingv1alpha1.GetDecoder()),
+		ResourceType: "oci_streaming_stream",
+	},
+	{
+		Group:    "streaming.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "streampools",
+	}: {
+		JsonIt:       controllers.GetJSONItr(streamingv1alpha1.GetEncoder(), streamingv1alpha1.GetDecoder()),
+		ResourceType: "oci_streaming_stream_pool",
+	},
+	{
+		Group:    "vulnerability.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "scanningcontainerscanrecipes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(vulnerabilityv1alpha1.GetEncoder(), vulnerabilityv1alpha1.GetDecoder()),
+		ResourceType: "oci_vulnerability_scanning_container_scan_recipe",
+	},
+	{
+		Group:    "vulnerability.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "scanningcontainerscantargets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(vulnerabilityv1alpha1.GetEncoder(), vulnerabilityv1alpha1.GetDecoder()),
+		ResourceType: "oci_vulnerability_scanning_container_scan_target",
+	},
+	{
+		Group:    "vulnerability.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "scanninghostscanrecipes",
+	}: {
+		JsonIt:       controllers.GetJSONItr(vulnerabilityv1alpha1.GetEncoder(), vulnerabilityv1alpha1.GetDecoder()),
+		ResourceType: "oci_vulnerability_scanning_host_scan_recipe",
+	},
+	{
+		Group:    "vulnerability.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "scanninghostscantargets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(vulnerabilityv1alpha1.GetEncoder(), vulnerabilityv1alpha1.GetDecoder()),
+		ResourceType: "oci_vulnerability_scanning_host_scan_target",
+	},
+	{
+		Group:    "waas.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "addresslists",
+	}: {
+		JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
+		ResourceType: "oci_waas_address_list",
+	},
+	{
+		Group:    "waas.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "certificates",
+	}: {
+		JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
+		ResourceType: "oci_waas_certificate",
+	},
+	{
+		Group:    "waas.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "customprotectionrules",
+	}: {
+		JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
+		ResourceType: "oci_waas_custom_protection_rule",
+	},
+	{
+		Group:    "waas.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "httpredirects",
+	}: {
+		JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
+		ResourceType: "oci_waas_http_redirect",
+	},
+	{
+		Group:    "waas.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "protectionrules",
+	}: {
+		JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
+		ResourceType: "oci_waas_protection_rule",
+	},
+	{
+		Group:    "waas.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "purgecaches",
+	}: {
+		JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
+		ResourceType: "oci_waas_purge_cache",
+	},
+	{
+		Group:    "waas.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "waaspolicies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(waasv1alpha1.GetEncoder(), waasv1alpha1.GetDecoder()),
+		ResourceType: "oci_waas_waas_policy",
+	},
+	{
+		Group:    "waf.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "networkaddresslists",
+	}: {
+		JsonIt:       controllers.GetJSONItr(wafv1alpha1.GetEncoder(), wafv1alpha1.GetDecoder()),
+		ResourceType: "oci_waf_network_address_list",
+	},
+	{
+		Group:    "waf.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "webappfirewalls",
+	}: {
+		JsonIt:       controllers.GetJSONItr(wafv1alpha1.GetEncoder(), wafv1alpha1.GetDecoder()),
+		ResourceType: "oci_waf_web_app_firewall",
+	},
+	{
+		Group:    "waf.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "webappfirewallpolicies",
+	}: {
+		JsonIt:       controllers.GetJSONItr(wafv1alpha1.GetEncoder(), wafv1alpha1.GetDecoder()),
+		ResourceType: "oci_waf_web_app_firewall_policy",
+	},
+}
 
 func getJsonItAndResType(gvr schema.GroupVersionResource) Data {
 	return allJsonIt[gvr]

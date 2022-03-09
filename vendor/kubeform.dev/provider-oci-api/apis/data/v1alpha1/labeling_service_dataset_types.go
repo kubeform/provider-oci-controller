@@ -98,6 +98,8 @@ type LabelingServiceDatasetSpecResource struct {
 	InitialRecordGenerationConfiguration *LabelingServiceDatasetSpecInitialRecordGenerationConfiguration `json:"initialRecordGenerationConfiguration,omitempty" tf:"initial_record_generation_configuration"`
 	LabelSet                             *LabelingServiceDatasetSpecLabelSet                             `json:"labelSet" tf:"label_set"`
 	// +optional
+	LabelingInstructions *string `json:"labelingInstructions,omitempty" tf:"labeling_instructions"`
+	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional
 	State *string `json:"state,omitempty" tf:"state"`

@@ -49,7 +49,8 @@ type SessionSpecTargetResourceDetails struct {
 	SessionType *string `json:"sessionType" tf:"session_type"`
 	// +optional
 	TargetResourceDisplayName *string `json:"targetResourceDisplayName,omitempty" tf:"target_resource_display_name"`
-	TargetResourceID          *string `json:"targetResourceID" tf:"target_resource_id"`
+	// +optional
+	TargetResourceID *string `json:"targetResourceID,omitempty" tf:"target_resource_id"`
 	// +optional
 	TargetResourceOperatingSystemUserName *string `json:"targetResourceOperatingSystemUserName,omitempty" tf:"target_resource_operating_system_user_name"`
 	// +optional

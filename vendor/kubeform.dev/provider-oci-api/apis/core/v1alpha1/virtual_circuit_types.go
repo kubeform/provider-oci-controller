@@ -107,6 +107,8 @@ type VirtualCircuitSpecResource struct {
 	// +optional
 	GatewayID *string `json:"gatewayID,omitempty" tf:"gateway_id"`
 	// +optional
+	IpMTU *string `json:"ipMTU,omitempty" tf:"ip_mtu"`
+	// +optional
 	OracleBGPAsn *int64 `json:"oracleBGPAsn,omitempty" tf:"oracle_bgp_asn"`
 	// +optional
 	ProviderServiceID *string `json:"providerServiceID,omitempty" tf:"provider_service_id"`

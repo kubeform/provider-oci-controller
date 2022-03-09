@@ -88,7 +88,7 @@ func (r *DeployEnvironment) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range deployenvironmentForceNewList {
+	for key, _ := range deployenvironmentForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

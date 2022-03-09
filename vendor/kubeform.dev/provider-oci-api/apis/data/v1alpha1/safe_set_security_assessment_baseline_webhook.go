@@ -89,7 +89,7 @@ func (r *SafeSetSecurityAssessmentBaseline) ValidateUpdate(old runtime.Object) e
 		return err
 	}
 
-	for key := range safesetsecurityassessmentbaselineForceNewList {
+	for key, _ := range safesetsecurityassessmentbaselineForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

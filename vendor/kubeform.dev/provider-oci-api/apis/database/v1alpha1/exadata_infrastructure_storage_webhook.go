@@ -91,7 +91,7 @@ func (r *ExadataInfrastructureStorage) ValidateUpdate(old runtime.Object) error 
 		return err
 	}
 
-	for key := range exadatainfrastructurestorageForceNewList {
+	for key, _ := range exadatainfrastructurestorageForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

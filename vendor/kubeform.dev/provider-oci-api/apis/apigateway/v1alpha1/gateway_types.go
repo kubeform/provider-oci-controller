@@ -41,6 +41,14 @@ type Gateway struct {
 	Status            GatewayStatus `json:"status,omitempty"`
 }
 
+type GatewaySpecCaBundles struct {
+	// +optional
+	CaBundleID *string `json:"caBundleID,omitempty" tf:"ca_bundle_id"`
+	// +optional
+	CertificateAuthorityID *string `json:"certificateAuthorityID,omitempty" tf:"certificate_authority_id"`
+	Type                   *string `json:"type" tf:"type"`
+}
+
 type GatewaySpecIpAddresses struct {
 	// +optional
 	IpAddress *string `json:"ipAddress,omitempty" tf:"ip_address"`
@@ -92,6 +100,8 @@ type GatewaySpecResource struct {
 
 	ID string `json:"id,omitempty" tf:"id,omitempty"`
 
+	// +optional
+	CaBundles []GatewaySpecCaBundles `json:"caBundles,omitempty" tf:"ca_bundles"`
 	// +optional
 	CertificateID *string `json:"certificateID,omitempty" tf:"certificate_id"`
 	CompartmentID *string `json:"compartmentID" tf:"compartment_id"`

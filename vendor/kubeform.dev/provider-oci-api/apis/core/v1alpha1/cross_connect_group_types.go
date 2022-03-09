@@ -41,6 +41,21 @@ type CrossConnectGroup struct {
 	Status            CrossConnectGroupStatus `json:"status,omitempty"`
 }
 
+type CrossConnectGroupSpecMacsecPropertiesPrimaryKey struct {
+	ConnectivityAssociationKeySecretID       *string `json:"connectivityAssociationKeySecretID" tf:"connectivity_association_key_secret_id"`
+	ConnectivityAssociationKeySecretVersion  *string `json:"connectivityAssociationKeySecretVersion" tf:"connectivity_association_key_secret_version"`
+	ConnectivityAssociationNameSecretID      *string `json:"connectivityAssociationNameSecretID" tf:"connectivity_association_name_secret_id"`
+	ConnectivityAssociationNameSecretVersion *string `json:"connectivityAssociationNameSecretVersion" tf:"connectivity_association_name_secret_version"`
+}
+
+type CrossConnectGroupSpecMacsecProperties struct {
+	// +optional
+	EncryptionCipher *string `json:"encryptionCipher,omitempty" tf:"encryption_cipher"`
+	// +optional
+	PrimaryKey *CrossConnectGroupSpecMacsecPropertiesPrimaryKey `json:"primaryKey,omitempty" tf:"primary_key"`
+	State      *string                                          `json:"state" tf:"state"`
+}
+
 type CrossConnectGroupSpec struct {
 	State *CrossConnectGroupSpecResource `json:"state,omitempty" tf:"-"`
 
@@ -69,6 +84,12 @@ type CrossConnectGroupSpecResource struct {
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name"`
 	// +optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
+	// +optional
+	MacsecProperties *CrossConnectGroupSpecMacsecProperties `json:"macsecProperties,omitempty" tf:"macsec_properties"`
+	// +optional
+	OciLogicalDeviceName *string `json:"ociLogicalDeviceName,omitempty" tf:"oci_logical_device_name"`
+	// +optional
+	OciPhysicalDeviceName *string `json:"ociPhysicalDeviceName,omitempty" tf:"oci_physical_device_name"`
 	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional

@@ -89,7 +89,7 @@ func (r *ObjectLifecyclePolicy) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range objectlifecyclepolicyForceNewList {
+	for key, _ := range objectlifecyclepolicyForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

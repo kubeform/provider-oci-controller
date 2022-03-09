@@ -107,7 +107,7 @@ func (r *DbHome) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range dbhomeForceNewList {
+	for key, _ := range dbhomeForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

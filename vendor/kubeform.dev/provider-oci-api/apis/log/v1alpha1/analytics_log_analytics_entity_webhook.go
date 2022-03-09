@@ -91,7 +91,7 @@ func (r *AnalyticsLogAnalyticsEntity) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range analyticsloganalyticsentityForceNewList {
+	for key, _ := range analyticsloganalyticsentityForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

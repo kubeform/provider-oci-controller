@@ -27,153 +27,179 @@ import (
 
 func GetEncoder() map[string]jsoniter.ValEncoder {
 	return map[string]jsoniter.ValEncoder{
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecBackupConfig{}).Type1()):                                 AutonomousContainerDatabaseSpecBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecBackupConfigBackupDestinationDetails{}).Type1()):         AutonomousContainerDatabaseSpecBackupConfigBackupDestinationDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecMaintenanceWindow{}).Type1()):                            AutonomousContainerDatabaseSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecMaintenanceWindowDetails{}).Type1()):                     AutonomousContainerDatabaseSpecMaintenanceWindowDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecPeerAutonomousContainerDatabaseBackupConfig{}).Type1()):  AutonomousContainerDatabaseSpecPeerAutonomousContainerDatabaseBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecApexDetails{}).Type1()):                                           AutonomousDatabaseSpecApexDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecBackupConfig{}).Type1()):                                          AutonomousDatabaseSpecBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecConnectionStrings{}).Type1()):                                     AutonomousDatabaseSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecConnectionUrls{}).Type1()):                                        AutonomousDatabaseSpecConnectionUrlsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecStandbyDb{}).Type1()):                                             AutonomousDatabaseSpecStandbyDbCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                        AutonomousExadataInfrastructureSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindowDetails{}).Type1()):                 AutonomousExadataInfrastructureSpecMaintenanceWindowDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(BackupDestinationSpecMountTypeDetails{}).Type1()):                                       BackupDestinationSpecMountTypeDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(CloudDatabaseManagementSpecCredentialdetails{}).Type1()):                                CloudDatabaseManagementSpecCredentialdetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(CloudExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                             CloudExadataInfrastructureSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(CloudVmClusterSpecIormConfigCache{}).Type1()):                                           CloudVmClusterSpecIormConfigCacheCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecConnectionStrings{}).Type1()):                                               DatabaseSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabase{}).Type1()):                                                        DatabaseSpecDatabaseCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseDbBackupConfig{}).Type1()):                                          DatabaseSpecDatabaseDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseManagementConfig{}).Type1()):                                        DatabaseSpecDatabaseManagementConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDbBackupConfig{}).Type1()):                                                  DatabaseSpecDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecConnectionStrings{}).Type1()):                                        DatabaseUpgradeSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDatabaseUpgradeSourceDetails{}).Type1()):                             DatabaseUpgradeSpecDatabaseUpgradeSourceDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDbBackupConfig{}).Type1()):                                           DatabaseUpgradeSpecDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbHomeSpecDatabase{}).Type1()):                                                          DbHomeSpecDatabaseCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbHomeSpecDatabaseDbBackupConfig{}).Type1()):                                            DbHomeSpecDatabaseDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHome{}).Type1()):                                                          DbSystemSpecDbHomeCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHomeDatabase{}).Type1()):                                                  DbSystemSpecDbHomeDatabaseCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHomeDatabaseDbBackupConfig{}).Type1()):                                    DbSystemSpecDbHomeDatabaseDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbSystemOptions{}).Type1()):                                                 DbSystemSpecDbSystemOptionsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecIormConfigCache{}).Type1()):                                                 DbSystemSpecIormConfigCacheCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecMaintenanceWindow{}).Type1()):                                               DbSystemSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecMaintenanceWindowDetails{}).Type1()):                                        DbSystemSpecMaintenanceWindowDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                                  ExadataInfrastructureSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExadataInfrastructureStorageSpecMaintenanceWindow{}).Type1()):                           ExadataInfrastructureStorageSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalContainerDatabaseSpecDatabaseManagementConfig{}).Type1()):                       ExternalContainerDatabaseSpecDatabaseManagementConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalDatabaseConnectorSpecConnectionCredentials{}).Type1()):                          ExternalDatabaseConnectorSpecConnectionCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalDatabaseConnectorSpecConnectionString{}).Type1()):                               ExternalDatabaseConnectorSpecConnectionStringCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalNonContainerDatabaseSpecDatabaseManagementConfig{}).Type1()):                    ExternalNonContainerDatabaseSpecDatabaseManagementConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalNonContainerDatabaseSpecOperationsInsightsConfig{}).Type1()):                    ExternalNonContainerDatabaseSpecOperationsInsightsConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalPluggableDatabaseSpecDatabaseManagementConfig{}).Type1()):                       ExternalPluggableDatabaseSpecDatabaseManagementConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalPluggableDatabaseSpecOperationsInsightsConfig{}).Type1()):                       ExternalPluggableDatabaseSpecOperationsInsightsConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(KeyStoreSpecTypeDetails{}).Type1()):                                                     KeyStoreSpecTypeDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ManagementManagedDatabasesChangeDatabaseParameterSpecCredentials{}).Type1()):            ManagementManagedDatabasesChangeDatabaseParameterSpecCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ManagementManagedDatabasesResetDatabaseParameterSpecCredentials{}).Type1()):             ManagementManagedDatabasesResetDatabaseParameterSpecCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecAdminCredentials{}).Type1()):                                     MigrationConnectionSpecAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecConnectDescriptor{}).Type1()):                                    MigrationConnectionSpecConnectDescriptorCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecPrivateEndpoint{}).Type1()):                                      MigrationConnectionSpecPrivateEndpointCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecSshDetails{}).Type1()):                                           MigrationConnectionSpecSshDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecVaultDetails{}).Type1()):                                         MigrationConnectionSpecVaultDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationJobSpecProgress{}).Type1()):                                                    MigrationJobSpecProgressCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetails{}).Type1()):                             MigrationMigrationSpecDataTransferMediumDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetails{}).Type1()):          MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsObjectStorageDetails{}).Type1()):         MigrationMigrationSpecDataTransferMediumDetailsObjectStorageDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettings{}).Type1()):                                      MigrationMigrationSpecDatapumpSettingsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsDataPumpParameters{}).Type1()):                    MigrationMigrationSpecDatapumpSettingsDataPumpParametersCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsExportDirectoryObject{}).Type1()):                 MigrationMigrationSpecDatapumpSettingsExportDirectoryObjectCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsImportDirectoryObject{}).Type1()):                 MigrationMigrationSpecDatapumpSettingsImportDirectoryObjectCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetails{}).Type1()):                                     MigrationMigrationSpecGoldenGateDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHub{}).Type1()):                                  MigrationMigrationSpecGoldenGateDetailsHubCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubRestAdminCredentials{}).Type1()):              MigrationMigrationSpecGoldenGateDetailsHubRestAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubSourceContainerDbAdminCredentials{}).Type1()): MigrationMigrationSpecGoldenGateDetailsHubSourceContainerDbAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubSourceDbAdminCredentials{}).Type1()):          MigrationMigrationSpecGoldenGateDetailsHubSourceDbAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubTargetDbAdminCredentials{}).Type1()):          MigrationMigrationSpecGoldenGateDetailsHubTargetDbAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettings{}).Type1()):                             MigrationMigrationSpecGoldenGateDetailsSettingsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettingsExtract{}).Type1()):                      MigrationMigrationSpecGoldenGateDetailsSettingsExtractCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettingsReplicat{}).Type1()):                     MigrationMigrationSpecGoldenGateDetailsSettingsReplicatCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecVaultDetails{}).Type1()):                                          MigrationMigrationSpecVaultDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabaseSpecConnectionStrings{}).Type1()):                                      PluggableDatabaseSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabasesLocalCloneSpecConnectionStrings{}).Type1()):                           PluggableDatabasesLocalCloneSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabasesRemoteCloneSpecConnectionStrings{}).Type1()):                          PluggableDatabasesRemoteCloneSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecBackupConfig{}).Type1()):                                    AutonomousContainerDatabaseSpecBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecBackupConfigBackupDestinationDetails{}).Type1()):            AutonomousContainerDatabaseSpecBackupConfigBackupDestinationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecMaintenanceWindow{}).Type1()):                               AutonomousContainerDatabaseSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecMaintenanceWindowDetails{}).Type1()):                        AutonomousContainerDatabaseSpecMaintenanceWindowDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecPeerAutonomousContainerDatabaseBackupConfig{}).Type1()):     AutonomousContainerDatabaseSpecPeerAutonomousContainerDatabaseBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecApexDetails{}).Type1()):                                              AutonomousDatabaseSpecApexDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecBackupConfig{}).Type1()):                                             AutonomousDatabaseSpecBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecConnectionStrings{}).Type1()):                                        AutonomousDatabaseSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecConnectionUrls{}).Type1()):                                           AutonomousDatabaseSpecConnectionUrlsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecScheduledOperationsDayOfWeek{}).Type1()):                             AutonomousDatabaseSpecScheduledOperationsDayOfWeekCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecStandbyDb{}).Type1()):                                                AutonomousDatabaseSpecStandbyDbCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                           AutonomousExadataInfrastructureSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindowDetails{}).Type1()):                    AutonomousExadataInfrastructureSpecMaintenanceWindowDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BackupDestinationSpecMountTypeDetails{}).Type1()):                                          BackupDestinationSpecMountTypeDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CloudDatabaseManagementSpecCredentialdetails{}).Type1()):                                   CloudDatabaseManagementSpecCredentialdetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CloudExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                                CloudExadataInfrastructureSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CloudVmClusterSpecIormConfigCache{}).Type1()):                                              CloudVmClusterSpecIormConfigCacheCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecConnectionStrings{}).Type1()):                                                  DatabaseSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabase{}).Type1()):                                                           DatabaseSpecDatabaseCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseDbBackupConfig{}).Type1()):                                             DatabaseSpecDatabaseDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseManagementConfig{}).Type1()):                                           DatabaseSpecDatabaseManagementConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDbBackupConfig{}).Type1()):                                                     DatabaseSpecDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecConnectionStrings{}).Type1()):                                           DatabaseUpgradeSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDatabaseUpgradeSourceDetails{}).Type1()):                                DatabaseUpgradeSpecDatabaseUpgradeSourceDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDbBackupConfig{}).Type1()):                                              DatabaseUpgradeSpecDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbHomeSpecDatabase{}).Type1()):                                                             DbHomeSpecDatabaseCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbHomeSpecDatabaseDbBackupConfig{}).Type1()):                                               DbHomeSpecDatabaseDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHome{}).Type1()):                                                             DbSystemSpecDbHomeCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHomeDatabase{}).Type1()):                                                     DbSystemSpecDbHomeDatabaseCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHomeDatabaseDbBackupConfig{}).Type1()):                                       DbSystemSpecDbHomeDatabaseDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbSystemOptions{}).Type1()):                                                    DbSystemSpecDbSystemOptionsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecIormConfigCache{}).Type1()):                                                    DbSystemSpecIormConfigCacheCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecMaintenanceWindow{}).Type1()):                                                  DbSystemSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecMaintenanceWindowDetails{}).Type1()):                                           DbSystemSpecMaintenanceWindowDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                                     ExadataInfrastructureSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExadataInfrastructureStorageSpecMaintenanceWindow{}).Type1()):                              ExadataInfrastructureStorageSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalContainerDatabaseSpecDatabaseManagementConfig{}).Type1()):                          ExternalContainerDatabaseSpecDatabaseManagementConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalDatabaseConnectorSpecConnectionCredentials{}).Type1()):                             ExternalDatabaseConnectorSpecConnectionCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalDatabaseConnectorSpecConnectionString{}).Type1()):                                  ExternalDatabaseConnectorSpecConnectionStringCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalNonContainerDatabaseSpecDatabaseManagementConfig{}).Type1()):                       ExternalNonContainerDatabaseSpecDatabaseManagementConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalNonContainerDatabaseSpecOperationsInsightsConfig{}).Type1()):                       ExternalNonContainerDatabaseSpecOperationsInsightsConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalPluggableDatabaseSpecDatabaseManagementConfig{}).Type1()):                          ExternalPluggableDatabaseSpecDatabaseManagementConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalPluggableDatabaseSpecOperationsInsightsConfig{}).Type1()):                          ExternalPluggableDatabaseSpecOperationsInsightsConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(KeyStoreSpecTypeDetails{}).Type1()):                                                        KeyStoreSpecTypeDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MaintenanceRunSpecEstimatedPatchingTime{}).Type1()):                                        MaintenanceRunSpecEstimatedPatchingTimeCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ManagementManagedDatabasesChangeDatabaseParameterSpecCredentials{}).Type1()):               ManagementManagedDatabasesChangeDatabaseParameterSpecCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ManagementManagedDatabasesResetDatabaseParameterSpecCredentials{}).Type1()):                ManagementManagedDatabasesResetDatabaseParameterSpecCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecAdminCredentials{}).Type1()):                                        MigrationConnectionSpecAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecConnectDescriptor{}).Type1()):                                       MigrationConnectionSpecConnectDescriptorCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecPrivateEndpoint{}).Type1()):                                         MigrationConnectionSpecPrivateEndpointCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecSshDetails{}).Type1()):                                              MigrationConnectionSpecSshDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecVaultDetails{}).Type1()):                                            MigrationConnectionSpecVaultDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationJobSpecProgress{}).Type1()):                                                       MigrationJobSpecProgressCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationJobSpecProgressPhasesLogLocation{}).Type1()):                                      MigrationJobSpecProgressPhasesLogLocationCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecAdvisorSettings{}).Type1()):                                          MigrationMigrationSpecAdvisorSettingsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetails{}).Type1()):                                MigrationMigrationSpecDataTransferMediumDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetails{}).Type1()):             MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{}).Type1()): MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucketCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsObjectStorageDetails{}).Type1()):            MigrationMigrationSpecDataTransferMediumDetailsObjectStorageDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettings{}).Type1()):                                         MigrationMigrationSpecDatapumpSettingsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsDataPumpParameters{}).Type1()):                       MigrationMigrationSpecDatapumpSettingsDataPumpParametersCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsExportDirectoryObject{}).Type1()):                    MigrationMigrationSpecDatapumpSettingsExportDirectoryObjectCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsImportDirectoryObject{}).Type1()):                    MigrationMigrationSpecDatapumpSettingsImportDirectoryObjectCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetails{}).Type1()):                                      MigrationMigrationSpecDumpTransferDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsSource{}).Type1()):                                MigrationMigrationSpecDumpTransferDetailsSourceCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsTarget{}).Type1()):                                MigrationMigrationSpecDumpTransferDetailsTargetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetails{}).Type1()):                                        MigrationMigrationSpecGoldenGateDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHub{}).Type1()):                                     MigrationMigrationSpecGoldenGateDetailsHubCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubRestAdminCredentials{}).Type1()):                 MigrationMigrationSpecGoldenGateDetailsHubRestAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubSourceContainerDbAdminCredentials{}).Type1()):    MigrationMigrationSpecGoldenGateDetailsHubSourceContainerDbAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubSourceDbAdminCredentials{}).Type1()):             MigrationMigrationSpecGoldenGateDetailsHubSourceDbAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubTargetDbAdminCredentials{}).Type1()):             MigrationMigrationSpecGoldenGateDetailsHubTargetDbAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettings{}).Type1()):                                MigrationMigrationSpecGoldenGateDetailsSettingsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettingsExtract{}).Type1()):                         MigrationMigrationSpecGoldenGateDetailsSettingsExtractCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettingsReplicat{}).Type1()):                        MigrationMigrationSpecGoldenGateDetailsSettingsReplicatCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecVaultDetails{}).Type1()):                                             MigrationMigrationSpecVaultDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabaseSpecConnectionStrings{}).Type1()):                                         PluggableDatabaseSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabasesLocalCloneSpecConnectionStrings{}).Type1()):                              PluggableDatabasesLocalCloneSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabasesRemoteCloneSpecConnectionStrings{}).Type1()):                             PluggableDatabasesRemoteCloneSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{}).Type1()):                       ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContentCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{}).Type1()):                      ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePasswordCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecRelatedResource{}).Type1()):                                ToolsDatabaseToolsConnectionSpecRelatedResourceCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecUserPassword{}).Type1()):                                   ToolsDatabaseToolsConnectionSpecUserPasswordCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{}).Type1()):            ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfigurationCodec{},
 	}
 }
 
 func GetDecoder() map[string]jsoniter.ValDecoder {
 	return map[string]jsoniter.ValDecoder{
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecBackupConfig{}).Type1()):                                 AutonomousContainerDatabaseSpecBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecBackupConfigBackupDestinationDetails{}).Type1()):         AutonomousContainerDatabaseSpecBackupConfigBackupDestinationDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecMaintenanceWindow{}).Type1()):                            AutonomousContainerDatabaseSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecMaintenanceWindowDetails{}).Type1()):                     AutonomousContainerDatabaseSpecMaintenanceWindowDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecPeerAutonomousContainerDatabaseBackupConfig{}).Type1()):  AutonomousContainerDatabaseSpecPeerAutonomousContainerDatabaseBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecApexDetails{}).Type1()):                                           AutonomousDatabaseSpecApexDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecBackupConfig{}).Type1()):                                          AutonomousDatabaseSpecBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecConnectionStrings{}).Type1()):                                     AutonomousDatabaseSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecConnectionUrls{}).Type1()):                                        AutonomousDatabaseSpecConnectionUrlsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecStandbyDb{}).Type1()):                                             AutonomousDatabaseSpecStandbyDbCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                        AutonomousExadataInfrastructureSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindowDetails{}).Type1()):                 AutonomousExadataInfrastructureSpecMaintenanceWindowDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(BackupDestinationSpecMountTypeDetails{}).Type1()):                                       BackupDestinationSpecMountTypeDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(CloudDatabaseManagementSpecCredentialdetails{}).Type1()):                                CloudDatabaseManagementSpecCredentialdetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(CloudExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                             CloudExadataInfrastructureSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(CloudVmClusterSpecIormConfigCache{}).Type1()):                                           CloudVmClusterSpecIormConfigCacheCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecConnectionStrings{}).Type1()):                                               DatabaseSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabase{}).Type1()):                                                        DatabaseSpecDatabaseCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseDbBackupConfig{}).Type1()):                                          DatabaseSpecDatabaseDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseManagementConfig{}).Type1()):                                        DatabaseSpecDatabaseManagementConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDbBackupConfig{}).Type1()):                                                  DatabaseSpecDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecConnectionStrings{}).Type1()):                                        DatabaseUpgradeSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDatabaseUpgradeSourceDetails{}).Type1()):                             DatabaseUpgradeSpecDatabaseUpgradeSourceDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDbBackupConfig{}).Type1()):                                           DatabaseUpgradeSpecDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbHomeSpecDatabase{}).Type1()):                                                          DbHomeSpecDatabaseCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbHomeSpecDatabaseDbBackupConfig{}).Type1()):                                            DbHomeSpecDatabaseDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHome{}).Type1()):                                                          DbSystemSpecDbHomeCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHomeDatabase{}).Type1()):                                                  DbSystemSpecDbHomeDatabaseCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHomeDatabaseDbBackupConfig{}).Type1()):                                    DbSystemSpecDbHomeDatabaseDbBackupConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbSystemOptions{}).Type1()):                                                 DbSystemSpecDbSystemOptionsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecIormConfigCache{}).Type1()):                                                 DbSystemSpecIormConfigCacheCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecMaintenanceWindow{}).Type1()):                                               DbSystemSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecMaintenanceWindowDetails{}).Type1()):                                        DbSystemSpecMaintenanceWindowDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                                  ExadataInfrastructureSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExadataInfrastructureStorageSpecMaintenanceWindow{}).Type1()):                           ExadataInfrastructureStorageSpecMaintenanceWindowCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalContainerDatabaseSpecDatabaseManagementConfig{}).Type1()):                       ExternalContainerDatabaseSpecDatabaseManagementConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalDatabaseConnectorSpecConnectionCredentials{}).Type1()):                          ExternalDatabaseConnectorSpecConnectionCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalDatabaseConnectorSpecConnectionString{}).Type1()):                               ExternalDatabaseConnectorSpecConnectionStringCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalNonContainerDatabaseSpecDatabaseManagementConfig{}).Type1()):                    ExternalNonContainerDatabaseSpecDatabaseManagementConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalNonContainerDatabaseSpecOperationsInsightsConfig{}).Type1()):                    ExternalNonContainerDatabaseSpecOperationsInsightsConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalPluggableDatabaseSpecDatabaseManagementConfig{}).Type1()):                       ExternalPluggableDatabaseSpecDatabaseManagementConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ExternalPluggableDatabaseSpecOperationsInsightsConfig{}).Type1()):                       ExternalPluggableDatabaseSpecOperationsInsightsConfigCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(KeyStoreSpecTypeDetails{}).Type1()):                                                     KeyStoreSpecTypeDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ManagementManagedDatabasesChangeDatabaseParameterSpecCredentials{}).Type1()):            ManagementManagedDatabasesChangeDatabaseParameterSpecCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ManagementManagedDatabasesResetDatabaseParameterSpecCredentials{}).Type1()):             ManagementManagedDatabasesResetDatabaseParameterSpecCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecAdminCredentials{}).Type1()):                                     MigrationConnectionSpecAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecConnectDescriptor{}).Type1()):                                    MigrationConnectionSpecConnectDescriptorCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecPrivateEndpoint{}).Type1()):                                      MigrationConnectionSpecPrivateEndpointCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecSshDetails{}).Type1()):                                           MigrationConnectionSpecSshDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecVaultDetails{}).Type1()):                                         MigrationConnectionSpecVaultDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationJobSpecProgress{}).Type1()):                                                    MigrationJobSpecProgressCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetails{}).Type1()):                             MigrationMigrationSpecDataTransferMediumDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetails{}).Type1()):          MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsObjectStorageDetails{}).Type1()):         MigrationMigrationSpecDataTransferMediumDetailsObjectStorageDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettings{}).Type1()):                                      MigrationMigrationSpecDatapumpSettingsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsDataPumpParameters{}).Type1()):                    MigrationMigrationSpecDatapumpSettingsDataPumpParametersCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsExportDirectoryObject{}).Type1()):                 MigrationMigrationSpecDatapumpSettingsExportDirectoryObjectCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsImportDirectoryObject{}).Type1()):                 MigrationMigrationSpecDatapumpSettingsImportDirectoryObjectCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetails{}).Type1()):                                     MigrationMigrationSpecGoldenGateDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHub{}).Type1()):                                  MigrationMigrationSpecGoldenGateDetailsHubCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubRestAdminCredentials{}).Type1()):              MigrationMigrationSpecGoldenGateDetailsHubRestAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubSourceContainerDbAdminCredentials{}).Type1()): MigrationMigrationSpecGoldenGateDetailsHubSourceContainerDbAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubSourceDbAdminCredentials{}).Type1()):          MigrationMigrationSpecGoldenGateDetailsHubSourceDbAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubTargetDbAdminCredentials{}).Type1()):          MigrationMigrationSpecGoldenGateDetailsHubTargetDbAdminCredentialsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettings{}).Type1()):                             MigrationMigrationSpecGoldenGateDetailsSettingsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettingsExtract{}).Type1()):                      MigrationMigrationSpecGoldenGateDetailsSettingsExtractCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettingsReplicat{}).Type1()):                     MigrationMigrationSpecGoldenGateDetailsSettingsReplicatCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecVaultDetails{}).Type1()):                                          MigrationMigrationSpecVaultDetailsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabaseSpecConnectionStrings{}).Type1()):                                      PluggableDatabaseSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabasesLocalCloneSpecConnectionStrings{}).Type1()):                           PluggableDatabasesLocalCloneSpecConnectionStringsCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabasesRemoteCloneSpecConnectionStrings{}).Type1()):                          PluggableDatabasesRemoteCloneSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecBackupConfig{}).Type1()):                                    AutonomousContainerDatabaseSpecBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecBackupConfigBackupDestinationDetails{}).Type1()):            AutonomousContainerDatabaseSpecBackupConfigBackupDestinationDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecMaintenanceWindow{}).Type1()):                               AutonomousContainerDatabaseSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecMaintenanceWindowDetails{}).Type1()):                        AutonomousContainerDatabaseSpecMaintenanceWindowDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousContainerDatabaseSpecPeerAutonomousContainerDatabaseBackupConfig{}).Type1()):     AutonomousContainerDatabaseSpecPeerAutonomousContainerDatabaseBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecApexDetails{}).Type1()):                                              AutonomousDatabaseSpecApexDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecBackupConfig{}).Type1()):                                             AutonomousDatabaseSpecBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecConnectionStrings{}).Type1()):                                        AutonomousDatabaseSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecConnectionUrls{}).Type1()):                                           AutonomousDatabaseSpecConnectionUrlsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecScheduledOperationsDayOfWeek{}).Type1()):                             AutonomousDatabaseSpecScheduledOperationsDayOfWeekCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecStandbyDb{}).Type1()):                                                AutonomousDatabaseSpecStandbyDbCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                           AutonomousExadataInfrastructureSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(AutonomousExadataInfrastructureSpecMaintenanceWindowDetails{}).Type1()):                    AutonomousExadataInfrastructureSpecMaintenanceWindowDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(BackupDestinationSpecMountTypeDetails{}).Type1()):                                          BackupDestinationSpecMountTypeDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CloudDatabaseManagementSpecCredentialdetails{}).Type1()):                                   CloudDatabaseManagementSpecCredentialdetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CloudExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                                CloudExadataInfrastructureSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CloudVmClusterSpecIormConfigCache{}).Type1()):                                              CloudVmClusterSpecIormConfigCacheCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecConnectionStrings{}).Type1()):                                                  DatabaseSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabase{}).Type1()):                                                           DatabaseSpecDatabaseCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseDbBackupConfig{}).Type1()):                                             DatabaseSpecDatabaseDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDatabaseManagementConfig{}).Type1()):                                           DatabaseSpecDatabaseManagementConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseSpecDbBackupConfig{}).Type1()):                                                     DatabaseSpecDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecConnectionStrings{}).Type1()):                                           DatabaseUpgradeSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDatabaseUpgradeSourceDetails{}).Type1()):                                DatabaseUpgradeSpecDatabaseUpgradeSourceDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DatabaseUpgradeSpecDbBackupConfig{}).Type1()):                                              DatabaseUpgradeSpecDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbHomeSpecDatabase{}).Type1()):                                                             DbHomeSpecDatabaseCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbHomeSpecDatabaseDbBackupConfig{}).Type1()):                                               DbHomeSpecDatabaseDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHome{}).Type1()):                                                             DbSystemSpecDbHomeCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHomeDatabase{}).Type1()):                                                     DbSystemSpecDbHomeDatabaseCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbHomeDatabaseDbBackupConfig{}).Type1()):                                       DbSystemSpecDbHomeDatabaseDbBackupConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecDbSystemOptions{}).Type1()):                                                    DbSystemSpecDbSystemOptionsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecIormConfigCache{}).Type1()):                                                    DbSystemSpecIormConfigCacheCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecMaintenanceWindow{}).Type1()):                                                  DbSystemSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DbSystemSpecMaintenanceWindowDetails{}).Type1()):                                           DbSystemSpecMaintenanceWindowDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExadataInfrastructureSpecMaintenanceWindow{}).Type1()):                                     ExadataInfrastructureSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExadataInfrastructureStorageSpecMaintenanceWindow{}).Type1()):                              ExadataInfrastructureStorageSpecMaintenanceWindowCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalContainerDatabaseSpecDatabaseManagementConfig{}).Type1()):                          ExternalContainerDatabaseSpecDatabaseManagementConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalDatabaseConnectorSpecConnectionCredentials{}).Type1()):                             ExternalDatabaseConnectorSpecConnectionCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalDatabaseConnectorSpecConnectionString{}).Type1()):                                  ExternalDatabaseConnectorSpecConnectionStringCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalNonContainerDatabaseSpecDatabaseManagementConfig{}).Type1()):                       ExternalNonContainerDatabaseSpecDatabaseManagementConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalNonContainerDatabaseSpecOperationsInsightsConfig{}).Type1()):                       ExternalNonContainerDatabaseSpecOperationsInsightsConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalPluggableDatabaseSpecDatabaseManagementConfig{}).Type1()):                          ExternalPluggableDatabaseSpecDatabaseManagementConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ExternalPluggableDatabaseSpecOperationsInsightsConfig{}).Type1()):                          ExternalPluggableDatabaseSpecOperationsInsightsConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(KeyStoreSpecTypeDetails{}).Type1()):                                                        KeyStoreSpecTypeDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MaintenanceRunSpecEstimatedPatchingTime{}).Type1()):                                        MaintenanceRunSpecEstimatedPatchingTimeCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ManagementManagedDatabasesChangeDatabaseParameterSpecCredentials{}).Type1()):               ManagementManagedDatabasesChangeDatabaseParameterSpecCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ManagementManagedDatabasesResetDatabaseParameterSpecCredentials{}).Type1()):                ManagementManagedDatabasesResetDatabaseParameterSpecCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecAdminCredentials{}).Type1()):                                        MigrationConnectionSpecAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecConnectDescriptor{}).Type1()):                                       MigrationConnectionSpecConnectDescriptorCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecPrivateEndpoint{}).Type1()):                                         MigrationConnectionSpecPrivateEndpointCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecSshDetails{}).Type1()):                                              MigrationConnectionSpecSshDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationConnectionSpecVaultDetails{}).Type1()):                                            MigrationConnectionSpecVaultDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationJobSpecProgress{}).Type1()):                                                       MigrationJobSpecProgressCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationJobSpecProgressPhasesLogLocation{}).Type1()):                                      MigrationJobSpecProgressPhasesLogLocationCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecAdvisorSettings{}).Type1()):                                          MigrationMigrationSpecAdvisorSettingsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetails{}).Type1()):                                MigrationMigrationSpecDataTransferMediumDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetails{}).Type1()):             MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{}).Type1()): MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucketCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsObjectStorageDetails{}).Type1()):            MigrationMigrationSpecDataTransferMediumDetailsObjectStorageDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettings{}).Type1()):                                         MigrationMigrationSpecDatapumpSettingsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsDataPumpParameters{}).Type1()):                       MigrationMigrationSpecDatapumpSettingsDataPumpParametersCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsExportDirectoryObject{}).Type1()):                    MigrationMigrationSpecDatapumpSettingsExportDirectoryObjectCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDatapumpSettingsImportDirectoryObject{}).Type1()):                    MigrationMigrationSpecDatapumpSettingsImportDirectoryObjectCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetails{}).Type1()):                                      MigrationMigrationSpecDumpTransferDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsSource{}).Type1()):                                MigrationMigrationSpecDumpTransferDetailsSourceCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsTarget{}).Type1()):                                MigrationMigrationSpecDumpTransferDetailsTargetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetails{}).Type1()):                                        MigrationMigrationSpecGoldenGateDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHub{}).Type1()):                                     MigrationMigrationSpecGoldenGateDetailsHubCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubRestAdminCredentials{}).Type1()):                 MigrationMigrationSpecGoldenGateDetailsHubRestAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubSourceContainerDbAdminCredentials{}).Type1()):    MigrationMigrationSpecGoldenGateDetailsHubSourceContainerDbAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubSourceDbAdminCredentials{}).Type1()):             MigrationMigrationSpecGoldenGateDetailsHubSourceDbAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsHubTargetDbAdminCredentials{}).Type1()):             MigrationMigrationSpecGoldenGateDetailsHubTargetDbAdminCredentialsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettings{}).Type1()):                                MigrationMigrationSpecGoldenGateDetailsSettingsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettingsExtract{}).Type1()):                         MigrationMigrationSpecGoldenGateDetailsSettingsExtractCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecGoldenGateDetailsSettingsReplicat{}).Type1()):                        MigrationMigrationSpecGoldenGateDetailsSettingsReplicatCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecVaultDetails{}).Type1()):                                             MigrationMigrationSpecVaultDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabaseSpecConnectionStrings{}).Type1()):                                         PluggableDatabaseSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabasesLocalCloneSpecConnectionStrings{}).Type1()):                              PluggableDatabasesLocalCloneSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(PluggableDatabasesRemoteCloneSpecConnectionStrings{}).Type1()):                             PluggableDatabasesRemoteCloneSpecConnectionStringsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{}).Type1()):                       ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContentCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{}).Type1()):                      ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePasswordCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecRelatedResource{}).Type1()):                                ToolsDatabaseToolsConnectionSpecRelatedResourceCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecUserPassword{}).Type1()):                                   ToolsDatabaseToolsConnectionSpecUserPasswordCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{}).Type1()):            ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfigurationCodec{},
 	}
 }
 
@@ -897,6 +923,85 @@ func (AutonomousDatabaseSpecConnectionUrlsCodec) Decode(ptr unsafe.Pointer, iter
 		}
 	default:
 		iter.ReportError("decode AutonomousDatabaseSpecConnectionUrls", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type AutonomousDatabaseSpecScheduledOperationsDayOfWeekCodec struct {
+}
+
+func (AutonomousDatabaseSpecScheduledOperationsDayOfWeekCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*AutonomousDatabaseSpecScheduledOperationsDayOfWeek)(ptr) == nil
+}
+
+func (AutonomousDatabaseSpecScheduledOperationsDayOfWeekCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*AutonomousDatabaseSpecScheduledOperationsDayOfWeek)(ptr)
+	var objs []AutonomousDatabaseSpecScheduledOperationsDayOfWeek
+	if obj != nil {
+		objs = []AutonomousDatabaseSpecScheduledOperationsDayOfWeek{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecScheduledOperationsDayOfWeek{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (AutonomousDatabaseSpecScheduledOperationsDayOfWeekCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*AutonomousDatabaseSpecScheduledOperationsDayOfWeek)(ptr) = AutonomousDatabaseSpecScheduledOperationsDayOfWeek{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []AutonomousDatabaseSpecScheduledOperationsDayOfWeek
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecScheduledOperationsDayOfWeek{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*AutonomousDatabaseSpecScheduledOperationsDayOfWeek)(ptr) = objs[0]
+			} else {
+				*(*AutonomousDatabaseSpecScheduledOperationsDayOfWeek)(ptr) = AutonomousDatabaseSpecScheduledOperationsDayOfWeek{}
+			}
+		} else {
+			*(*AutonomousDatabaseSpecScheduledOperationsDayOfWeek)(ptr) = AutonomousDatabaseSpecScheduledOperationsDayOfWeek{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj AutonomousDatabaseSpecScheduledOperationsDayOfWeek
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(AutonomousDatabaseSpecScheduledOperationsDayOfWeek{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*AutonomousDatabaseSpecScheduledOperationsDayOfWeek)(ptr) = obj
+		} else {
+			*(*AutonomousDatabaseSpecScheduledOperationsDayOfWeek)(ptr) = AutonomousDatabaseSpecScheduledOperationsDayOfWeek{}
+		}
+	default:
+		iter.ReportError("decode AutonomousDatabaseSpecScheduledOperationsDayOfWeek", "unexpected JSON type")
 	}
 }
 
@@ -3587,6 +3692,85 @@ func (KeyStoreSpecTypeDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.It
 }
 
 // +k8s:deepcopy-gen=false
+type MaintenanceRunSpecEstimatedPatchingTimeCodec struct {
+}
+
+func (MaintenanceRunSpecEstimatedPatchingTimeCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*MaintenanceRunSpecEstimatedPatchingTime)(ptr) == nil
+}
+
+func (MaintenanceRunSpecEstimatedPatchingTimeCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*MaintenanceRunSpecEstimatedPatchingTime)(ptr)
+	var objs []MaintenanceRunSpecEstimatedPatchingTime
+	if obj != nil {
+		objs = []MaintenanceRunSpecEstimatedPatchingTime{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MaintenanceRunSpecEstimatedPatchingTime{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (MaintenanceRunSpecEstimatedPatchingTimeCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*MaintenanceRunSpecEstimatedPatchingTime)(ptr) = MaintenanceRunSpecEstimatedPatchingTime{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []MaintenanceRunSpecEstimatedPatchingTime
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MaintenanceRunSpecEstimatedPatchingTime{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*MaintenanceRunSpecEstimatedPatchingTime)(ptr) = objs[0]
+			} else {
+				*(*MaintenanceRunSpecEstimatedPatchingTime)(ptr) = MaintenanceRunSpecEstimatedPatchingTime{}
+			}
+		} else {
+			*(*MaintenanceRunSpecEstimatedPatchingTime)(ptr) = MaintenanceRunSpecEstimatedPatchingTime{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj MaintenanceRunSpecEstimatedPatchingTime
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MaintenanceRunSpecEstimatedPatchingTime{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*MaintenanceRunSpecEstimatedPatchingTime)(ptr) = obj
+		} else {
+			*(*MaintenanceRunSpecEstimatedPatchingTime)(ptr) = MaintenanceRunSpecEstimatedPatchingTime{}
+		}
+	default:
+		iter.ReportError("decode MaintenanceRunSpecEstimatedPatchingTime", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
 type ManagementManagedDatabasesChangeDatabaseParameterSpecCredentialsCodec struct {
 }
 
@@ -4219,6 +4403,164 @@ func (MigrationJobSpecProgressCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.I
 }
 
 // +k8s:deepcopy-gen=false
+type MigrationJobSpecProgressPhasesLogLocationCodec struct {
+}
+
+func (MigrationJobSpecProgressPhasesLogLocationCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*MigrationJobSpecProgressPhasesLogLocation)(ptr) == nil
+}
+
+func (MigrationJobSpecProgressPhasesLogLocationCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*MigrationJobSpecProgressPhasesLogLocation)(ptr)
+	var objs []MigrationJobSpecProgressPhasesLogLocation
+	if obj != nil {
+		objs = []MigrationJobSpecProgressPhasesLogLocation{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationJobSpecProgressPhasesLogLocation{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (MigrationJobSpecProgressPhasesLogLocationCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*MigrationJobSpecProgressPhasesLogLocation)(ptr) = MigrationJobSpecProgressPhasesLogLocation{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []MigrationJobSpecProgressPhasesLogLocation
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationJobSpecProgressPhasesLogLocation{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*MigrationJobSpecProgressPhasesLogLocation)(ptr) = objs[0]
+			} else {
+				*(*MigrationJobSpecProgressPhasesLogLocation)(ptr) = MigrationJobSpecProgressPhasesLogLocation{}
+			}
+		} else {
+			*(*MigrationJobSpecProgressPhasesLogLocation)(ptr) = MigrationJobSpecProgressPhasesLogLocation{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj MigrationJobSpecProgressPhasesLogLocation
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationJobSpecProgressPhasesLogLocation{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*MigrationJobSpecProgressPhasesLogLocation)(ptr) = obj
+		} else {
+			*(*MigrationJobSpecProgressPhasesLogLocation)(ptr) = MigrationJobSpecProgressPhasesLogLocation{}
+		}
+	default:
+		iter.ReportError("decode MigrationJobSpecProgressPhasesLogLocation", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type MigrationMigrationSpecAdvisorSettingsCodec struct {
+}
+
+func (MigrationMigrationSpecAdvisorSettingsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*MigrationMigrationSpecAdvisorSettings)(ptr) == nil
+}
+
+func (MigrationMigrationSpecAdvisorSettingsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*MigrationMigrationSpecAdvisorSettings)(ptr)
+	var objs []MigrationMigrationSpecAdvisorSettings
+	if obj != nil {
+		objs = []MigrationMigrationSpecAdvisorSettings{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecAdvisorSettings{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (MigrationMigrationSpecAdvisorSettingsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*MigrationMigrationSpecAdvisorSettings)(ptr) = MigrationMigrationSpecAdvisorSettings{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []MigrationMigrationSpecAdvisorSettings
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecAdvisorSettings{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*MigrationMigrationSpecAdvisorSettings)(ptr) = objs[0]
+			} else {
+				*(*MigrationMigrationSpecAdvisorSettings)(ptr) = MigrationMigrationSpecAdvisorSettings{}
+			}
+		} else {
+			*(*MigrationMigrationSpecAdvisorSettings)(ptr) = MigrationMigrationSpecAdvisorSettings{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj MigrationMigrationSpecAdvisorSettings
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecAdvisorSettings{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*MigrationMigrationSpecAdvisorSettings)(ptr) = obj
+		} else {
+			*(*MigrationMigrationSpecAdvisorSettings)(ptr) = MigrationMigrationSpecAdvisorSettings{}
+		}
+	default:
+		iter.ReportError("decode MigrationMigrationSpecAdvisorSettings", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
 type MigrationMigrationSpecDataTransferMediumDetailsCodec struct {
 }
 
@@ -4373,6 +4715,85 @@ func (MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsCodec) D
 		}
 	default:
 		iter.ReportError("decode MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucketCodec struct {
+}
+
+func (MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucketCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket)(ptr) == nil
+}
+
+func (MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucketCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket)(ptr)
+	var objs []MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket
+	if obj != nil {
+		objs = []MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucketCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket)(ptr) = MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket)(ptr) = objs[0]
+			} else {
+				*(*MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket)(ptr) = MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{}
+			}
+		} else {
+			*(*MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket)(ptr) = MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket)(ptr) = obj
+		} else {
+			*(*MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket)(ptr) = MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket{}
+		}
+	default:
+		iter.ReportError("decode MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket", "unexpected JSON type")
 	}
 }
 
@@ -4768,6 +5189,243 @@ func (MigrationMigrationSpecDatapumpSettingsImportDirectoryObjectCodec) Decode(p
 		}
 	default:
 		iter.ReportError("decode MigrationMigrationSpecDatapumpSettingsImportDirectoryObject", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type MigrationMigrationSpecDumpTransferDetailsCodec struct {
+}
+
+func (MigrationMigrationSpecDumpTransferDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*MigrationMigrationSpecDumpTransferDetails)(ptr) == nil
+}
+
+func (MigrationMigrationSpecDumpTransferDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*MigrationMigrationSpecDumpTransferDetails)(ptr)
+	var objs []MigrationMigrationSpecDumpTransferDetails
+	if obj != nil {
+		objs = []MigrationMigrationSpecDumpTransferDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (MigrationMigrationSpecDumpTransferDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*MigrationMigrationSpecDumpTransferDetails)(ptr) = MigrationMigrationSpecDumpTransferDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []MigrationMigrationSpecDumpTransferDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*MigrationMigrationSpecDumpTransferDetails)(ptr) = objs[0]
+			} else {
+				*(*MigrationMigrationSpecDumpTransferDetails)(ptr) = MigrationMigrationSpecDumpTransferDetails{}
+			}
+		} else {
+			*(*MigrationMigrationSpecDumpTransferDetails)(ptr) = MigrationMigrationSpecDumpTransferDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj MigrationMigrationSpecDumpTransferDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*MigrationMigrationSpecDumpTransferDetails)(ptr) = obj
+		} else {
+			*(*MigrationMigrationSpecDumpTransferDetails)(ptr) = MigrationMigrationSpecDumpTransferDetails{}
+		}
+	default:
+		iter.ReportError("decode MigrationMigrationSpecDumpTransferDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type MigrationMigrationSpecDumpTransferDetailsSourceCodec struct {
+}
+
+func (MigrationMigrationSpecDumpTransferDetailsSourceCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*MigrationMigrationSpecDumpTransferDetailsSource)(ptr) == nil
+}
+
+func (MigrationMigrationSpecDumpTransferDetailsSourceCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*MigrationMigrationSpecDumpTransferDetailsSource)(ptr)
+	var objs []MigrationMigrationSpecDumpTransferDetailsSource
+	if obj != nil {
+		objs = []MigrationMigrationSpecDumpTransferDetailsSource{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsSource{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (MigrationMigrationSpecDumpTransferDetailsSourceCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*MigrationMigrationSpecDumpTransferDetailsSource)(ptr) = MigrationMigrationSpecDumpTransferDetailsSource{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []MigrationMigrationSpecDumpTransferDetailsSource
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsSource{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*MigrationMigrationSpecDumpTransferDetailsSource)(ptr) = objs[0]
+			} else {
+				*(*MigrationMigrationSpecDumpTransferDetailsSource)(ptr) = MigrationMigrationSpecDumpTransferDetailsSource{}
+			}
+		} else {
+			*(*MigrationMigrationSpecDumpTransferDetailsSource)(ptr) = MigrationMigrationSpecDumpTransferDetailsSource{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj MigrationMigrationSpecDumpTransferDetailsSource
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsSource{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*MigrationMigrationSpecDumpTransferDetailsSource)(ptr) = obj
+		} else {
+			*(*MigrationMigrationSpecDumpTransferDetailsSource)(ptr) = MigrationMigrationSpecDumpTransferDetailsSource{}
+		}
+	default:
+		iter.ReportError("decode MigrationMigrationSpecDumpTransferDetailsSource", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type MigrationMigrationSpecDumpTransferDetailsTargetCodec struct {
+}
+
+func (MigrationMigrationSpecDumpTransferDetailsTargetCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*MigrationMigrationSpecDumpTransferDetailsTarget)(ptr) == nil
+}
+
+func (MigrationMigrationSpecDumpTransferDetailsTargetCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*MigrationMigrationSpecDumpTransferDetailsTarget)(ptr)
+	var objs []MigrationMigrationSpecDumpTransferDetailsTarget
+	if obj != nil {
+		objs = []MigrationMigrationSpecDumpTransferDetailsTarget{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsTarget{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (MigrationMigrationSpecDumpTransferDetailsTargetCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*MigrationMigrationSpecDumpTransferDetailsTarget)(ptr) = MigrationMigrationSpecDumpTransferDetailsTarget{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []MigrationMigrationSpecDumpTransferDetailsTarget
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsTarget{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*MigrationMigrationSpecDumpTransferDetailsTarget)(ptr) = objs[0]
+			} else {
+				*(*MigrationMigrationSpecDumpTransferDetailsTarget)(ptr) = MigrationMigrationSpecDumpTransferDetailsTarget{}
+			}
+		} else {
+			*(*MigrationMigrationSpecDumpTransferDetailsTarget)(ptr) = MigrationMigrationSpecDumpTransferDetailsTarget{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj MigrationMigrationSpecDumpTransferDetailsTarget
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(MigrationMigrationSpecDumpTransferDetailsTarget{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*MigrationMigrationSpecDumpTransferDetailsTarget)(ptr) = obj
+		} else {
+			*(*MigrationMigrationSpecDumpTransferDetailsTarget)(ptr) = MigrationMigrationSpecDumpTransferDetailsTarget{}
+		}
+	default:
+		iter.ReportError("decode MigrationMigrationSpecDumpTransferDetailsTarget", "unexpected JSON type")
 	}
 }
 
@@ -5795,5 +6453,400 @@ func (PluggableDatabasesRemoteCloneSpecConnectionStringsCodec) Decode(ptr unsafe
 		}
 	default:
 		iter.ReportError("decode PluggableDatabasesRemoteCloneSpecConnectionStrings", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContentCodec struct {
+}
+
+func (ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContentCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent)(ptr) == nil
+}
+
+func (ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContentCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent)(ptr)
+	var objs []ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent
+	if obj != nil {
+		objs = []ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContentCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent)(ptr) = ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent)(ptr) = objs[0]
+			} else {
+				*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent)(ptr) = ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{}
+			}
+		} else {
+			*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent)(ptr) = ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent)(ptr) = obj
+		} else {
+			*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent)(ptr) = ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent{}
+		}
+	default:
+		iter.ReportError("decode ToolsDatabaseToolsConnectionSpecKeyStoresKeyStoreContent", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePasswordCodec struct {
+}
+
+func (ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePasswordCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword)(ptr) == nil
+}
+
+func (ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePasswordCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword)(ptr)
+	var objs []ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword
+	if obj != nil {
+		objs = []ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePasswordCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword)(ptr) = ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword)(ptr) = objs[0]
+			} else {
+				*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword)(ptr) = ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{}
+			}
+		} else {
+			*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword)(ptr) = ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword)(ptr) = obj
+		} else {
+			*(*ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword)(ptr) = ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword{}
+		}
+	default:
+		iter.ReportError("decode ToolsDatabaseToolsConnectionSpecKeyStoresKeyStorePassword", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type ToolsDatabaseToolsConnectionSpecRelatedResourceCodec struct {
+}
+
+func (ToolsDatabaseToolsConnectionSpecRelatedResourceCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ToolsDatabaseToolsConnectionSpecRelatedResource)(ptr) == nil
+}
+
+func (ToolsDatabaseToolsConnectionSpecRelatedResourceCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ToolsDatabaseToolsConnectionSpecRelatedResource)(ptr)
+	var objs []ToolsDatabaseToolsConnectionSpecRelatedResource
+	if obj != nil {
+		objs = []ToolsDatabaseToolsConnectionSpecRelatedResource{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecRelatedResource{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ToolsDatabaseToolsConnectionSpecRelatedResourceCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ToolsDatabaseToolsConnectionSpecRelatedResource)(ptr) = ToolsDatabaseToolsConnectionSpecRelatedResource{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ToolsDatabaseToolsConnectionSpecRelatedResource
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecRelatedResource{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ToolsDatabaseToolsConnectionSpecRelatedResource)(ptr) = objs[0]
+			} else {
+				*(*ToolsDatabaseToolsConnectionSpecRelatedResource)(ptr) = ToolsDatabaseToolsConnectionSpecRelatedResource{}
+			}
+		} else {
+			*(*ToolsDatabaseToolsConnectionSpecRelatedResource)(ptr) = ToolsDatabaseToolsConnectionSpecRelatedResource{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ToolsDatabaseToolsConnectionSpecRelatedResource
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecRelatedResource{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ToolsDatabaseToolsConnectionSpecRelatedResource)(ptr) = obj
+		} else {
+			*(*ToolsDatabaseToolsConnectionSpecRelatedResource)(ptr) = ToolsDatabaseToolsConnectionSpecRelatedResource{}
+		}
+	default:
+		iter.ReportError("decode ToolsDatabaseToolsConnectionSpecRelatedResource", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type ToolsDatabaseToolsConnectionSpecUserPasswordCodec struct {
+}
+
+func (ToolsDatabaseToolsConnectionSpecUserPasswordCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ToolsDatabaseToolsConnectionSpecUserPassword)(ptr) == nil
+}
+
+func (ToolsDatabaseToolsConnectionSpecUserPasswordCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ToolsDatabaseToolsConnectionSpecUserPassword)(ptr)
+	var objs []ToolsDatabaseToolsConnectionSpecUserPassword
+	if obj != nil {
+		objs = []ToolsDatabaseToolsConnectionSpecUserPassword{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecUserPassword{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ToolsDatabaseToolsConnectionSpecUserPasswordCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ToolsDatabaseToolsConnectionSpecUserPassword)(ptr) = ToolsDatabaseToolsConnectionSpecUserPassword{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ToolsDatabaseToolsConnectionSpecUserPassword
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecUserPassword{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ToolsDatabaseToolsConnectionSpecUserPassword)(ptr) = objs[0]
+			} else {
+				*(*ToolsDatabaseToolsConnectionSpecUserPassword)(ptr) = ToolsDatabaseToolsConnectionSpecUserPassword{}
+			}
+		} else {
+			*(*ToolsDatabaseToolsConnectionSpecUserPassword)(ptr) = ToolsDatabaseToolsConnectionSpecUserPassword{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ToolsDatabaseToolsConnectionSpecUserPassword
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsConnectionSpecUserPassword{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ToolsDatabaseToolsConnectionSpecUserPassword)(ptr) = obj
+		} else {
+			*(*ToolsDatabaseToolsConnectionSpecUserPassword)(ptr) = ToolsDatabaseToolsConnectionSpecUserPassword{}
+		}
+	default:
+		iter.ReportError("decode ToolsDatabaseToolsConnectionSpecUserPassword", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfigurationCodec struct {
+}
+
+func (ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfigurationCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration)(ptr) == nil
+}
+
+func (ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfigurationCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration)(ptr)
+	var objs []ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration
+	if obj != nil {
+		objs = []ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfigurationCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration)(ptr) = ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration)(ptr) = objs[0]
+			} else {
+				*(*ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration)(ptr) = ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{}
+			}
+		} else {
+			*(*ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration)(ptr) = ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration)(ptr) = obj
+		} else {
+			*(*ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration)(ptr) = ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration{}
+		}
+	default:
+		iter.ReportError("decode ToolsDatabaseToolsPrivateEndpointSpecReverseConnectionConfiguration", "unexpected JSON type")
 	}
 }

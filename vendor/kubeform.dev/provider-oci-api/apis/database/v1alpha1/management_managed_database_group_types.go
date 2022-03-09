@@ -56,6 +56,8 @@ type ManagementManagedDatabaseGroupSpecManagedDatabases struct {
 	Name *string `json:"name,omitempty" tf:"name"`
 	// +optional
 	TimeAdded *string `json:"timeAdded,omitempty" tf:"time_added"`
+	// +optional
+	WorkloadType *string `json:"workloadType,omitempty" tf:"workload_type"`
 }
 
 type ManagementManagedDatabaseGroupSpec struct {

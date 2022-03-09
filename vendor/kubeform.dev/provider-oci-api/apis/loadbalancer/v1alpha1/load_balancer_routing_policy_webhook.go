@@ -89,7 +89,7 @@ func (r *LoadBalancerRoutingPolicy) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range loadbalancerroutingpolicyForceNewList {
+	for key, _ := range loadbalancerroutingpolicyForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

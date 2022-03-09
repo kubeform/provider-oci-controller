@@ -43,6 +43,7 @@ var _ webhook.Validator = &ListingPackageAgreement{}
 
 var listingpackageagreementForceNewList = map[string]bool{
 	"/agreement_id":    true,
+	"/compartment_id":  true,
 	"/listing_id":      true,
 	"/package_version": true,
 }
@@ -90,7 +91,7 @@ func (r *ListingPackageAgreement) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range listingpackageagreementForceNewList {
+	for key, _ := range listingpackageagreementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

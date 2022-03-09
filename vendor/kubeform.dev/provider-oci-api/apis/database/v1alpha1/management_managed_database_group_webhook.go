@@ -88,7 +88,7 @@ func (r *ManagementManagedDatabaseGroup) ValidateUpdate(old runtime.Object) erro
 		return err
 	}
 
-	for key := range managementmanageddatabasegroupForceNewList {
+	for key, _ := range managementmanageddatabasegroupForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

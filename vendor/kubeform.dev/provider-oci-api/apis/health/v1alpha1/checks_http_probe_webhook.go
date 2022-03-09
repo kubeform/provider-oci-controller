@@ -96,7 +96,7 @@ func (r *ChecksHTTPProbe) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range checkshttpprobeForceNewList {
+	for key, _ := range checkshttpprobeForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

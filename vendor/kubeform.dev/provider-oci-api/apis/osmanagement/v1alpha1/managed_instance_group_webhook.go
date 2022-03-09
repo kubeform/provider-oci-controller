@@ -88,7 +88,7 @@ func (r *ManagedInstanceGroup) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range managedinstancegroupForceNewList {
+	for key, _ := range managedinstancegroupForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

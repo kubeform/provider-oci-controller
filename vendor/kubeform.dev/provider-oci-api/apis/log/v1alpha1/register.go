@@ -66,6 +66,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&AnalyticsLogAnalyticsObjectCollectionRuleList{},
 		&AnalyticsLogAnalyticsPreferencesManagement{},
 		&AnalyticsLogAnalyticsPreferencesManagementList{},
+		&AnalyticsLogAnalyticsResourceCategoriesManagement{},
+		&AnalyticsLogAnalyticsResourceCategoriesManagementList{},
 		&AnalyticsLogAnalyticsUnprocessedDataBucketManagement{},
 		&AnalyticsLogAnalyticsUnprocessedDataBucketManagementList{},
 		&AnalyticsNamespace{},

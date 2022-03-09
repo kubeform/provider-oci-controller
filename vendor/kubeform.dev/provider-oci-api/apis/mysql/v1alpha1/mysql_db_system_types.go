@@ -208,6 +208,8 @@ type MysqlDbSystemSpecResource struct {
 	// +optional
 	ConfigurationID *string `json:"configurationID,omitempty" tf:"configuration_id"`
 	// +optional
+	CrashRecovery *string `json:"crashRecovery,omitempty" tf:"crash_recovery"`
+	// +optional
 	CurrentPlacement *MysqlDbSystemSpecCurrentPlacement `json:"currentPlacement,omitempty" tf:"current_placement"`
 	// +optional
 	DataStorageSizeInGb *int64 `json:"dataStorageSizeInGb,omitempty" tf:"data_storage_size_in_gb"`

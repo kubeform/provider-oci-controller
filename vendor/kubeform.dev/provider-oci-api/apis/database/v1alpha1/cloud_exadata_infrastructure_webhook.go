@@ -89,7 +89,7 @@ func (r *CloudExadataInfrastructure) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range cloudexadatainfrastructureForceNewList {
+	for key, _ := range cloudexadatainfrastructureForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

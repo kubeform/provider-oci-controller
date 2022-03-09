@@ -94,7 +94,7 @@ func (r *AppCatalogSubscription) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range appcatalogsubscriptionForceNewList {
+	for key, _ := range appcatalogsubscriptionForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -96,7 +96,7 @@ func (r *BdsInstance) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range bdsinstanceForceNewList {
+	for key, _ := range bdsinstanceForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

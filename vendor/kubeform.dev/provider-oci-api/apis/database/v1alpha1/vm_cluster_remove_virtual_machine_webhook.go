@@ -89,7 +89,7 @@ func (r *VmClusterRemoveVirtualMachine) ValidateUpdate(old runtime.Object) error
 		return err
 	}
 
-	for key := range vmclusterremovevirtualmachineForceNewList {
+	for key, _ := range vmclusterremovevirtualmachineForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

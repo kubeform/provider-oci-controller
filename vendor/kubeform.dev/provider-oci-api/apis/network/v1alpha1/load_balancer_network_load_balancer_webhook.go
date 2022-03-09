@@ -90,7 +90,7 @@ func (r *LoadBalancerNetworkLoadBalancer) ValidateUpdate(old runtime.Object) err
 		return err
 	}
 
-	for key := range loadbalancernetworkloadbalancerForceNewList {
+	for key, _ := range loadbalancernetworkloadbalancerForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

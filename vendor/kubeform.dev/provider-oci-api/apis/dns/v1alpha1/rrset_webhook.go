@@ -92,7 +92,7 @@ func (r *Rrset) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range rrsetForceNewList {
+	for key, _ := range rrsetForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

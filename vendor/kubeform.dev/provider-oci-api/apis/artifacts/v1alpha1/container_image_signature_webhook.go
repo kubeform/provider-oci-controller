@@ -94,7 +94,7 @@ func (r *ContainerImageSignature) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range containerimagesignatureForceNewList {
+	for key, _ := range containerimagesignatureForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

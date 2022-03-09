@@ -104,6 +104,8 @@ type LoadBalancerBackendSetSpecResource struct {
 	Backends      []LoadBalancerBackendSetSpecBackends     `json:"backends,omitempty" tf:"backends"`
 	HealthChecker *LoadBalancerBackendSetSpecHealthChecker `json:"healthChecker" tf:"health_checker"`
 	// +optional
+	IpVersion *string `json:"ipVersion,omitempty" tf:"ip_version"`
+	// +optional
 	IsPreserveSource      *bool   `json:"isPreserveSource,omitempty" tf:"is_preserve_source"`
 	Name                  *string `json:"name" tf:"name"`
 	NetworkLoadBalancerID *string `json:"networkLoadBalancerID" tf:"network_load_balancer_id"`

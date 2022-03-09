@@ -109,9 +109,23 @@ type AutonomousDatabaseSpecKeyHistoryEntry struct {
 	// +optional
 	ID *string `json:"ID,omitempty" tf:"id"`
 	// +optional
+	KmsKeyVersionID *string `json:"kmsKeyVersionID,omitempty" tf:"kms_key_version_id"`
+	// +optional
 	TimeActivated *string `json:"timeActivated,omitempty" tf:"time_activated"`
 	// +optional
 	VaultID *string `json:"vaultID,omitempty" tf:"vault_id"`
+}
+
+type AutonomousDatabaseSpecScheduledOperationsDayOfWeek struct {
+	Name *string `json:"name" tf:"name"`
+}
+
+type AutonomousDatabaseSpecScheduledOperations struct {
+	DayOfWeek *AutonomousDatabaseSpecScheduledOperationsDayOfWeek `json:"dayOfWeek" tf:"day_of_week"`
+	// +optional
+	ScheduledStartTime *string `json:"scheduledStartTime,omitempty" tf:"scheduled_start_time"`
+	// +optional
+	ScheduledStopTime *string `json:"scheduledStopTime,omitempty" tf:"scheduled_stop_time"`
 }
 
 type AutonomousDatabaseSpecStandbyDb struct {
@@ -178,8 +192,10 @@ type AutonomousDatabaseSpecResource struct {
 	// +optional
 	DataStorageSizeInGb *int64 `json:"dataStorageSizeInGb,omitempty" tf:"data_storage_size_in_gb"`
 	// +optional
-	DataStorageSizeInTbs *int64  `json:"dataStorageSizeInTbs,omitempty" tf:"data_storage_size_in_tbs"`
-	DbName               *string `json:"dbName" tf:"db_name"`
+	DataStorageSizeInTbs *int64 `json:"dataStorageSizeInTbs,omitempty" tf:"data_storage_size_in_tbs"`
+	// +optional
+	DatabaseManagementStatus *string `json:"databaseManagementStatus,omitempty" tf:"database_management_status"`
+	DbName                   *string `json:"dbName" tf:"db_name"`
 	// +optional
 	DbVersion *string `json:"dbVersion,omitempty" tf:"db_version"`
 	// +optional
@@ -211,6 +227,8 @@ type AutonomousDatabaseSpecResource struct {
 	// +optional
 	IsPreviewVersionWithServiceTermsAccepted *bool `json:"isPreviewVersionWithServiceTermsAccepted,omitempty" tf:"is_preview_version_with_service_terms_accepted"`
 	// +optional
+	IsReconnectCloneEnabled *bool `json:"isReconnectCloneEnabled,omitempty" tf:"is_reconnect_clone_enabled"`
+	// +optional
 	IsRefreshableClone *bool `json:"isRefreshableClone,omitempty" tf:"is_refreshable_clone"`
 	// +optional
 	KeyHistoryEntry []AutonomousDatabaseSpecKeyHistoryEntry `json:"keyHistoryEntry,omitempty" tf:"key_history_entry"`
@@ -222,6 +240,8 @@ type AutonomousDatabaseSpecResource struct {
 	KmsKeyID *string `json:"kmsKeyID,omitempty" tf:"kms_key_id"`
 	// +optional
 	KmsKeyLifecycleDetails *string `json:"kmsKeyLifecycleDetails,omitempty" tf:"kms_key_lifecycle_details"`
+	// +optional
+	KmsKeyVersionID *string `json:"kmsKeyVersionID,omitempty" tf:"kms_key_version_id"`
 	// +optional
 	LicenseModel *string `json:"licenseModel,omitempty" tf:"license_model"`
 	// +optional
@@ -251,6 +271,8 @@ type AutonomousDatabaseSpecResource struct {
 	// +optional
 	RotateKeyTrigger *bool `json:"rotateKeyTrigger,omitempty" tf:"rotate_key_trigger"`
 	// +optional
+	ScheduledOperations []AutonomousDatabaseSpecScheduledOperations `json:"scheduledOperations,omitempty" tf:"scheduled_operations"`
+	// +optional
 	ServiceConsoleURL *string `json:"serviceConsoleURL,omitempty" tf:"service_console_url"`
 	// +optional
 	Source *string `json:"source,omitempty" tf:"source"`
@@ -264,6 +286,8 @@ type AutonomousDatabaseSpecResource struct {
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional
 	SubnetID *string `json:"subnetID,omitempty" tf:"subnet_id"`
+	// +optional
+	SupportedRegionsToCloneTo []string `json:"supportedRegionsToCloneTo,omitempty" tf:"supported_regions_to_clone_to"`
 	// +optional
 	SwitchoverTo *string `json:"switchoverTo,omitempty" tf:"switchover_to"`
 	// +optional
@@ -288,6 +312,8 @@ type AutonomousDatabaseSpecResource struct {
 	TimeOfNextRefresh *string `json:"timeOfNextRefresh,omitempty" tf:"time_of_next_refresh"`
 	// +optional
 	TimeReclamationOfFreeAutonomousDatabase *string `json:"timeReclamationOfFreeAutonomousDatabase,omitempty" tf:"time_reclamation_of_free_autonomous_database"`
+	// +optional
+	TimeUntilReconnectCloneEnabled *string `json:"timeUntilReconnectCloneEnabled,omitempty" tf:"time_until_reconnect_clone_enabled"`
 	// +optional
 	Timestamp *string `json:"timestamp,omitempty" tf:"timestamp"`
 	// +optional

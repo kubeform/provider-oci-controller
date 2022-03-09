@@ -41,6 +41,8 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetails{}).Type1()):                      ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsInstanceConfiguration{}).Type1()): ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsInstanceConfigurationCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsScalingPolicy{}).Type1()):         ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsScalingPolicyCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetails{}).Type1()):                                                      NotebookSessionSpecNotebookSessionConfigDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{}).Type1()):                     NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigurationDetails{}).Type1()):                                               NotebookSessionSpecNotebookSessionConfigurationDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigurationDetailsNotebookSessionShapeConfigDetails{}).Type1()):              NotebookSessionSpecNotebookSessionConfigurationDetailsNotebookSessionShapeConfigDetailsCodec{},
 	}
@@ -62,6 +64,8 @@ func GetDecoder() map[string]jsoniter.ValDecoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetails{}).Type1()):                      ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsInstanceConfiguration{}).Type1()): ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsInstanceConfigurationCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsScalingPolicy{}).Type1()):         ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsScalingPolicyCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetails{}).Type1()):                                                      NotebookSessionSpecNotebookSessionConfigDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{}).Type1()):                     NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigurationDetails{}).Type1()):                                               NotebookSessionSpecNotebookSessionConfigurationDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigurationDetailsNotebookSessionShapeConfigDetails{}).Type1()):              NotebookSessionSpecNotebookSessionConfigurationDetailsNotebookSessionShapeConfigDetailsCodec{},
 	}
@@ -1182,6 +1186,164 @@ func (ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDe
 		}
 	default:
 		iter.ReportError("decode ModelDeploymentSpecModelDeploymentConfigurationDetailsModelConfigurationDetailsScalingPolicy", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type NotebookSessionSpecNotebookSessionConfigDetailsCodec struct {
+}
+
+func (NotebookSessionSpecNotebookSessionConfigDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*NotebookSessionSpecNotebookSessionConfigDetails)(ptr) == nil
+}
+
+func (NotebookSessionSpecNotebookSessionConfigDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*NotebookSessionSpecNotebookSessionConfigDetails)(ptr)
+	var objs []NotebookSessionSpecNotebookSessionConfigDetails
+	if obj != nil {
+		objs = []NotebookSessionSpecNotebookSessionConfigDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (NotebookSessionSpecNotebookSessionConfigDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*NotebookSessionSpecNotebookSessionConfigDetails)(ptr) = NotebookSessionSpecNotebookSessionConfigDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []NotebookSessionSpecNotebookSessionConfigDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*NotebookSessionSpecNotebookSessionConfigDetails)(ptr) = objs[0]
+			} else {
+				*(*NotebookSessionSpecNotebookSessionConfigDetails)(ptr) = NotebookSessionSpecNotebookSessionConfigDetails{}
+			}
+		} else {
+			*(*NotebookSessionSpecNotebookSessionConfigDetails)(ptr) = NotebookSessionSpecNotebookSessionConfigDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj NotebookSessionSpecNotebookSessionConfigDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*NotebookSessionSpecNotebookSessionConfigDetails)(ptr) = obj
+		} else {
+			*(*NotebookSessionSpecNotebookSessionConfigDetails)(ptr) = NotebookSessionSpecNotebookSessionConfigDetails{}
+		}
+	default:
+		iter.ReportError("decode NotebookSessionSpecNotebookSessionConfigDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetailsCodec struct {
+}
+
+func (NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails)(ptr) == nil
+}
+
+func (NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails)(ptr)
+	var objs []NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails
+	if obj != nil {
+		objs = []NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails)(ptr) = NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails)(ptr) = objs[0]
+			} else {
+				*(*NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails)(ptr) = NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{}
+			}
+		} else {
+			*(*NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails)(ptr) = NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails)(ptr) = obj
+		} else {
+			*(*NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails)(ptr) = NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails{}
+		}
+	default:
+		iter.ReportError("decode NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails", "unexpected JSON type")
 	}
 }
 

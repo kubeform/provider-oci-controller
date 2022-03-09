@@ -90,7 +90,7 @@ func (r *StreamPool) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range streampoolForceNewList {
+	for key, _ := range streampoolForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

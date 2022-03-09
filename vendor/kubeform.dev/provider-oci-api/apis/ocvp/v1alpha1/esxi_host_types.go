@@ -75,10 +75,16 @@ type EsxiHostSpecResource struct {
 	// +optional
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name"`
 	// +optional
+	FailedEsxiHostID *string `json:"failedEsxiHostID,omitempty" tf:"failed_esxi_host_id"`
+	// +optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
+	GracePeriodEndDate *string `json:"gracePeriodEndDate,omitempty" tf:"grace_period_end_date"`
+	// +optional
 	NextSku *string `json:"nextSku,omitempty" tf:"next_sku"`
-	SddcID  *string `json:"sddcID" tf:"sddc_id"`
+	// +optional
+	ReplacementEsxiHostID *string `json:"replacementEsxiHostID,omitempty" tf:"replacement_esxi_host_id"`
+	SddcID                *string `json:"sddcID" tf:"sddc_id"`
 	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional

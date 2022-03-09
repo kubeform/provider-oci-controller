@@ -89,7 +89,7 @@ func (r *GuardManagedList) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range guardmanagedlistForceNewList {
+	for key, _ := range guardmanagedlistForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

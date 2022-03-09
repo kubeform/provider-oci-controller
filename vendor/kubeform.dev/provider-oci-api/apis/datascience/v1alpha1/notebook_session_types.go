@@ -41,6 +41,23 @@ type NotebookSession struct {
 	Status            NotebookSessionStatus `json:"status,omitempty"`
 }
 
+type NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails struct {
+	// +optional
+	MemoryInGbs *float64 `json:"memoryInGbs,omitempty" tf:"memory_in_gbs"`
+	// +optional
+	Ocpus *float64 `json:"ocpus,omitempty" tf:"ocpus"`
+}
+
+type NotebookSessionSpecNotebookSessionConfigDetails struct {
+	// +optional
+	BlockStorageSizeInGbs *int64 `json:"blockStorageSizeInGbs,omitempty" tf:"block_storage_size_in_gbs"`
+	// +optional
+	NotebookSessionShapeConfigDetails *NotebookSessionSpecNotebookSessionConfigDetailsNotebookSessionShapeConfigDetails `json:"notebookSessionShapeConfigDetails,omitempty" tf:"notebook_session_shape_config_details"`
+	Shape                             *string                                                                           `json:"shape" tf:"shape"`
+	// +optional
+	SubnetID *string `json:"subnetID,omitempty" tf:"subnet_id"`
+}
+
 type NotebookSessionSpecNotebookSessionConfigurationDetailsNotebookSessionShapeConfigDetails struct {
 	// +optional
 	MemoryInGbs *float64 `json:"memoryInGbs,omitempty" tf:"memory_in_gbs"`
@@ -86,8 +103,11 @@ type NotebookSessionSpecResource struct {
 	// +optional
 	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
-	LifecycleDetails                    *string                                                 `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
-	NotebookSessionConfigurationDetails *NotebookSessionSpecNotebookSessionConfigurationDetails `json:"notebookSessionConfigurationDetails" tf:"notebook_session_configuration_details"`
+	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
+	// +optional
+	NotebookSessionConfigDetails *NotebookSessionSpecNotebookSessionConfigDetails `json:"notebookSessionConfigDetails,omitempty" tf:"notebook_session_config_details"`
+	// +optional
+	NotebookSessionConfigurationDetails *NotebookSessionSpecNotebookSessionConfigurationDetails `json:"notebookSessionConfigurationDetails,omitempty" tf:"notebook_session_configuration_details"`
 	// +optional
 	NotebookSessionURL *string `json:"notebookSessionURL,omitempty" tf:"notebook_session_url"`
 	ProjectID          *string `json:"projectID" tf:"project_id"`

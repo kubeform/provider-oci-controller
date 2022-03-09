@@ -285,6 +285,11 @@ func (in *ApplicationSpecResource) DeepCopyInto(out *ApplicationSpecResource) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.Type != nil {
+		in, out := &in.Type, &out.Type
+		*out = new(string)
+		**out = **in
+	}
 	if in.WarehouseBucketURI != nil {
 		in, out := &in.WarehouseBucketURI, &out.WarehouseBucketURI
 		*out = new(string)
@@ -635,6 +640,11 @@ func (in *InvokeRunSpecResource) DeepCopyInto(out *InvokeRunSpecResource) {
 	if in.TotalOcpu != nil {
 		in, out := &in.TotalOcpu, &out.TotalOcpu
 		*out = new(int64)
+		**out = **in
+	}
+	if in.Type != nil {
+		in, out := &in.Type, &out.Type
+		*out = new(string)
 		**out = **in
 	}
 	if in.WarehouseBucketURI != nil {

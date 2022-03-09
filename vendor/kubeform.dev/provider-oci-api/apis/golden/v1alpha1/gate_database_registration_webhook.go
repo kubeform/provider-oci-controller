@@ -93,7 +93,7 @@ func (r *GateDatabaseRegistration) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range gatedatabaseregistrationForceNewList {
+	for key, _ := range gatedatabaseregistrationForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -57,6 +57,7 @@ var invokerunForceNewList = map[string]bool{
 	"/parameters/*/name":    true,
 	"/parameters/*/value":   true,
 	"/spark_version":        true,
+	"/type":                 true,
 	"/warehouse_bucket_uri": true,
 }
 
@@ -103,7 +104,7 @@ func (r *InvokeRun) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range invokerunForceNewList {
+	for key, _ := range invokerunForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -92,7 +92,7 @@ func (r *CrossConnect) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range crossconnectForceNewList {
+	for key, _ := range crossconnectForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

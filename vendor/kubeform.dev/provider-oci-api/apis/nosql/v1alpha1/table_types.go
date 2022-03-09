@@ -64,9 +64,11 @@ type TableSpecSchema struct {
 }
 
 type TableSpecTableLimits struct {
-	MaxReadUnits    *int64 `json:"maxReadUnits" tf:"max_read_units"`
-	MaxStorageInGbs *int64 `json:"maxStorageInGbs" tf:"max_storage_in_gbs"`
-	MaxWriteUnits   *int64 `json:"maxWriteUnits" tf:"max_write_units"`
+	// +optional
+	CapacityMode    *string `json:"capacityMode,omitempty" tf:"capacity_mode"`
+	MaxReadUnits    *int64  `json:"maxReadUnits" tf:"max_read_units"`
+	MaxStorageInGbs *int64  `json:"maxStorageInGbs" tf:"max_storage_in_gbs"`
+	MaxWriteUnits   *int64  `json:"maxWriteUnits" tf:"max_write_units"`
 }
 
 type TableSpec struct {

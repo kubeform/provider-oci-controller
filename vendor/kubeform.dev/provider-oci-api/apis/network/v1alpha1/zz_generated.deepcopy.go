@@ -321,6 +321,11 @@ func (in *LoadBalancerBackendSetSpecResource) DeepCopyInto(out *LoadBalancerBack
 		*out = new(LoadBalancerBackendSetSpecHealthChecker)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.IpVersion != nil {
+		in, out := &in.IpVersion, &out.IpVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.IsPreserveSource != nil {
 		in, out := &in.IsPreserveSource, &out.IsPreserveSource
 		*out = new(bool)
@@ -601,6 +606,11 @@ func (in *LoadBalancerListenerSpecResource) DeepCopyInto(out *LoadBalancerListen
 		*out = new(string)
 		**out = **in
 	}
+	if in.IpVersion != nil {
+		in, out := &in.IpVersion, &out.IpVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
 		*out = new(string)
@@ -754,6 +764,11 @@ func (in *LoadBalancerNetworkLoadBalancerSpecIpAddresses) DeepCopyInto(out *Load
 		*out = new(string)
 		**out = **in
 	}
+	if in.IpVersion != nil {
+		in, out := &in.IpVersion, &out.IpVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.IsPublic != nil {
 		in, out := &in.IsPublic, &out.IsPublic
 		*out = new(bool)
@@ -877,6 +892,11 @@ func (in *LoadBalancerNetworkLoadBalancerSpecResource) DeepCopyInto(out *LoadBal
 		in, out := &in.NetworkSecurityGroupIDS, &out.NetworkSecurityGroupIDS
 		*out = make([]string, len(*in))
 		copy(*out, *in)
+	}
+	if in.NlbIPVersion != nil {
+		in, out := &in.NlbIPVersion, &out.NlbIPVersion
+		*out = new(string)
+		**out = **in
 	}
 	if in.ReservedIPS != nil {
 		in, out := &in.ReservedIPS, &out.ReservedIPS

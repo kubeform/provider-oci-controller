@@ -89,7 +89,7 @@ func (r *SafeCompareUserAssessment) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range safecompareuserassessmentForceNewList {
+	for key, _ := range safecompareuserassessmentForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

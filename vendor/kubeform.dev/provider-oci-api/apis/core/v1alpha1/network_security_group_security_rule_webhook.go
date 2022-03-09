@@ -88,7 +88,7 @@ func (r *NetworkSecurityGroupSecurityRule) ValidateUpdate(old runtime.Object) er
 		return err
 	}
 
-	for key := range networksecuritygroupsecurityruleForceNewList {
+	for key, _ := range networksecuritygroupsecurityruleForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -51,6 +51,8 @@ type UserSpecCapabilities struct {
 	// +optional
 	CanUseCustomerSecretKeys *bool `json:"canUseCustomerSecretKeys,omitempty" tf:"can_use_customer_secret_keys"`
 	// +optional
+	CanUseDbCredentials *bool `json:"canUseDbCredentials,omitempty" tf:"can_use_db_credentials"`
+	// +optional
 	CanUseOauth2clientCredentials *bool `json:"canUseOauth2clientCredentials,omitempty" tf:"can_use_oauth2client_credentials"`
 	// +optional
 	CanUseSMTPCredentials *bool `json:"canUseSMTPCredentials,omitempty" tf:"can_use_smtp_credentials"`
@@ -79,6 +81,8 @@ type UserSpecResource struct {
 	Capabilities *UserSpecCapabilities `json:"capabilities,omitempty" tf:"capabilities"`
 	// +optional
 	CompartmentID *string `json:"compartmentID,omitempty" tf:"compartment_id"`
+	// +optional
+	DbUserName *string `json:"dbUserName,omitempty" tf:"db_user_name"`
 	// +optional
 	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
 	Description *string           `json:"description" tf:"description"`

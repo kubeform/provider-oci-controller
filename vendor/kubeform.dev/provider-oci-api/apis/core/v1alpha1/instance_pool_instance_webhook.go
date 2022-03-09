@@ -91,7 +91,7 @@ func (r *InstancePoolInstance) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range instancepoolinstanceForceNewList {
+	for key, _ := range instancepoolinstanceForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

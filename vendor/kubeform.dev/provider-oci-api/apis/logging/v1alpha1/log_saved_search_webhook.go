@@ -86,7 +86,7 @@ func (r *LogSavedSearch) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range logsavedsearchForceNewList {
+	for key, _ := range logsavedsearchForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

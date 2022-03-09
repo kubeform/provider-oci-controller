@@ -89,7 +89,7 @@ func (r *Ipsec) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range ipsecForceNewList {
+	for key, _ := range ipsecForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

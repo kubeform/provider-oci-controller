@@ -89,7 +89,7 @@ func (r *ExternalContainerDatabaseManagement) ValidateUpdate(old runtime.Object)
 		return err
 	}
 
-	for key := range externalcontainerdatabasemanagementForceNewList {
+	for key, _ := range externalcontainerdatabasemanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

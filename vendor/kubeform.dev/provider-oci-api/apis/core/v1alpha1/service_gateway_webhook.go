@@ -88,7 +88,7 @@ func (r *ServiceGateway) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range servicegatewayForceNewList {
+	for key, _ := range servicegatewayForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -55,7 +55,8 @@ type JobSpecJobInfrastructureConfigurationDetails struct {
 	BlockStorageSizeInGbs *int64  `json:"blockStorageSizeInGbs" tf:"block_storage_size_in_gbs"`
 	JobInfrastructureType *string `json:"jobInfrastructureType" tf:"job_infrastructure_type"`
 	ShapeName             *string `json:"shapeName" tf:"shape_name"`
-	SubnetID              *string `json:"subnetID" tf:"subnet_id"`
+	// +optional
+	SubnetID *string `json:"subnetID,omitempty" tf:"subnet_id"`
 }
 
 type JobSpecJobLogConfigurationDetails struct {

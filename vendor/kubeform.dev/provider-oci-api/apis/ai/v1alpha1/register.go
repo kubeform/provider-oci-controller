@@ -64,6 +64,10 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&AnomalyDetectionModelList{},
 		&AnomalyDetectionProject{},
 		&AnomalyDetectionProjectList{},
+		&VisionModel{},
+		&VisionModelList{},
+		&VisionProject{},
+		&VisionProjectList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

@@ -88,7 +88,7 @@ func (r *StorageExportSet) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range storageexportsetForceNewList {
+	for key, _ := range storageexportsetForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

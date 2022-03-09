@@ -90,7 +90,7 @@ func (r *ExadataInsight) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range exadatainsightForceNewList {
+	for key, _ := range exadatainsightForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

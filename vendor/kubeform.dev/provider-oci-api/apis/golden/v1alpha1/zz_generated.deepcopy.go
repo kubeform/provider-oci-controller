@@ -215,6 +215,11 @@ func (in *GateDatabaseRegistrationSpecResource) DeepCopyInto(out *GateDatabaseRe
 		*out = new(string)
 		**out = **in
 	}
+	if in.SessionMode != nil {
+		in, out := &in.SessionMode, &out.SessionMode
+		*out = new(string)
+		**out = **in
+	}
 	if in.State != nil {
 		in, out := &in.State, &out.State
 		*out = new(string)
@@ -482,6 +487,11 @@ func (in *GateDeploymentBackupSpecResource) DeepCopyInto(out *GateDeploymentBack
 		*out = new(string)
 		**out = **in
 	}
+	if in.SizeInBytes != nil {
+		in, out := &in.SizeInBytes, &out.SizeInBytes
+		*out = new(float64)
+		**out = **in
+	}
 	if in.State != nil {
 		in, out := &in.State, &out.State
 		*out = new(string)
@@ -493,6 +503,11 @@ func (in *GateDeploymentBackupSpecResource) DeepCopyInto(out *GateDeploymentBack
 		for key, val := range *in {
 			(*out)[key] = val
 		}
+	}
+	if in.TimeBackupFinished != nil {
+		in, out := &in.TimeBackupFinished, &out.TimeBackupFinished
+		*out = new(string)
+		**out = **in
 	}
 	if in.TimeCreated != nil {
 		in, out := &in.TimeCreated, &out.TimeCreated

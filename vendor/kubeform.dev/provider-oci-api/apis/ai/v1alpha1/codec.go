@@ -32,6 +32,9 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(AnomalyDetectionModelSpecModelTrainingDetails{}).Type1()):                        AnomalyDetectionModelSpecModelTrainingDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(AnomalyDetectionModelSpecModelTrainingResults{}).Type1()):                        AnomalyDetectionModelSpecModelTrainingResultsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(AnomalyDetectionModelSpecModelTrainingResultsRowReductionDetails{}).Type1()):     AnomalyDetectionModelSpecModelTrainingResultsRowReductionDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTestingDataset{}).Type1()):                                        VisionModelSpecTestingDatasetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTrainingDataset{}).Type1()):                                       VisionModelSpecTrainingDatasetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecValidationDataset{}).Type1()):                                     VisionModelSpecValidationDatasetCodec{},
 	}
 }
 
@@ -42,6 +45,9 @@ func GetDecoder() map[string]jsoniter.ValDecoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(AnomalyDetectionModelSpecModelTrainingDetails{}).Type1()):                        AnomalyDetectionModelSpecModelTrainingDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(AnomalyDetectionModelSpecModelTrainingResults{}).Type1()):                        AnomalyDetectionModelSpecModelTrainingResultsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(AnomalyDetectionModelSpecModelTrainingResultsRowReductionDetails{}).Type1()):     AnomalyDetectionModelSpecModelTrainingResultsRowReductionDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTestingDataset{}).Type1()):                                        VisionModelSpecTestingDatasetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTrainingDataset{}).Type1()):                                       VisionModelSpecTrainingDatasetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecValidationDataset{}).Type1()):                                     VisionModelSpecValidationDatasetCodec{},
 	}
 }
 
@@ -449,5 +455,242 @@ func (AnomalyDetectionModelSpecModelTrainingResultsRowReductionDetailsCodec) Dec
 		}
 	default:
 		iter.ReportError("decode AnomalyDetectionModelSpecModelTrainingResultsRowReductionDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type VisionModelSpecTestingDatasetCodec struct {
+}
+
+func (VisionModelSpecTestingDatasetCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*VisionModelSpecTestingDataset)(ptr) == nil
+}
+
+func (VisionModelSpecTestingDatasetCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*VisionModelSpecTestingDataset)(ptr)
+	var objs []VisionModelSpecTestingDataset
+	if obj != nil {
+		objs = []VisionModelSpecTestingDataset{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTestingDataset{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (VisionModelSpecTestingDatasetCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*VisionModelSpecTestingDataset)(ptr) = VisionModelSpecTestingDataset{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []VisionModelSpecTestingDataset
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTestingDataset{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*VisionModelSpecTestingDataset)(ptr) = objs[0]
+			} else {
+				*(*VisionModelSpecTestingDataset)(ptr) = VisionModelSpecTestingDataset{}
+			}
+		} else {
+			*(*VisionModelSpecTestingDataset)(ptr) = VisionModelSpecTestingDataset{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj VisionModelSpecTestingDataset
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTestingDataset{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*VisionModelSpecTestingDataset)(ptr) = obj
+		} else {
+			*(*VisionModelSpecTestingDataset)(ptr) = VisionModelSpecTestingDataset{}
+		}
+	default:
+		iter.ReportError("decode VisionModelSpecTestingDataset", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type VisionModelSpecTrainingDatasetCodec struct {
+}
+
+func (VisionModelSpecTrainingDatasetCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*VisionModelSpecTrainingDataset)(ptr) == nil
+}
+
+func (VisionModelSpecTrainingDatasetCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*VisionModelSpecTrainingDataset)(ptr)
+	var objs []VisionModelSpecTrainingDataset
+	if obj != nil {
+		objs = []VisionModelSpecTrainingDataset{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTrainingDataset{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (VisionModelSpecTrainingDatasetCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*VisionModelSpecTrainingDataset)(ptr) = VisionModelSpecTrainingDataset{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []VisionModelSpecTrainingDataset
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTrainingDataset{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*VisionModelSpecTrainingDataset)(ptr) = objs[0]
+			} else {
+				*(*VisionModelSpecTrainingDataset)(ptr) = VisionModelSpecTrainingDataset{}
+			}
+		} else {
+			*(*VisionModelSpecTrainingDataset)(ptr) = VisionModelSpecTrainingDataset{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj VisionModelSpecTrainingDataset
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecTrainingDataset{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*VisionModelSpecTrainingDataset)(ptr) = obj
+		} else {
+			*(*VisionModelSpecTrainingDataset)(ptr) = VisionModelSpecTrainingDataset{}
+		}
+	default:
+		iter.ReportError("decode VisionModelSpecTrainingDataset", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type VisionModelSpecValidationDatasetCodec struct {
+}
+
+func (VisionModelSpecValidationDatasetCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*VisionModelSpecValidationDataset)(ptr) == nil
+}
+
+func (VisionModelSpecValidationDatasetCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*VisionModelSpecValidationDataset)(ptr)
+	var objs []VisionModelSpecValidationDataset
+	if obj != nil {
+		objs = []VisionModelSpecValidationDataset{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecValidationDataset{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (VisionModelSpecValidationDatasetCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*VisionModelSpecValidationDataset)(ptr) = VisionModelSpecValidationDataset{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []VisionModelSpecValidationDataset
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecValidationDataset{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*VisionModelSpecValidationDataset)(ptr) = objs[0]
+			} else {
+				*(*VisionModelSpecValidationDataset)(ptr) = VisionModelSpecValidationDataset{}
+			}
+		} else {
+			*(*VisionModelSpecValidationDataset)(ptr) = VisionModelSpecValidationDataset{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj VisionModelSpecValidationDataset
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(VisionModelSpecValidationDataset{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*VisionModelSpecValidationDataset)(ptr) = obj
+		} else {
+			*(*VisionModelSpecValidationDataset)(ptr) = VisionModelSpecValidationDataset{}
+		}
+	default:
+		iter.ReportError("decode VisionModelSpecValidationDataset", "unexpected JSON type")
 	}
 }

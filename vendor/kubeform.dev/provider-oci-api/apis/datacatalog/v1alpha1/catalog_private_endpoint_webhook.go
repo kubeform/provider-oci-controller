@@ -88,7 +88,7 @@ func (r *CatalogPrivateEndpoint) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range catalogprivateendpointForceNewList {
+	for key, _ := range catalogprivateendpointForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

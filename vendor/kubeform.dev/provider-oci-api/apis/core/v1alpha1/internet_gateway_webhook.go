@@ -88,7 +88,7 @@ func (r *InternetGateway) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range internetgatewayForceNewList {
+	for key, _ := range internetgatewayForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

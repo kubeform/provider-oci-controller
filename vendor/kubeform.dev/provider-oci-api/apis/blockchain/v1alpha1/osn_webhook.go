@@ -89,7 +89,7 @@ func (r *Osn) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range osnForceNewList {
+	for key, _ := range osnForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

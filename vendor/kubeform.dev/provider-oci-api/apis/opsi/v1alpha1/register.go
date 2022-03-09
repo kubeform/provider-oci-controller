@@ -56,6 +56,8 @@ func Resource(resource string) schema.GroupResource {
 // Adds the list of known types to api.Scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
+		&AwrHub{},
+		&AwrHubList{},
 		&DatabaseInsight{},
 		&DatabaseInsightList{},
 		&EnterpriseManagerBridge{},
@@ -64,6 +66,14 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ExadataInsightList{},
 		&HostInsight{},
 		&HostInsightList{},
+		&OperationsInsightsWarehouse{},
+		&OperationsInsightsWarehouseList{},
+		&OperationsInsightsWarehouseDownloadWarehouseWallet{},
+		&OperationsInsightsWarehouseDownloadWarehouseWalletList{},
+		&OperationsInsightsWarehouseRotateWarehouseWallet{},
+		&OperationsInsightsWarehouseRotateWarehouseWalletList{},
+		&OperationsInsightsWarehouseUser{},
+		&OperationsInsightsWarehouseUserList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

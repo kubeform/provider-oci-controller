@@ -137,6 +137,8 @@ type InvokeRunSpecResource struct {
 	// +optional
 	TotalOcpu *int64 `json:"totalOcpu,omitempty" tf:"total_ocpu"`
 	// +optional
+	Type *string `json:"type,omitempty" tf:"type"`
+	// +optional
 	WarehouseBucketURI *string `json:"warehouseBucketURI,omitempty" tf:"warehouse_bucket_uri"`
 }
 

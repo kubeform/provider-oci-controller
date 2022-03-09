@@ -89,7 +89,7 @@ func (r *DrgAttachmentManagement) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range drgattachmentmanagementForceNewList {
+	for key, _ := range drgattachmentmanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

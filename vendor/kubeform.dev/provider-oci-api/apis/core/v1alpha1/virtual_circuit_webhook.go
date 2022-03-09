@@ -90,7 +90,7 @@ func (r *VirtualCircuit) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range virtualcircuitForceNewList {
+	for key, _ := range virtualcircuitForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

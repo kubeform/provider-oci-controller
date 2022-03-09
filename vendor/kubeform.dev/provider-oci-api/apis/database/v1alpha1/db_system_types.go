@@ -181,14 +181,20 @@ type DbSystemSpecMaintenanceWindowMonths struct {
 
 type DbSystemSpecMaintenanceWindow struct {
 	// +optional
+	CustomActionTimeoutInMins *int64 `json:"customActionTimeoutInMins,omitempty" tf:"custom_action_timeout_in_mins"`
+	// +optional
 	DaysOfWeek []DbSystemSpecMaintenanceWindowDaysOfWeek `json:"daysOfWeek,omitempty" tf:"days_of_week"`
 	// +optional
 	// +kubebuilder:validation:MaxItems=20
 	HoursOfDay []int64 `json:"hoursOfDay,omitempty" tf:"hours_of_day"`
 	// +optional
+	IsCustomActionTimeoutEnabled *bool `json:"isCustomActionTimeoutEnabled,omitempty" tf:"is_custom_action_timeout_enabled"`
+	// +optional
 	LeadTimeInWeeks *int64 `json:"leadTimeInWeeks,omitempty" tf:"lead_time_in_weeks"`
 	// +optional
 	Months []DbSystemSpecMaintenanceWindowMonths `json:"months,omitempty" tf:"months"`
+	// +optional
+	PatchingMode *string `json:"patchingMode,omitempty" tf:"patching_mode"`
 	// +optional
 	Preference *string `json:"preference,omitempty" tf:"preference"`
 	// +optional
@@ -209,14 +215,20 @@ type DbSystemSpecMaintenanceWindowDetailsMonths struct {
 
 type DbSystemSpecMaintenanceWindowDetails struct {
 	// +optional
+	CustomActionTimeoutInMins *int64 `json:"customActionTimeoutInMins,omitempty" tf:"custom_action_timeout_in_mins"`
+	// +optional
 	DaysOfWeek []DbSystemSpecMaintenanceWindowDetailsDaysOfWeek `json:"daysOfWeek,omitempty" tf:"days_of_week"`
 	// +optional
 	// +kubebuilder:validation:MaxItems=20
 	HoursOfDay []int64 `json:"hoursOfDay,omitempty" tf:"hours_of_day"`
 	// +optional
+	IsCustomActionTimeoutEnabled *bool `json:"isCustomActionTimeoutEnabled,omitempty" tf:"is_custom_action_timeout_enabled"`
+	// +optional
 	LeadTimeInWeeks *int64 `json:"leadTimeInWeeks,omitempty" tf:"lead_time_in_weeks"`
 	// +optional
 	Months []DbSystemSpecMaintenanceWindowDetailsMonths `json:"months,omitempty" tf:"months"`
+	// +optional
+	PatchingMode *string `json:"patchingMode,omitempty" tf:"patching_mode"`
 	// +optional
 	Preference *string `json:"preference,omitempty" tf:"preference"`
 	// +optional

@@ -90,7 +90,7 @@ func (r *SslCipherSuite) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range sslciphersuiteForceNewList {
+	for key, _ := range sslciphersuiteForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

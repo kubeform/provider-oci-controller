@@ -89,7 +89,7 @@ func (r *DbNodeConsoleConnection) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range dbnodeconsoleconnectionForceNewList {
+	for key, _ := range dbnodeconsoleconnectionForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

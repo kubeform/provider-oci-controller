@@ -88,7 +88,7 @@ func (r *UserCapabilitiesManagement) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range usercapabilitiesmanagementForceNewList {
+	for key, _ := range usercapabilitiesmanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -89,7 +89,7 @@ func (r *ExternalDatabaseConnector) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range externaldatabaseconnectorForceNewList {
+	for key, _ := range externaldatabaseconnectorForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

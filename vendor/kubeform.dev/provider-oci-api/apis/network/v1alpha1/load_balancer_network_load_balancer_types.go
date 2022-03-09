@@ -50,6 +50,8 @@ type LoadBalancerNetworkLoadBalancerSpecIpAddresses struct {
 	// +optional
 	IpAddress *string `json:"ipAddress,omitempty" tf:"ip_address"`
 	// +optional
+	IpVersion *string `json:"ipVersion,omitempty" tf:"ip_version"`
+	// +optional
 	IsPublic *bool `json:"isPublic,omitempty" tf:"is_public"`
 	// +optional
 	ReservedIP *LoadBalancerNetworkLoadBalancerSpecIpAddressesReservedIP `json:"reservedIP,omitempty" tf:"reserved_ip"`
@@ -95,6 +97,8 @@ type LoadBalancerNetworkLoadBalancerSpecResource struct {
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional
 	NetworkSecurityGroupIDS []string `json:"networkSecurityGroupIDS,omitempty" tf:"network_security_group_ids"`
+	// +optional
+	NlbIPVersion *string `json:"nlbIPVersion,omitempty" tf:"nlb_ip_version"`
 	// +optional
 	ReservedIPS []LoadBalancerNetworkLoadBalancerSpecReservedIPS `json:"reservedIPS,omitempty" tf:"reserved_ips"`
 	// +optional

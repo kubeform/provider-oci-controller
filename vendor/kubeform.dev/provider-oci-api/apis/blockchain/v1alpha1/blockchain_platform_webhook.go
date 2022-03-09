@@ -48,6 +48,7 @@ var blockchainplatformForceNewList = map[string]bool{
 	"/federated_user_id":    true,
 	"/is_byol":              true,
 	"/platform_role":        true,
+	"/platform_version":     true,
 }
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
@@ -93,7 +94,7 @@ func (r *BlockchainPlatform) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range blockchainplatformForceNewList {
+	for key, _ := range blockchainplatformForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

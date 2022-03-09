@@ -90,7 +90,7 @@ func (r *PublicIPPoolCapacity) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range publicippoolcapacityForceNewList {
+	for key, _ := range publicippoolcapacityForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

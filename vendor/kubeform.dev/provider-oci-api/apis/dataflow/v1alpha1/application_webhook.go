@@ -41,7 +41,9 @@ func (r *Application) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 var _ webhook.Validator = &Application{}
 
-var applicationForceNewList = map[string]bool{}
+var applicationForceNewList = map[string]bool{
+	"/type": true,
+}
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
 func (r *Application) ValidateCreate() error {
@@ -86,7 +88,7 @@ func (r *Application) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range applicationForceNewList {
+	for key, _ := range applicationForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

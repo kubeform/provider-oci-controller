@@ -88,7 +88,7 @@ func (r *AnalyticsLogAnalyticsUnprocessedDataBucketManagement) ValidateUpdate(ol
 		return err
 	}
 
-	for key := range analyticsloganalyticsunprocesseddatabucketmanagementForceNewList {
+	for key, _ := range analyticsloganalyticsunprocesseddatabucketmanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

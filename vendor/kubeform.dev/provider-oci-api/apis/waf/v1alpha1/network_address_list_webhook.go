@@ -86,7 +86,7 @@ func (r *NetworkAddressList) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range networkaddresslistForceNewList {
+	for key, _ := range networkaddresslistForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -94,7 +94,7 @@ func (r *AnalyticsLogAnalyticsObjectCollectionRule) ValidateUpdate(old runtime.O
 		return err
 	}
 
-	for key := range analyticsloganalyticsobjectcollectionruleForceNewList {
+	for key, _ := range analyticsloganalyticsobjectcollectionruleForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

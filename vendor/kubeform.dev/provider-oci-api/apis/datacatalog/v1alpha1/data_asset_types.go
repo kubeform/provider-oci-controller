@@ -77,6 +77,8 @@ type DataAssetSpecResource struct {
 	// +optional
 	TimeCreated *string `json:"timeCreated,omitempty" tf:"time_created"`
 	// +optional
+	TimeHarvested *string `json:"timeHarvested,omitempty" tf:"time_harvested"`
+	// +optional
 	TimeUpdated *string `json:"timeUpdated,omitempty" tf:"time_updated"`
 	TypeKey     *string `json:"typeKey" tf:"type_key"`
 	// +optional

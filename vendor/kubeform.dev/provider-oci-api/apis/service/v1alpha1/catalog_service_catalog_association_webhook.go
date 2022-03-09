@@ -90,7 +90,7 @@ func (r *CatalogServiceCatalogAssociation) ValidateUpdate(old runtime.Object) er
 		return err
 	}
 
-	for key := range catalogservicecatalogassociationForceNewList {
+	for key, _ := range catalogservicecatalogassociationForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -86,6 +86,8 @@ type RecommendationSpecResource struct {
 	// +optional
 	EstimatedCostSaving *float64 `json:"estimatedCostSaving,omitempty" tf:"estimated_cost_saving"`
 	// +optional
+	ExtendedMetadata map[string]string `json:"extendedMetadata,omitempty" tf:"extended_metadata"`
+	// +optional
 	Importance *string `json:"importance,omitempty" tf:"importance"`
 	// +optional
 	Name             *string `json:"name,omitempty" tf:"name"`

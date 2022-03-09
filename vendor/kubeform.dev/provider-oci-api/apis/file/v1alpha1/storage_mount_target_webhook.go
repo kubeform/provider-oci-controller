@@ -91,7 +91,7 @@ func (r *StorageMountTarget) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range storagemounttargetForceNewList {
+	for key, _ := range storagemounttargetForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -61,6 +61,58 @@ type IpsecConnectionTunnelManagementSpecEncryptionDomainConfig struct {
 	OracleTrafficSelector []string `json:"oracleTrafficSelector,omitempty" tf:"oracle_traffic_selector"`
 }
 
+type IpsecConnectionTunnelManagementSpecPhaseOneDetails struct {
+	// +optional
+	CustomAuthenticationAlgorithm *string `json:"customAuthenticationAlgorithm,omitempty" tf:"custom_authentication_algorithm"`
+	// +optional
+	CustomDhGroup *string `json:"customDhGroup,omitempty" tf:"custom_dh_group"`
+	// +optional
+	CustomEncryptionAlgorithm *string `json:"customEncryptionAlgorithm,omitempty" tf:"custom_encryption_algorithm"`
+	// +optional
+	IsCustomPhaseOneConfig *bool `json:"isCustomPhaseOneConfig,omitempty" tf:"is_custom_phase_one_config"`
+	// +optional
+	IsIkeEstablished *bool `json:"isIkeEstablished,omitempty" tf:"is_ike_established"`
+	// +optional
+	Lifetime *string `json:"lifetime,omitempty" tf:"lifetime"`
+	// +optional
+	NegotiatedAuthenticationAlgorithm *string `json:"negotiatedAuthenticationAlgorithm,omitempty" tf:"negotiated_authentication_algorithm"`
+	// +optional
+	NegotiatedDhGroup *string `json:"negotiatedDhGroup,omitempty" tf:"negotiated_dh_group"`
+	// +optional
+	NegotiatedEncryptionAlgorithm *string `json:"negotiatedEncryptionAlgorithm,omitempty" tf:"negotiated_encryption_algorithm"`
+	// +optional
+	RemainingLifetime *string `json:"remainingLifetime,omitempty" tf:"remaining_lifetime"`
+	// +optional
+	RemainingLifetimeLastRetrieved *string `json:"remainingLifetimeLastRetrieved,omitempty" tf:"remaining_lifetime_last_retrieved"`
+}
+
+type IpsecConnectionTunnelManagementSpecPhaseTwoDetails struct {
+	// +optional
+	CustomAuthenticationAlgorithm *string `json:"customAuthenticationAlgorithm,omitempty" tf:"custom_authentication_algorithm"`
+	// +optional
+	CustomEncryptionAlgorithm *string `json:"customEncryptionAlgorithm,omitempty" tf:"custom_encryption_algorithm"`
+	// +optional
+	DhGroup *string `json:"dhGroup,omitempty" tf:"dh_group"`
+	// +optional
+	IsCustomPhaseTwoConfig *bool `json:"isCustomPhaseTwoConfig,omitempty" tf:"is_custom_phase_two_config"`
+	// +optional
+	IsEspEstablished *bool `json:"isEspEstablished,omitempty" tf:"is_esp_established"`
+	// +optional
+	IsPfsEnabled *bool `json:"isPfsEnabled,omitempty" tf:"is_pfs_enabled"`
+	// +optional
+	Lifetime *string `json:"lifetime,omitempty" tf:"lifetime"`
+	// +optional
+	NegotiatedAuthenticationAlgorithm *string `json:"negotiatedAuthenticationAlgorithm,omitempty" tf:"negotiated_authentication_algorithm"`
+	// +optional
+	NegotiatedDhGroup *string `json:"negotiatedDhGroup,omitempty" tf:"negotiated_dh_group"`
+	// +optional
+	NegotiatedEncryptionAlgorithm *string `json:"negotiatedEncryptionAlgorithm,omitempty" tf:"negotiated_encryption_algorithm"`
+	// +optional
+	RemainingLifetime *string `json:"remainingLifetime,omitempty" tf:"remaining_lifetime"`
+	// +optional
+	RemainingLifetimeLastRetrieved *string `json:"remainingLifetimeLastRetrieved,omitempty" tf:"remaining_lifetime_last_retrieved"`
+}
+
 type IpsecConnectionTunnelManagementSpec struct {
 	State *IpsecConnectionTunnelManagementSpecResource `json:"state,omitempty" tf:"-"`
 
@@ -89,11 +141,23 @@ type IpsecConnectionTunnelManagementSpecResource struct {
 	// +optional
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name"`
 	// +optional
+	DpdMode *string `json:"dpdMode,omitempty" tf:"dpd_mode"`
+	// +optional
+	DpdTimeoutInSec *int64 `json:"dpdTimeoutInSec,omitempty" tf:"dpd_timeout_in_sec"`
+	// +optional
 	EncryptionDomainConfig *IpsecConnectionTunnelManagementSpecEncryptionDomainConfig `json:"encryptionDomainConfig,omitempty" tf:"encryption_domain_config"`
 	// +optional
 	IkeVersion *string `json:"ikeVersion,omitempty" tf:"ike_version"`
 	IpsecID    *string `json:"ipsecID" tf:"ipsec_id"`
-	Routing    *string `json:"routing" tf:"routing"`
+	// +optional
+	NatTranslationEnabled *string `json:"natTranslationEnabled,omitempty" tf:"nat_translation_enabled"`
+	// +optional
+	OracleCanInitiate *string `json:"oracleCanInitiate,omitempty" tf:"oracle_can_initiate"`
+	// +optional
+	PhaseOneDetails *IpsecConnectionTunnelManagementSpecPhaseOneDetails `json:"phaseOneDetails,omitempty" tf:"phase_one_details"`
+	// +optional
+	PhaseTwoDetails *IpsecConnectionTunnelManagementSpecPhaseTwoDetails `json:"phaseTwoDetails,omitempty" tf:"phase_two_details"`
+	Routing         *string                                             `json:"routing" tf:"routing"`
 	// +optional
 	SharedSecret *string `json:"sharedSecret,omitempty" tf:"shared_secret"`
 	// +optional

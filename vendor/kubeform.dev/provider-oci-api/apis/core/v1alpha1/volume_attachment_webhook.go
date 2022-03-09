@@ -97,7 +97,7 @@ func (r *VolumeAttachment) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range volumeattachmentForceNewList {
+	for key, _ := range volumeattachmentForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

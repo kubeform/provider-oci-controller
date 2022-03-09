@@ -86,7 +86,7 @@ func (r *PublicIPPool) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range publicippoolForceNewList {
+	for key, _ := range publicippoolForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

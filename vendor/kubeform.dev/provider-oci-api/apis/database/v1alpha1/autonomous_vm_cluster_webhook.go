@@ -92,7 +92,7 @@ func (r *AutonomousVmCluster) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range autonomousvmclusterForceNewList {
+	for key, _ := range autonomousvmclusterForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -88,7 +88,7 @@ func (r *AnalyticsLogAnalyticsPreferencesManagement) ValidateUpdate(old runtime.
 		return err
 	}
 
-	for key := range analyticsloganalyticspreferencesmanagementForceNewList {
+	for key, _ := range analyticsloganalyticspreferencesmanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

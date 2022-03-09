@@ -86,7 +86,7 @@ func (r *AutonomousDatabaseInstanceWalletManagement) ValidateUpdate(old runtime.
 		return err
 	}
 
-	for key := range autonomousdatabaseinstancewalletmanagementForceNewList {
+	for key, _ := range autonomousdatabaseinstancewalletmanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

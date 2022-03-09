@@ -42,12 +42,13 @@ func (r *VolumeGroup) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &VolumeGroup{}
 
 var volumegroupForceNewList = map[string]bool{
-	"/availability_domain":                     true,
-	"/backup_policy_id":                        true,
-	"/source_details/*/type":                   true,
-	"/source_details/*/volume_group_backup_id": true,
-	"/source_details/*/volume_group_id":        true,
-	"/source_details/*/volume_ids":             true,
+	"/availability_domain":                      true,
+	"/backup_policy_id":                         true,
+	"/source_details/*/type":                    true,
+	"/source_details/*/volume_group_backup_id":  true,
+	"/source_details/*/volume_group_id":         true,
+	"/source_details/*/volume_group_replica_id": true,
+	"/source_details/*/volume_ids":              true,
 }
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
@@ -93,7 +94,7 @@ func (r *VolumeGroup) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range volumegroupForceNewList {
+	for key, _ := range volumegroupForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

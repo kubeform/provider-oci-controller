@@ -48,6 +48,8 @@ type DrgAttachmentSpecNetworkDetails struct {
 	// +optional
 	RouteTableID *string `json:"routeTableID,omitempty" tf:"route_table_id"`
 	Type         *string `json:"type" tf:"type"`
+	// +optional
+	VcnRouteType *string `json:"vcnRouteType,omitempty" tf:"vcn_route_type"`
 }
 
 type DrgAttachmentSpec struct {

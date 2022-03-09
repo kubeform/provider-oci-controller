@@ -35,6 +35,7 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesAuthentication{}).Type1()):                                           DeploymentSpecSpecificationRequestPoliciesAuthenticationCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesAuthenticationPublicKeys{}).Type1()):                                 DeploymentSpecSpecificationRequestPoliciesAuthenticationPublicKeysCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesCors{}).Type1()):                                                     DeploymentSpecSpecificationRequestPoliciesCorsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesMutualTls{}).Type1()):                                                DeploymentSpecSpecificationRequestPoliciesMutualTlsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesRateLimiting{}).Type1()):                                             DeploymentSpecSpecificationRequestPoliciesRateLimitingCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRoutesBackend{}).Type1()):                                                           DeploymentSpecSpecificationRoutesBackendCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRoutesLoggingPolicies{}).Type1()):                                                   DeploymentSpecSpecificationRoutesLoggingPoliciesCodec{},
@@ -75,6 +76,7 @@ func GetDecoder() map[string]jsoniter.ValDecoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesAuthentication{}).Type1()):                                           DeploymentSpecSpecificationRequestPoliciesAuthenticationCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesAuthenticationPublicKeys{}).Type1()):                                 DeploymentSpecSpecificationRequestPoliciesAuthenticationPublicKeysCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesCors{}).Type1()):                                                     DeploymentSpecSpecificationRequestPoliciesCorsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesMutualTls{}).Type1()):                                                DeploymentSpecSpecificationRequestPoliciesMutualTlsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesRateLimiting{}).Type1()):                                             DeploymentSpecSpecificationRequestPoliciesRateLimitingCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRoutesBackend{}).Type1()):                                                           DeploymentSpecSpecificationRoutesBackendCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRoutesLoggingPolicies{}).Type1()):                                                   DeploymentSpecSpecificationRoutesLoggingPoliciesCodec{},
@@ -746,6 +748,85 @@ func (DeploymentSpecSpecificationRequestPoliciesCorsCodec) Decode(ptr unsafe.Poi
 		}
 	default:
 		iter.ReportError("decode DeploymentSpecSpecificationRequestPoliciesCors", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type DeploymentSpecSpecificationRequestPoliciesMutualTlsCodec struct {
+}
+
+func (DeploymentSpecSpecificationRequestPoliciesMutualTlsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*DeploymentSpecSpecificationRequestPoliciesMutualTls)(ptr) == nil
+}
+
+func (DeploymentSpecSpecificationRequestPoliciesMutualTlsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*DeploymentSpecSpecificationRequestPoliciesMutualTls)(ptr)
+	var objs []DeploymentSpecSpecificationRequestPoliciesMutualTls
+	if obj != nil {
+		objs = []DeploymentSpecSpecificationRequestPoliciesMutualTls{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesMutualTls{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (DeploymentSpecSpecificationRequestPoliciesMutualTlsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*DeploymentSpecSpecificationRequestPoliciesMutualTls)(ptr) = DeploymentSpecSpecificationRequestPoliciesMutualTls{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []DeploymentSpecSpecificationRequestPoliciesMutualTls
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesMutualTls{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*DeploymentSpecSpecificationRequestPoliciesMutualTls)(ptr) = objs[0]
+			} else {
+				*(*DeploymentSpecSpecificationRequestPoliciesMutualTls)(ptr) = DeploymentSpecSpecificationRequestPoliciesMutualTls{}
+			}
+		} else {
+			*(*DeploymentSpecSpecificationRequestPoliciesMutualTls)(ptr) = DeploymentSpecSpecificationRequestPoliciesMutualTls{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj DeploymentSpecSpecificationRequestPoliciesMutualTls
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(DeploymentSpecSpecificationRequestPoliciesMutualTls{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*DeploymentSpecSpecificationRequestPoliciesMutualTls)(ptr) = obj
+		} else {
+			*(*DeploymentSpecSpecificationRequestPoliciesMutualTls)(ptr) = DeploymentSpecSpecificationRequestPoliciesMutualTls{}
+		}
+	default:
+		iter.ReportError("decode DeploymentSpecSpecificationRequestPoliciesMutualTls", "unexpected JSON type")
 	}
 }
 

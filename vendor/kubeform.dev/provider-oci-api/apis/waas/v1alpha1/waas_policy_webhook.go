@@ -88,7 +88,7 @@ func (r *WaasPolicy) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range waaspolicyForceNewList {
+	for key, _ := range waaspolicyForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

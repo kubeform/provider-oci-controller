@@ -88,7 +88,7 @@ func (r *SecurityList) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range securitylistForceNewList {
+	for key, _ := range securitylistForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

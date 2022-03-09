@@ -42,9 +42,10 @@ func (r *PluggableDatabasesRemoteClone) SetupWebhookWithManager(mgr ctrl.Manager
 var _ webhook.Validator = &PluggableDatabasesRemoteClone{}
 
 var pluggabledatabasesremotecloneForceNewList = map[string]bool{
-	"/cloned_pdb_name":              true,
-	"/pluggable_database_id":        true,
-	"/target_container_database_id": true,
+	"/cloned_pdb_name":                    true,
+	"/pluggable_database_id":              true,
+	"/should_pdb_admin_account_be_locked": true,
+	"/target_container_database_id":       true,
 }
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
@@ -90,7 +91,7 @@ func (r *PluggableDatabasesRemoteClone) ValidateUpdate(old runtime.Object) error
 		return err
 	}
 
-	for key := range pluggabledatabasesremotecloneForceNewList {
+	for key, _ := range pluggabledatabasesremotecloneForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

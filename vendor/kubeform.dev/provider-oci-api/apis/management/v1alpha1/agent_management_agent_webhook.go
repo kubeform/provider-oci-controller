@@ -88,7 +88,7 @@ func (r *AgentManagementAgent) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range agentmanagementagentForceNewList {
+	for key, _ := range agentmanagementagentForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

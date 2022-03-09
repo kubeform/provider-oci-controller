@@ -41,8 +41,23 @@ type MigrationMigration struct {
 	Status            MigrationMigrationStatus `json:"status,omitempty"`
 }
 
+type MigrationMigrationSpecAdvisorSettings struct {
+	// +optional
+	IsIgnoreErrors *bool `json:"isIgnoreErrors,omitempty" tf:"is_ignore_errors"`
+	// +optional
+	IsSkipAdvisor *bool `json:"isSkipAdvisor,omitempty" tf:"is_skip_advisor"`
+}
+
+type MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket struct {
+	Bucket    *string `json:"bucket" tf:"bucket"`
+	Namespace *string `json:"namespace" tf:"namespace"`
+}
+
 type MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetails struct {
-	Name *string `json:"name" tf:"name"`
+	// +optional
+	Name *string `json:"name,omitempty" tf:"name"`
+	// +optional
+	WalletBucket *MigrationMigrationSpecDataTransferMediumDetailsDatabaseLinkDetailsWalletBucket `json:"walletBucket,omitempty" tf:"wallet_bucket"`
 }
 
 type MigrationMigrationSpecDataTransferMediumDetailsObjectStorageDetails struct {
@@ -101,9 +116,30 @@ type MigrationMigrationSpecDatapumpSettings struct {
 	MetadataRemaps []MigrationMigrationSpecDatapumpSettingsMetadataRemaps `json:"metadataRemaps,omitempty" tf:"metadata_remaps"`
 }
 
+type MigrationMigrationSpecDumpTransferDetailsSource struct {
+	Kind *string `json:"kind" tf:"kind"`
+	// +optional
+	OciHome *string `json:"ociHome,omitempty" tf:"oci_home"`
+}
+
+type MigrationMigrationSpecDumpTransferDetailsTarget struct {
+	Kind *string `json:"kind" tf:"kind"`
+	// +optional
+	OciHome *string `json:"ociHome,omitempty" tf:"oci_home"`
+}
+
+type MigrationMigrationSpecDumpTransferDetails struct {
+	// +optional
+	Source *MigrationMigrationSpecDumpTransferDetailsSource `json:"source,omitempty" tf:"source"`
+	// +optional
+	Target *MigrationMigrationSpecDumpTransferDetailsTarget `json:"target,omitempty" tf:"target"`
+}
+
 type MigrationMigrationSpecExcludeObjects struct {
 	Object *string `json:"object" tf:"object"`
 	Owner  *string `json:"owner" tf:"owner"`
+	// +optional
+	Type *string `json:"type,omitempty" tf:"type"`
 }
 
 type MigrationMigrationSpecGoldenGateDetailsHubRestAdminCredentials struct {
@@ -170,6 +206,13 @@ type MigrationMigrationSpecGoldenGateDetails struct {
 	Settings *MigrationMigrationSpecGoldenGateDetailsSettings `json:"settings,omitempty" tf:"settings"`
 }
 
+type MigrationMigrationSpecIncludeObjects struct {
+	Object *string `json:"object" tf:"object"`
+	Owner  *string `json:"owner" tf:"owner"`
+	// +optional
+	Type *string `json:"type,omitempty" tf:"type"`
+}
+
 type MigrationMigrationSpecVaultDetails struct {
 	CompartmentID *string `json:"compartmentID" tf:"compartment_id"`
 	KeyID         *string `json:"keyID" tf:"key_id"`
@@ -198,6 +241,8 @@ type MigrationMigrationSpecResource struct {
 	ID string `json:"id,omitempty" tf:"id,omitempty"`
 
 	// +optional
+	AdvisorSettings *MigrationMigrationSpecAdvisorSettings `json:"advisorSettings,omitempty" tf:"advisor_settings"`
+	// +optional
 	AgentID       *string `json:"agentID,omitempty" tf:"agent_id"`
 	CompartmentID *string `json:"compartmentID" tf:"compartment_id"`
 	// +optional
@@ -211,6 +256,8 @@ type MigrationMigrationSpecResource struct {
 	// +optional
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name"`
 	// +optional
+	DumpTransferDetails *MigrationMigrationSpecDumpTransferDetails `json:"dumpTransferDetails,omitempty" tf:"dump_transfer_details"`
+	// +optional
 	ExcludeObjects []MigrationMigrationSpecExcludeObjects `json:"excludeObjects,omitempty" tf:"exclude_objects"`
 	// +optional
 	ExecutingJobID *string `json:"executingJobID,omitempty" tf:"executing_job_id"`
@@ -218,6 +265,8 @@ type MigrationMigrationSpecResource struct {
 	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
 	GoldenGateDetails *MigrationMigrationSpecGoldenGateDetails `json:"goldenGateDetails,omitempty" tf:"golden_gate_details"`
+	// +optional
+	IncludeObjects []MigrationMigrationSpecIncludeObjects `json:"includeObjects,omitempty" tf:"include_objects"`
 	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional

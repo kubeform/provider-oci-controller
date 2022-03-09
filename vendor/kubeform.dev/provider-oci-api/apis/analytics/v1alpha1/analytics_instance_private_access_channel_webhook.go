@@ -88,7 +88,7 @@ func (r *AnalyticsInstancePrivateAccessChannel) ValidateUpdate(old runtime.Objec
 		return err
 	}
 
-	for key := range analyticsinstanceprivateaccesschannelForceNewList {
+	for key, _ := range analyticsinstanceprivateaccesschannelForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

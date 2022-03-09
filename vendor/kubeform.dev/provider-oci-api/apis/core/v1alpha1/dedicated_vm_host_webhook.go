@@ -90,7 +90,7 @@ func (r *DedicatedVmHost) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range dedicatedvmhostForceNewList {
+	for key, _ := range dedicatedvmhostForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -88,6 +88,8 @@ type MysqlBackupSpecDbSystemSnapshot struct {
 	// +optional
 	ConfigurationID *string `json:"configurationID,omitempty" tf:"configuration_id"`
 	// +optional
+	CrashRecovery *string `json:"crashRecovery,omitempty" tf:"crash_recovery"`
+	// +optional
 	DataStorageSizeInGb *int64 `json:"dataStorageSizeInGb,omitempty" tf:"data_storage_size_in_gb"`
 	// +optional
 	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`

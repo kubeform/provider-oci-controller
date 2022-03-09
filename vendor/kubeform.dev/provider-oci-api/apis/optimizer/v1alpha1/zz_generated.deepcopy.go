@@ -343,6 +343,11 @@ func (in *ProfileSpecResource) DeepCopyInto(out *ProfileSpecResource) {
 		*out = new(apiv1alpha1.ResourceTimeout)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.AggregationIntervalInDays != nil {
+		in, out := &in.AggregationIntervalInDays, &out.AggregationIntervalInDays
+		*out = new(int64)
+		**out = **in
+	}
 	if in.CompartmentID != nil {
 		in, out := &in.CompartmentID, &out.CompartmentID
 		*out = new(string)
@@ -634,6 +639,13 @@ func (in *RecommendationSpecResource) DeepCopyInto(out *RecommendationSpecResour
 		in, out := &in.EstimatedCostSaving, &out.EstimatedCostSaving
 		*out = new(float64)
 		**out = **in
+	}
+	if in.ExtendedMetadata != nil {
+		in, out := &in.ExtendedMetadata, &out.ExtendedMetadata
+		*out = make(map[string]string, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
 	}
 	if in.Importance != nil {
 		in, out := &in.Importance, &out.Importance

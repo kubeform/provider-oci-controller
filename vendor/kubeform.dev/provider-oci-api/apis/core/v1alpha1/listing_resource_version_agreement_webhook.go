@@ -89,7 +89,7 @@ func (r *ListingResourceVersionAgreement) ValidateUpdate(old runtime.Object) err
 		return err
 	}
 
-	for key := range listingresourceversionagreementForceNewList {
+	for key, _ := range listingresourceversionagreementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

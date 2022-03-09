@@ -443,6 +443,11 @@ func (in *BlockchainPlatformSpecResource) DeepCopyInto(out *BlockchainPlatformSp
 		*out = new(string)
 		**out = **in
 	}
+	if in.PlatformVersion != nil {
+		in, out := &in.PlatformVersion, &out.PlatformVersion
+		*out = new(string)
+		**out = **in
+	}
 	if in.Replicas != nil {
 		in, out := &in.Replicas, &out.Replicas
 		*out = new(BlockchainPlatformSpecReplicas)

@@ -88,7 +88,7 @@ func (r *ComputationQuery) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range computationqueryForceNewList {
+	for key, _ := range computationqueryForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

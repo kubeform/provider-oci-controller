@@ -65,6 +65,21 @@ type ServiceConnectorSpecSource struct {
 	StreamID *string `json:"streamID,omitempty" tf:"stream_id"`
 }
 
+type ServiceConnectorSpecTargetDimensionsDimensionValue struct {
+	Kind *string `json:"kind" tf:"kind"`
+	// +optional
+	Path *string `json:"path,omitempty" tf:"path"`
+	// +optional
+	Value *string `json:"value,omitempty" tf:"value"`
+}
+
+type ServiceConnectorSpecTargetDimensions struct {
+	// +optional
+	DimensionValue *ServiceConnectorSpecTargetDimensionsDimensionValue `json:"dimensionValue,omitempty" tf:"dimension_value"`
+	// +optional
+	Name *string `json:"name,omitempty" tf:"name"`
+}
+
 type ServiceConnectorSpecTarget struct {
 	// +optional
 	BatchRolloverSizeInMbs *int64 `json:"batchRolloverSizeInMbs,omitempty" tf:"batch_rollover_size_in_mbs"`
@@ -74,6 +89,8 @@ type ServiceConnectorSpecTarget struct {
 	Bucket *string `json:"bucket,omitempty" tf:"bucket"`
 	// +optional
 	CompartmentID *string `json:"compartmentID,omitempty" tf:"compartment_id"`
+	// +optional
+	Dimensions []ServiceConnectorSpecTargetDimensions `json:"dimensions,omitempty" tf:"dimensions"`
 	// +optional
 	EnableFormattedMessaging *bool `json:"enableFormattedMessaging,omitempty" tf:"enable_formatted_messaging"`
 	// +optional

@@ -93,7 +93,7 @@ func (r *DatabaseUpgrade) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range databaseupgradeForceNewList {
+	for key, _ := range databaseupgradeForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

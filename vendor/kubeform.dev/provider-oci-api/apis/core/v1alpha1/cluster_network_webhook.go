@@ -42,7 +42,6 @@ func (r *ClusterNetwork) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &ClusterNetwork{}
 
 var clusternetworkForceNewList = map[string]bool{
-	"/instance_pools/*/instance_configuration_id":                      true,
 	"/placement_configuration/*/availability_domain":                   true,
 	"/placement_configuration/*/primary_subnet_id":                     true,
 	"/placement_configuration/*/secondary_vnic_subnets/*/display_name": true,
@@ -92,7 +91,7 @@ func (r *ClusterNetwork) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range clusternetworkForceNewList {
+	for key, _ := range clusternetworkForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

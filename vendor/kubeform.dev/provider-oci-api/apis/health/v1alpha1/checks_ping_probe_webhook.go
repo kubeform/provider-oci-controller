@@ -93,7 +93,7 @@ func (r *ChecksPingProbe) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range checkspingprobeForceNewList {
+	for key, _ := range checkspingprobeForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -88,7 +88,7 @@ func (r *EmailDomain) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range emaildomainForceNewList {
+	for key, _ := range emaildomainForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

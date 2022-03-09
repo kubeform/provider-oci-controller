@@ -89,7 +89,7 @@ func (r *ComputeImageCapabilitySchema) ValidateUpdate(old runtime.Object) error 
 		return err
 	}
 
-	for key := range computeimagecapabilityschemaForceNewList {
+	for key, _ := range computeimagecapabilityschemaForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

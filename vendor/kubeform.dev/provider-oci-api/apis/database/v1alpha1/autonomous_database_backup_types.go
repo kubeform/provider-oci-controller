@@ -77,6 +77,8 @@ type AutonomousDatabaseBackupSpecResource struct {
 	// +optional
 	KmsKeyID *string `json:"kmsKeyID,omitempty" tf:"kms_key_id"`
 	// +optional
+	KmsKeyVersionID *string `json:"kmsKeyVersionID,omitempty" tf:"kms_key_version_id"`
+	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional
 	State *string `json:"state,omitempty" tf:"state"`

@@ -89,7 +89,7 @@ func (r *AppCatalogListingResourceVersionAgreement) ValidateUpdate(old runtime.O
 		return err
 	}
 
-	for key := range appcataloglistingresourceversionagreementForceNewList {
+	for key, _ := range appcataloglistingresourceversionagreementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

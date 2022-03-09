@@ -89,7 +89,7 @@ func (r *WebAppFirewall) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range webappfirewallForceNewList {
+	for key, _ := range webappfirewallForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

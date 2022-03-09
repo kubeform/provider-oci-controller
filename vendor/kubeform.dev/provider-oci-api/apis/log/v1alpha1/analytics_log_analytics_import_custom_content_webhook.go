@@ -91,7 +91,7 @@ func (r *AnalyticsLogAnalyticsImportCustomContent) ValidateUpdate(old runtime.Ob
 		return err
 	}
 
-	for key := range analyticsloganalyticsimportcustomcontentForceNewList {
+	for key, _ := range analyticsloganalyticsimportcustomcontentForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -88,7 +88,7 @@ func (r *SyntheticsMonitor) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range syntheticsmonitorForceNewList {
+	for key, _ := range syntheticsmonitorForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

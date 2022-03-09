@@ -86,7 +86,7 @@ func (r *GuardCloudGuardConfiguration) ValidateUpdate(old runtime.Object) error 
 		return err
 	}
 
-	for key := range guardcloudguardconfigurationForceNewList {
+	for key, _ := range guardcloudguardconfigurationForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

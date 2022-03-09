@@ -89,7 +89,7 @@ func (r *Suppression) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range suppressionForceNewList {
+	for key, _ := range suppressionForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

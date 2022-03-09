@@ -86,7 +86,7 @@ func (r *UnifiedAgentConfiguration) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range unifiedagentconfigurationForceNewList {
+	for key, _ := range unifiedagentconfigurationForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

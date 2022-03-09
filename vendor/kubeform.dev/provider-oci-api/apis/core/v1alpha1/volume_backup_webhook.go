@@ -92,7 +92,7 @@ func (r *VolumeBackup) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range volumebackupForceNewList {
+	for key, _ := range volumebackupForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -103,7 +103,7 @@ func (r *SteeringPolicy) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range steeringpolicyForceNewList {
+	for key, _ := range steeringpolicyForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

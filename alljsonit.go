@@ -25,6 +25,7 @@ import (
 	analyticsv1alpha1 "kubeform.dev/provider-oci-api/apis/analytics/v1alpha1"
 	apigatewayv1alpha1 "kubeform.dev/provider-oci-api/apis/apigateway/v1alpha1"
 	apmv1alpha1 "kubeform.dev/provider-oci-api/apis/apm/v1alpha1"
+	appmgmtv1alpha1 "kubeform.dev/provider-oci-api/apis/appmgmt/v1alpha1"
 	artifactsv1alpha1 "kubeform.dev/provider-oci-api/apis/artifacts/v1alpha1"
 	auditv1alpha1 "kubeform.dev/provider-oci-api/apis/audit/v1alpha1"
 	autoscalingv1alpha1 "kubeform.dev/provider-oci-api/apis/autoscaling/v1alpha1"
@@ -71,12 +72,17 @@ import (
 	ocvpv1alpha1 "kubeform.dev/provider-oci-api/apis/ocvp/v1alpha1"
 	odav1alpha1 "kubeform.dev/provider-oci-api/apis/oda/v1alpha1"
 	onsv1alpha1 "kubeform.dev/provider-oci-api/apis/ons/v1alpha1"
+	operatorv1alpha1 "kubeform.dev/provider-oci-api/apis/operator/v1alpha1"
 	opsiv1alpha1 "kubeform.dev/provider-oci-api/apis/opsi/v1alpha1"
 	optimizerv1alpha1 "kubeform.dev/provider-oci-api/apis/optimizer/v1alpha1"
 	osmanagementv1alpha1 "kubeform.dev/provider-oci-api/apis/osmanagement/v1alpha1"
+	ospv1alpha1 "kubeform.dev/provider-oci-api/apis/osp/v1alpha1"
 	schv1alpha1 "kubeform.dev/provider-oci-api/apis/sch/v1alpha1"
 	servicev1alpha1 "kubeform.dev/provider-oci-api/apis/service/v1alpha1"
 	streamingv1alpha1 "kubeform.dev/provider-oci-api/apis/streaming/v1alpha1"
+	usagev1alpha1 "kubeform.dev/provider-oci-api/apis/usage/v1alpha1"
+	vaultv1alpha1 "kubeform.dev/provider-oci-api/apis/vault/v1alpha1"
+	visualv1alpha1 "kubeform.dev/provider-oci-api/apis/visual/v1alpha1"
 	vulnerabilityv1alpha1 "kubeform.dev/provider-oci-api/apis/vulnerability/v1alpha1"
 	waasv1alpha1 "kubeform.dev/provider-oci-api/apis/waas/v1alpha1"
 	wafv1alpha1 "kubeform.dev/provider-oci-api/apis/waf/v1alpha1"
@@ -120,6 +126,22 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	}: {
 		JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
 		ResourceType: "oci_ai_anomaly_detection_project",
+	},
+	{
+		Group:    "ai.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "visionmodels",
+	}: {
+		JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
+		ResourceType: "oci_ai_vision_model",
+	},
+	{
+		Group:    "ai.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "visionprojects",
+	}: {
+		JsonIt:       controllers.GetJSONItr(aiv1alpha1.GetEncoder(), aiv1alpha1.GetDecoder()),
+		ResourceType: "oci_ai_vision_project",
 	},
 	{
 		Group:    "analytics.oci.kubeform.com",
@@ -210,6 +232,14 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 		ResourceType: "oci_apm_synthetics_script",
 	},
 	{
+		Group:    "appmgmt.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "controlmonitorpluginmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(appmgmtv1alpha1.GetEncoder(), appmgmtv1alpha1.GetDecoder()),
+		ResourceType: "oci_appmgmt_control_monitor_plugin_management",
+	},
+	{
 		Group:    "artifacts.oci.kubeform.com",
 		Version:  "v1alpha1",
 		Resource: "containerconfigurations",
@@ -296,6 +326,22 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	}: {
 		JsonIt:       controllers.GetJSONItr(bdsv1alpha1.GetEncoder(), bdsv1alpha1.GetDecoder()),
 		ResourceType: "oci_bds_bds_instance",
+	},
+	{
+		Group:    "bds.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "bdsinstanceapikeys",
+	}: {
+		JsonIt:       controllers.GetJSONItr(bdsv1alpha1.GetEncoder(), bdsv1alpha1.GetDecoder()),
+		ResourceType: "oci_bds_bds_instance_api_key",
+	},
+	{
+		Group:    "bds.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "bdsinstancemetastoreconfigs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(bdsv1alpha1.GetEncoder(), bdsv1alpha1.GetDecoder()),
+		ResourceType: "oci_bds_bds_instance_metastore_config",
 	},
 	{
 		Group:    "blockchain.oci.kubeform.com",
@@ -924,6 +970,38 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	{
 		Group:    "data.oci.kubeform.com",
 		Version:  "v1alpha1",
+		Resource: "connectivityregistries",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_connectivity_registry",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "connectivityregistryconnections",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_connectivity_registry_connection",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "connectivityregistrydataassets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_connectivity_registry_data_asset",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "connectivityregistryfolders",
+	}: {
+		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
+		ResourceType: "oci_data_connectivity_registry_folder",
+	},
+	{
+		Group:    "data.oci.kubeform.com",
+		Version:  "v1alpha1",
 		Resource: "labelingservicedatasets",
 	}: {
 		JsonIt:       controllers.GetJSONItr(datav1alpha1.GetEncoder(), datav1alpha1.GetDecoder()),
@@ -1036,6 +1114,14 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	{
 		Group:    "database.oci.kubeform.com",
 		Version:  "v1alpha1",
+		Resource: "autonomouscontainerdatabasedataguardassociations",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_autonomous_container_database_dataguard_association",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
 		Resource: "autonomouscontainerdatabasedataguardassociationoperations",
 	}: {
 		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
@@ -1112,6 +1198,14 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	}: {
 		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
 		ResourceType: "oci_database_backup_destination",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "cloudautonomousvmclusters",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_cloud_autonomous_vm_cluster",
 	},
 	{
 		Group:    "database.oci.kubeform.com",
@@ -1400,6 +1494,22 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	}: {
 		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
 		ResourceType: "oci_database_pluggable_databases_remote_clone",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "toolsdatabasetoolsconnections",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_tools_database_tools_connection",
+	},
+	{
+		Group:    "database.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "toolsdatabasetoolsprivateendpoints",
+	}: {
+		JsonIt:       controllers.GetJSONItr(databasev1alpha1.GetEncoder(), databasev1alpha1.GetDecoder()),
+		ResourceType: "oci_database_tools_database_tools_private_endpoint",
 	},
 	{
 		Group:    "database.oci.kubeform.com",
@@ -1956,6 +2066,38 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	{
 		Group:    "identity.oci.kubeform.com",
 		Version:  "v1alpha1",
+		Resource: "dataplanegeneratescopedaccesstokens",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_data_plane_generate_scoped_access_token",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "dbcredentials",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_db_credential",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "domains",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_domain",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "domainreplicationtoregions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_domain_replication_to_region",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
 		Resource: "dynamicgroups",
 	}: {
 		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
@@ -1984,6 +2126,14 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	}: {
 		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
 		ResourceType: "oci_identity_idp_group_mapping",
+	},
+	{
+		Group:    "identity.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "importstandardtagsmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(identityv1alpha1.GetEncoder(), identityv1alpha1.GetDecoder()),
+		ResourceType: "oci_identity_import_standard_tags_management",
 	},
 	{
 		Group:    "identity.oci.kubeform.com",
@@ -2280,6 +2430,14 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	}: {
 		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
 		ResourceType: "oci_log_analytics_log_analytics_preferences_management",
+	},
+	{
+		Group:    "log.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "analyticsloganalyticsresourcecategoriesmanagements",
+	}: {
+		JsonIt:       controllers.GetJSONItr(logv1alpha1.GetEncoder(), logv1alpha1.GetDecoder()),
+		ResourceType: "oci_log_analytics_log_analytics_resource_categories_management",
 	},
 	{
 		Group:    "log.oci.kubeform.com",
@@ -2602,6 +2760,30 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 		ResourceType: "oci_ons_subscription",
 	},
 	{
+		Group:    "operator.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "accesscontroloperatorcontrols",
+	}: {
+		JsonIt:       controllers.GetJSONItr(operatorv1alpha1.GetEncoder(), operatorv1alpha1.GetDecoder()),
+		ResourceType: "oci_operator_access_control_operator_control",
+	},
+	{
+		Group:    "operator.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "accesscontroloperatorcontrolassignments",
+	}: {
+		JsonIt:       controllers.GetJSONItr(operatorv1alpha1.GetEncoder(), operatorv1alpha1.GetDecoder()),
+		ResourceType: "oci_operator_access_control_operator_control_assignment",
+	},
+	{
+		Group:    "opsi.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "awrhubs",
+	}: {
+		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
+		ResourceType: "oci_opsi_awr_hub",
+	},
+	{
 		Group:    "opsi.oci.kubeform.com",
 		Version:  "v1alpha1",
 		Resource: "databaseinsights",
@@ -2632,6 +2814,38 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	}: {
 		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
 		ResourceType: "oci_opsi_host_insight",
+	},
+	{
+		Group:    "opsi.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "operationsinsightswarehouses",
+	}: {
+		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
+		ResourceType: "oci_opsi_operations_insights_warehouse",
+	},
+	{
+		Group:    "opsi.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "operationsinsightswarehousedownloadwarehousewallets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
+		ResourceType: "oci_opsi_operations_insights_warehouse_download_warehouse_wallet",
+	},
+	{
+		Group:    "opsi.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "operationsinsightswarehouserotatewarehousewallets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
+		ResourceType: "oci_opsi_operations_insights_warehouse_rotate_warehouse_wallet",
+	},
+	{
+		Group:    "opsi.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "operationsinsightswarehouseusers",
+	}: {
+		JsonIt:       controllers.GetJSONItr(opsiv1alpha1.GetEncoder(), opsiv1alpha1.GetDecoder()),
+		ResourceType: "oci_opsi_operations_insights_warehouse_user",
 	},
 	{
 		Group:    "optimizer.oci.kubeform.com",
@@ -2698,6 +2912,14 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 		ResourceType: "oci_osmanagement_software_source",
 	},
 	{
+		Group:    "osp.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "gatewaysubscriptions",
+	}: {
+		JsonIt:       controllers.GetJSONItr(ospv1alpha1.GetEncoder(), ospv1alpha1.GetDecoder()),
+		ResourceType: "oci_osp_gateway_subscription",
+	},
+	{
 		Group:    "sch.oci.kubeform.com",
 		Version:  "v1alpha1",
 		Resource: "serviceconnectors",
@@ -2752,6 +2974,30 @@ var allJsonIt = map[schema.GroupVersionResource]Data{
 	}: {
 		JsonIt:       controllers.GetJSONItr(streamingv1alpha1.GetEncoder(), streamingv1alpha1.GetDecoder()),
 		ResourceType: "oci_streaming_stream_pool",
+	},
+	{
+		Group:    "usage.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "proxysubscriptionredeemableusers",
+	}: {
+		JsonIt:       controllers.GetJSONItr(usagev1alpha1.GetEncoder(), usagev1alpha1.GetDecoder()),
+		ResourceType: "oci_usage_proxy_subscription_redeemable_user",
+	},
+	{
+		Group:    "vault.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "secrets",
+	}: {
+		JsonIt:       controllers.GetJSONItr(vaultv1alpha1.GetEncoder(), vaultv1alpha1.GetDecoder()),
+		ResourceType: "oci_vault_secret",
+	},
+	{
+		Group:    "visual.oci.kubeform.com",
+		Version:  "v1alpha1",
+		Resource: "buildervbinstances",
+	}: {
+		JsonIt:       controllers.GetJSONItr(visualv1alpha1.GetEncoder(), visualv1alpha1.GetDecoder()),
+		ResourceType: "oci_visual_builder_vb_instance",
 	},
 	{
 		Group:    "vulnerability.oci.kubeform.com",

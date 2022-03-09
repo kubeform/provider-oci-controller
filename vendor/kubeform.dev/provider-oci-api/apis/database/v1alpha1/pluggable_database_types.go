@@ -85,11 +85,15 @@ type PluggableDatabaseSpecResource struct {
 	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional
-	OpenMode         *string `json:"openMode,omitempty" tf:"open_mode"`
+	OpenMode *string `json:"openMode,omitempty" tf:"open_mode"`
+	// +optional
 	PdbAdminPassword *string `json:"-" sensitive:"true" tf:"pdb_admin_password"`
 	PdbName          *string `json:"pdbName" tf:"pdb_name"`
 	// +optional
-	State             *string `json:"state,omitempty" tf:"state"`
+	ShouldPdbAdminAccountBeLocked *bool `json:"shouldPdbAdminAccountBeLocked,omitempty" tf:"should_pdb_admin_account_be_locked"`
+	// +optional
+	State *string `json:"state,omitempty" tf:"state"`
+	// +optional
 	TdeWalletPassword *string `json:"-" sensitive:"true" tf:"tde_wallet_password"`
 	// +optional
 	TimeCreated *string `json:"timeCreated,omitempty" tf:"time_created"`

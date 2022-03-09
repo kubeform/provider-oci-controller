@@ -41,6 +41,23 @@ type CrossConnect struct {
 	Status            CrossConnectStatus `json:"status,omitempty"`
 }
 
+type CrossConnectSpecMacsecPropertiesPrimaryKey struct {
+	ConnectivityAssociationKeySecretID *string `json:"connectivityAssociationKeySecretID" tf:"connectivity_association_key_secret_id"`
+	// +optional
+	ConnectivityAssociationKeySecretVersion *string `json:"connectivityAssociationKeySecretVersion,omitempty" tf:"connectivity_association_key_secret_version"`
+	ConnectivityAssociationNameSecretID     *string `json:"connectivityAssociationNameSecretID" tf:"connectivity_association_name_secret_id"`
+	// +optional
+	ConnectivityAssociationNameSecretVersion *string `json:"connectivityAssociationNameSecretVersion,omitempty" tf:"connectivity_association_name_secret_version"`
+}
+
+type CrossConnectSpecMacsecProperties struct {
+	// +optional
+	EncryptionCipher *string `json:"encryptionCipher,omitempty" tf:"encryption_cipher"`
+	// +optional
+	PrimaryKey *CrossConnectSpecMacsecPropertiesPrimaryKey `json:"primaryKey,omitempty" tf:"primary_key"`
+	State      *string                                     `json:"state" tf:"state"`
+}
+
 type CrossConnectSpec struct {
 	State *CrossConnectSpecResource `json:"state,omitempty" tf:"-"`
 
@@ -77,7 +94,13 @@ type CrossConnectSpecResource struct {
 	IsActive     *bool   `json:"isActive,omitempty" tf:"is_active"`
 	LocationName *string `json:"locationName" tf:"location_name"`
 	// +optional
+	MacsecProperties *CrossConnectSpecMacsecProperties `json:"macsecProperties,omitempty" tf:"macsec_properties"`
+	// +optional
 	NearCrossConnectOrCrossConnectGroupID *string `json:"nearCrossConnectOrCrossConnectGroupID,omitempty" tf:"near_cross_connect_or_cross_connect_group_id"`
+	// +optional
+	OciLogicalDeviceName *string `json:"ociLogicalDeviceName,omitempty" tf:"oci_logical_device_name"`
+	// +optional
+	OciPhysicalDeviceName *string `json:"ociPhysicalDeviceName,omitempty" tf:"oci_physical_device_name"`
 	// +optional
 	PortName           *string `json:"portName,omitempty" tf:"port_name"`
 	PortSpeedShapeName *string `json:"portSpeedShapeName" tf:"port_speed_shape_name"`

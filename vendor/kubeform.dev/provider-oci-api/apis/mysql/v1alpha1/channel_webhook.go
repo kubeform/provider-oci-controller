@@ -89,7 +89,7 @@ func (r *Channel) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range channelForceNewList {
+	for key, _ := range channelForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

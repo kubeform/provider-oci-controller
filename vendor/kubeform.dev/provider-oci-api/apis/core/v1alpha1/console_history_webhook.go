@@ -88,7 +88,7 @@ func (r *ConsoleHistory) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range consolehistoryForceNewList {
+	for key, _ := range consolehistoryForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

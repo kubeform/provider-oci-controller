@@ -89,7 +89,7 @@ func (r *MysqlBackup) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range mysqlbackupForceNewList {
+	for key, _ := range mysqlbackupForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

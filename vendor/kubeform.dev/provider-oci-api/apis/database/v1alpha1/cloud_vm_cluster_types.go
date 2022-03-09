@@ -124,11 +124,17 @@ type CloudVmClusterSpecResource struct {
 	// +optional
 	NsgIDS []string `json:"nsgIDS,omitempty" tf:"nsg_ids"`
 	// +optional
+	OcpuCount *float64 `json:"ocpuCount,omitempty" tf:"ocpu_count"`
+	// +optional
 	ScanDNSName *string `json:"scanDNSName,omitempty" tf:"scan_dns_name"`
 	// +optional
 	ScanDNSRecordID *string `json:"scanDNSRecordID,omitempty" tf:"scan_dns_record_id"`
 	// +optional
 	ScanIPIDS []string `json:"scanIPIDS,omitempty" tf:"scan_ip_ids"`
+	// +optional
+	ScanListenerPortTcp *int64 `json:"scanListenerPortTcp,omitempty" tf:"scan_listener_port_tcp"`
+	// +optional
+	ScanListenerPortTcpSsl *int64 `json:"scanListenerPortTcpSsl,omitempty" tf:"scan_listener_port_tcp_ssl"`
 	// +optional
 	Shape         *string  `json:"shape,omitempty" tf:"shape"`
 	SshPublicKeys []string `json:"sshPublicKeys" tf:"ssh_public_keys"`

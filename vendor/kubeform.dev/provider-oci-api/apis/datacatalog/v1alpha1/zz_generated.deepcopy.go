@@ -789,6 +789,11 @@ func (in *DataAssetSpecResource) DeepCopyInto(out *DataAssetSpecResource) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.TimeHarvested != nil {
+		in, out := &in.TimeHarvested, &out.TimeHarvested
+		*out = new(string)
+		**out = **in
+	}
 	if in.TimeUpdated != nil {
 		in, out := &in.TimeUpdated, &out.TimeUpdated
 		*out = new(string)

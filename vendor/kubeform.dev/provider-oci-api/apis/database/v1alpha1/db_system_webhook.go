@@ -124,7 +124,7 @@ func (r *DbSystem) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range dbsystemForceNewList {
+	for key, _ := range dbsystemForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

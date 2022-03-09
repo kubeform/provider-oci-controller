@@ -51,6 +51,8 @@ var cloudvmclusterForceNewList = map[string]bool{
 	"/hostname":                        true,
 	"/is_local_backup_enabled":         true,
 	"/is_sparse_diskgroup_enabled":     true,
+	"/scan_listener_port_tcp":          true,
+	"/scan_listener_port_tcp_ssl":      true,
 	"/subnet_id":                       true,
 	"/time_zone":                       true,
 }
@@ -98,7 +100,7 @@ func (r *CloudVmCluster) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range cloudvmclusterForceNewList {
+	for key, _ := range cloudvmclusterForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -41,9 +41,31 @@ type MigrationJob struct {
 	Status            MigrationJobStatus `json:"status,omitempty"`
 }
 
+type MigrationJobSpecProgressPhasesExtract struct {
+	// +optional
+	Message *string `json:"message,omitempty" tf:"message"`
+	// +optional
+	Type *string `json:"type,omitempty" tf:"type"`
+}
+
+type MigrationJobSpecProgressPhasesLogLocation struct {
+	// +optional
+	Bucket *string `json:"bucket,omitempty" tf:"bucket"`
+	// +optional
+	Namespace *string `json:"namespace,omitempty" tf:"namespace"`
+	// +optional
+	Object *string `json:"object,omitempty" tf:"object"`
+}
+
 type MigrationJobSpecProgressPhases struct {
 	// +optional
 	DurationInMs *int64 `json:"durationInMs,omitempty" tf:"duration_in_ms"`
+	// +optional
+	Extract []MigrationJobSpecProgressPhasesExtract `json:"extract,omitempty" tf:"extract"`
+	// +optional
+	IsAdvisorReportAvailable *bool `json:"isAdvisorReportAvailable,omitempty" tf:"is_advisor_report_available"`
+	// +optional
+	LogLocation *MigrationJobSpecProgressPhasesLogLocation `json:"logLocation,omitempty" tf:"log_location"`
 	// +optional
 	Name *string `json:"name,omitempty" tf:"name"`
 	// +optional

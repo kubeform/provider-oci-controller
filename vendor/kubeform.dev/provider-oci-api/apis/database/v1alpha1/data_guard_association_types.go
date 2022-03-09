@@ -83,6 +83,8 @@ type DataGuardAssociationSpecResource struct {
 	// +optional
 	Hostname *string `json:"hostname,omitempty" tf:"hostname"`
 	// +optional
+	IsActiveDataGuardEnabled *bool `json:"isActiveDataGuardEnabled,omitempty" tf:"is_active_data_guard_enabled"`
+	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional
 	NsgIDS []string `json:"nsgIDS,omitempty" tf:"nsg_ids"`

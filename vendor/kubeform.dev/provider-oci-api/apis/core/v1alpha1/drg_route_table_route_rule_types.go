@@ -60,9 +60,11 @@ type DrgRouteTableRouteRuleSpecResource struct {
 
 	ID string `json:"id,omitempty" tf:"id,omitempty"`
 
-	Destination     *string `json:"destination" tf:"destination"`
-	DestinationType *string `json:"destinationType" tf:"destination_type"`
-	DrgRouteTableID *string `json:"drgRouteTableID" tf:"drg_route_table_id"`
+	// +optional
+	Attributes      map[string]string `json:"attributes,omitempty" tf:"attributes"`
+	Destination     *string           `json:"destination" tf:"destination"`
+	DestinationType *string           `json:"destinationType" tf:"destination_type"`
+	DrgRouteTableID *string           `json:"drgRouteTableID" tf:"drg_route_table_id"`
 	// +optional
 	IsBlackhole *bool `json:"isBlackhole,omitempty" tf:"is_blackhole"`
 	// +optional

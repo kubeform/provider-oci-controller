@@ -44,6 +44,7 @@ var _ webhook.Validator = &EsxiHost{}
 var esxihostForceNewList = map[string]bool{
 	"/compute_availability_domain": true,
 	"/current_sku":                 true,
+	"/failed_esxi_host_id":         true,
 	"/sddc_id":                     true,
 }
 
@@ -90,7 +91,7 @@ func (r *EsxiHost) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range esxihostForceNewList {
+	for key, _ := range esxihostForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -89,7 +89,7 @@ func (r *LoadBalancerListener) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range loadbalancerlistenerForceNewList {
+	for key, _ := range loadbalancerlistenerForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

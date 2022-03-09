@@ -89,7 +89,7 @@ func (r *Dkim) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range dkimForceNewList {
+	for key, _ := range dkimForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

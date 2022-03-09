@@ -88,7 +88,7 @@ func (r *EnrollmentStatus) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range enrollmentstatusForceNewList {
+	for key, _ := range enrollmentstatusForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

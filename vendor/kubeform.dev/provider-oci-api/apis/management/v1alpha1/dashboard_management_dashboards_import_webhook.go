@@ -89,7 +89,7 @@ func (r *DashboardManagementDashboardsImport) ValidateUpdate(old runtime.Object)
 		return err
 	}
 
-	for key := range dashboardmanagementdashboardsimportForceNewList {
+	for key, _ := range dashboardmanagementdashboardsimportForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -89,7 +89,7 @@ func (r *DrgRouteDistributionStatement) ValidateUpdate(old runtime.Object) error
 		return err
 	}
 
-	for key := range drgroutedistributionstatementForceNewList {
+	for key, _ := range drgroutedistributionstatementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

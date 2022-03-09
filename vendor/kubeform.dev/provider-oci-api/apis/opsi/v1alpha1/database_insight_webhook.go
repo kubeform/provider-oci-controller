@@ -91,7 +91,7 @@ func (r *DatabaseInsight) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range databaseinsightForceNewList {
+	for key, _ := range databaseinsightForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

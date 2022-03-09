@@ -86,7 +86,7 @@ func (r *SafeOnPremConnector) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range safeonpremconnectorForceNewList {
+	for key, _ := range safeonpremconnectorForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

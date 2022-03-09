@@ -94,7 +94,7 @@ func (r *Sddc) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range sddcForceNewList {
+	for key, _ := range sddcForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

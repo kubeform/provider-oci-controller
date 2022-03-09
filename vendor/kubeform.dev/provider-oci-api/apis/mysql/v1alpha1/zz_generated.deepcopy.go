@@ -883,6 +883,11 @@ func (in *MysqlBackupSpecDbSystemSnapshot) DeepCopyInto(out *MysqlBackupSpecDbSy
 		*out = new(string)
 		**out = **in
 	}
+	if in.CrashRecovery != nil {
+		in, out := &in.CrashRecovery, &out.CrashRecovery
+		*out = new(string)
+		**out = **in
+	}
 	if in.DataStorageSizeInGb != nil {
 		in, out := &in.DataStorageSizeInGb, &out.DataStorageSizeInGb
 		*out = new(int64)
@@ -1796,6 +1801,11 @@ func (in *MysqlDbSystemSpecResource) DeepCopyInto(out *MysqlDbSystemSpecResource
 	}
 	if in.ConfigurationID != nil {
 		in, out := &in.ConfigurationID, &out.ConfigurationID
+		*out = new(string)
+		**out = **in
+	}
+	if in.CrashRecovery != nil {
+		in, out := &in.CrashRecovery, &out.CrashRecovery
 		*out = new(string)
 		**out = **in
 	}

@@ -27,17 +27,19 @@ import (
 
 func GetEncoder() map[string]jsoniter.ValEncoder {
 	return map[string]jsoniter.ValEncoder{
-		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecSource{}).Type1()):       ServiceConnectorSpecSourceCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecSourceCursor{}).Type1()): ServiceConnectorSpecSourceCursorCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecTarget{}).Type1()):       ServiceConnectorSpecTargetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecSource{}).Type1()):                         ServiceConnectorSpecSourceCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecSourceCursor{}).Type1()):                   ServiceConnectorSpecSourceCursorCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecTarget{}).Type1()):                         ServiceConnectorSpecTargetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecTargetDimensionsDimensionValue{}).Type1()): ServiceConnectorSpecTargetDimensionsDimensionValueCodec{},
 	}
 }
 
 func GetDecoder() map[string]jsoniter.ValDecoder {
 	return map[string]jsoniter.ValDecoder{
-		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecSource{}).Type1()):       ServiceConnectorSpecSourceCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecSourceCursor{}).Type1()): ServiceConnectorSpecSourceCursorCodec{},
-		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecTarget{}).Type1()):       ServiceConnectorSpecTargetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecSource{}).Type1()):                         ServiceConnectorSpecSourceCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecSourceCursor{}).Type1()):                   ServiceConnectorSpecSourceCursorCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecTarget{}).Type1()):                         ServiceConnectorSpecTargetCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecTargetDimensionsDimensionValue{}).Type1()): ServiceConnectorSpecTargetDimensionsDimensionValueCodec{},
 	}
 }
 
@@ -287,5 +289,84 @@ func (ServiceConnectorSpecTargetCodec) Decode(ptr unsafe.Pointer, iter *jsoniter
 		}
 	default:
 		iter.ReportError("decode ServiceConnectorSpecTarget", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type ServiceConnectorSpecTargetDimensionsDimensionValueCodec struct {
+}
+
+func (ServiceConnectorSpecTargetDimensionsDimensionValueCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ServiceConnectorSpecTargetDimensionsDimensionValue)(ptr) == nil
+}
+
+func (ServiceConnectorSpecTargetDimensionsDimensionValueCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ServiceConnectorSpecTargetDimensionsDimensionValue)(ptr)
+	var objs []ServiceConnectorSpecTargetDimensionsDimensionValue
+	if obj != nil {
+		objs = []ServiceConnectorSpecTargetDimensionsDimensionValue{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecTargetDimensionsDimensionValue{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ServiceConnectorSpecTargetDimensionsDimensionValueCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ServiceConnectorSpecTargetDimensionsDimensionValue)(ptr) = ServiceConnectorSpecTargetDimensionsDimensionValue{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ServiceConnectorSpecTargetDimensionsDimensionValue
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecTargetDimensionsDimensionValue{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ServiceConnectorSpecTargetDimensionsDimensionValue)(ptr) = objs[0]
+			} else {
+				*(*ServiceConnectorSpecTargetDimensionsDimensionValue)(ptr) = ServiceConnectorSpecTargetDimensionsDimensionValue{}
+			}
+		} else {
+			*(*ServiceConnectorSpecTargetDimensionsDimensionValue)(ptr) = ServiceConnectorSpecTargetDimensionsDimensionValue{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ServiceConnectorSpecTargetDimensionsDimensionValue
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ServiceConnectorSpecTargetDimensionsDimensionValue{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ServiceConnectorSpecTargetDimensionsDimensionValue)(ptr) = obj
+		} else {
+			*(*ServiceConnectorSpecTargetDimensionsDimensionValue)(ptr) = ServiceConnectorSpecTargetDimensionsDimensionValue{}
+		}
+	default:
+		iter.ReportError("decode ServiceConnectorSpecTargetDimensionsDimensionValue", "unexpected JSON type")
 	}
 }

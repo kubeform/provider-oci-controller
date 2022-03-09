@@ -56,15 +56,21 @@ type CloudExadataInfrastructureSpecMaintenanceWindowMonths struct {
 
 type CloudExadataInfrastructureSpecMaintenanceWindow struct {
 	// +optional
+	CustomActionTimeoutInMins *int64 `json:"customActionTimeoutInMins,omitempty" tf:"custom_action_timeout_in_mins"`
+	// +optional
 	DaysOfWeek []CloudExadataInfrastructureSpecMaintenanceWindowDaysOfWeek `json:"daysOfWeek,omitempty" tf:"days_of_week"`
 	// +optional
 	// +kubebuilder:validation:MaxItems=20
 	HoursOfDay []int64 `json:"hoursOfDay,omitempty" tf:"hours_of_day"`
 	// +optional
+	IsCustomActionTimeoutEnabled *bool `json:"isCustomActionTimeoutEnabled,omitempty" tf:"is_custom_action_timeout_enabled"`
+	// +optional
 	LeadTimeInWeeks *int64 `json:"leadTimeInWeeks,omitempty" tf:"lead_time_in_weeks"`
 	// +optional
-	Months     []CloudExadataInfrastructureSpecMaintenanceWindowMonths `json:"months,omitempty" tf:"months"`
-	Preference *string                                                 `json:"preference" tf:"preference"`
+	Months []CloudExadataInfrastructureSpecMaintenanceWindowMonths `json:"months,omitempty" tf:"months"`
+	// +optional
+	PatchingMode *string `json:"patchingMode,omitempty" tf:"patching_mode"`
+	Preference   *string `json:"preference" tf:"preference"`
 	// +optional
 	// +kubebuilder:validation:MaxItems=4
 	// +kubebuilder:validation:MinItems=1

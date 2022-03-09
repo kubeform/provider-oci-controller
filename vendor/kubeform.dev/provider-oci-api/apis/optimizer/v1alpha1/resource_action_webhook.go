@@ -88,7 +88,7 @@ func (r *ResourceAction) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range resourceactionForceNewList {
+	for key, _ := range resourceactionForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

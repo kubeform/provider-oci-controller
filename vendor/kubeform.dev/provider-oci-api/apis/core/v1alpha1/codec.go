@@ -31,6 +31,10 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(BootVolumeBackupSpecSourceDetails{}).Type1()):                                                              BootVolumeBackupSpecSourceDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ClusterNetworkSpecPlacementConfiguration{}).Type1()):                                                       ClusterNetworkSpecPlacementConfigurationCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ComputeCapacityReservationSpecInstanceReservationConfigsInstanceShapeConfig{}).Type1()):                    ComputeCapacityReservationSpecInstanceReservationConfigsInstanceShapeConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecProperties{}).Type1()):                                                               CrossConnectSpecMacsecPropertiesCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecPropertiesPrimaryKey{}).Type1()):                                                     CrossConnectSpecMacsecPropertiesPrimaryKeyCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecProperties{}).Type1()):                                                          CrossConnectGroupSpecMacsecPropertiesCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecPropertiesPrimaryKey{}).Type1()):                                                CrossConnectGroupSpecMacsecPropertiesPrimaryKeyCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DefaultSecurityListSpecEgressSecurityRulesIcmpOptions{}).Type1()):                                          DefaultSecurityListSpecEgressSecurityRulesIcmpOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DefaultSecurityListSpecEgressSecurityRulesTcpOptions{}).Type1()):                                           DefaultSecurityListSpecEgressSecurityRulesTcpOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DefaultSecurityListSpecEgressSecurityRulesTcpOptionsSourcePortRange{}).Type1()):                            DefaultSecurityListSpecEgressSecurityRulesTcpOptionsSourcePortRangeCodec{},
@@ -75,6 +79,8 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(InstanceConfigurationSpecInstanceDetailsLaunchDetailsSourceDetails{}).Type1()):                             InstanceConfigurationSpecInstanceDetailsLaunchDetailsSourceDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(InstanceConfigurationSpecInstanceDetailsSecondaryVnicsCreateVnicDetails{}).Type1()):                        InstanceConfigurationSpecInstanceDetailsSecondaryVnicsCreateVnicDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecEncryptionDomainConfig{}).Type1()):                                      IpsecConnectionTunnelManagementSpecEncryptionDomainConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseOneDetails{}).Type1()):                                             IpsecConnectionTunnelManagementSpecPhaseOneDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseTwoDetails{}).Type1()):                                             IpsecConnectionTunnelManagementSpecPhaseTwoDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NetworkSecurityGroupSecurityRuleSpecIcmpOptions{}).Type1()):                                                NetworkSecurityGroupSecurityRuleSpecIcmpOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NetworkSecurityGroupSecurityRuleSpecTcpOptions{}).Type1()):                                                 NetworkSecurityGroupSecurityRuleSpecTcpOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NetworkSecurityGroupSecurityRuleSpecTcpOptionsDestinationPortRange{}).Type1()):                             NetworkSecurityGroupSecurityRuleSpecTcpOptionsDestinationPortRangeCodec{},
@@ -106,6 +112,10 @@ func GetDecoder() map[string]jsoniter.ValDecoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(BootVolumeBackupSpecSourceDetails{}).Type1()):                                                              BootVolumeBackupSpecSourceDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ClusterNetworkSpecPlacementConfiguration{}).Type1()):                                                       ClusterNetworkSpecPlacementConfigurationCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ComputeCapacityReservationSpecInstanceReservationConfigsInstanceShapeConfig{}).Type1()):                    ComputeCapacityReservationSpecInstanceReservationConfigsInstanceShapeConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecProperties{}).Type1()):                                                               CrossConnectSpecMacsecPropertiesCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecPropertiesPrimaryKey{}).Type1()):                                                     CrossConnectSpecMacsecPropertiesPrimaryKeyCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecProperties{}).Type1()):                                                          CrossConnectGroupSpecMacsecPropertiesCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecPropertiesPrimaryKey{}).Type1()):                                                CrossConnectGroupSpecMacsecPropertiesPrimaryKeyCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DefaultSecurityListSpecEgressSecurityRulesIcmpOptions{}).Type1()):                                          DefaultSecurityListSpecEgressSecurityRulesIcmpOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DefaultSecurityListSpecEgressSecurityRulesTcpOptions{}).Type1()):                                           DefaultSecurityListSpecEgressSecurityRulesTcpOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(DefaultSecurityListSpecEgressSecurityRulesTcpOptionsSourcePortRange{}).Type1()):                            DefaultSecurityListSpecEgressSecurityRulesTcpOptionsSourcePortRangeCodec{},
@@ -150,6 +160,8 @@ func GetDecoder() map[string]jsoniter.ValDecoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(InstanceConfigurationSpecInstanceDetailsLaunchDetailsSourceDetails{}).Type1()):                             InstanceConfigurationSpecInstanceDetailsLaunchDetailsSourceDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(InstanceConfigurationSpecInstanceDetailsSecondaryVnicsCreateVnicDetails{}).Type1()):                        InstanceConfigurationSpecInstanceDetailsSecondaryVnicsCreateVnicDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecEncryptionDomainConfig{}).Type1()):                                      IpsecConnectionTunnelManagementSpecEncryptionDomainConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseOneDetails{}).Type1()):                                             IpsecConnectionTunnelManagementSpecPhaseOneDetailsCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseTwoDetails{}).Type1()):                                             IpsecConnectionTunnelManagementSpecPhaseTwoDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NetworkSecurityGroupSecurityRuleSpecIcmpOptions{}).Type1()):                                                NetworkSecurityGroupSecurityRuleSpecIcmpOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NetworkSecurityGroupSecurityRuleSpecTcpOptions{}).Type1()):                                                 NetworkSecurityGroupSecurityRuleSpecTcpOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NetworkSecurityGroupSecurityRuleSpecTcpOptionsDestinationPortRange{}).Type1()):                             NetworkSecurityGroupSecurityRuleSpecTcpOptionsDestinationPortRangeCodec{},
@@ -500,6 +512,322 @@ func (ComputeCapacityReservationSpecInstanceReservationConfigsInstanceShapeConfi
 		}
 	default:
 		iter.ReportError("decode ComputeCapacityReservationSpecInstanceReservationConfigsInstanceShapeConfig", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type CrossConnectSpecMacsecPropertiesCodec struct {
+}
+
+func (CrossConnectSpecMacsecPropertiesCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*CrossConnectSpecMacsecProperties)(ptr) == nil
+}
+
+func (CrossConnectSpecMacsecPropertiesCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*CrossConnectSpecMacsecProperties)(ptr)
+	var objs []CrossConnectSpecMacsecProperties
+	if obj != nil {
+		objs = []CrossConnectSpecMacsecProperties{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecProperties{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (CrossConnectSpecMacsecPropertiesCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*CrossConnectSpecMacsecProperties)(ptr) = CrossConnectSpecMacsecProperties{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []CrossConnectSpecMacsecProperties
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecProperties{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*CrossConnectSpecMacsecProperties)(ptr) = objs[0]
+			} else {
+				*(*CrossConnectSpecMacsecProperties)(ptr) = CrossConnectSpecMacsecProperties{}
+			}
+		} else {
+			*(*CrossConnectSpecMacsecProperties)(ptr) = CrossConnectSpecMacsecProperties{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj CrossConnectSpecMacsecProperties
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecProperties{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*CrossConnectSpecMacsecProperties)(ptr) = obj
+		} else {
+			*(*CrossConnectSpecMacsecProperties)(ptr) = CrossConnectSpecMacsecProperties{}
+		}
+	default:
+		iter.ReportError("decode CrossConnectSpecMacsecProperties", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type CrossConnectSpecMacsecPropertiesPrimaryKeyCodec struct {
+}
+
+func (CrossConnectSpecMacsecPropertiesPrimaryKeyCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*CrossConnectSpecMacsecPropertiesPrimaryKey)(ptr) == nil
+}
+
+func (CrossConnectSpecMacsecPropertiesPrimaryKeyCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*CrossConnectSpecMacsecPropertiesPrimaryKey)(ptr)
+	var objs []CrossConnectSpecMacsecPropertiesPrimaryKey
+	if obj != nil {
+		objs = []CrossConnectSpecMacsecPropertiesPrimaryKey{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecPropertiesPrimaryKey{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (CrossConnectSpecMacsecPropertiesPrimaryKeyCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*CrossConnectSpecMacsecPropertiesPrimaryKey)(ptr) = CrossConnectSpecMacsecPropertiesPrimaryKey{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []CrossConnectSpecMacsecPropertiesPrimaryKey
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecPropertiesPrimaryKey{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*CrossConnectSpecMacsecPropertiesPrimaryKey)(ptr) = objs[0]
+			} else {
+				*(*CrossConnectSpecMacsecPropertiesPrimaryKey)(ptr) = CrossConnectSpecMacsecPropertiesPrimaryKey{}
+			}
+		} else {
+			*(*CrossConnectSpecMacsecPropertiesPrimaryKey)(ptr) = CrossConnectSpecMacsecPropertiesPrimaryKey{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj CrossConnectSpecMacsecPropertiesPrimaryKey
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectSpecMacsecPropertiesPrimaryKey{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*CrossConnectSpecMacsecPropertiesPrimaryKey)(ptr) = obj
+		} else {
+			*(*CrossConnectSpecMacsecPropertiesPrimaryKey)(ptr) = CrossConnectSpecMacsecPropertiesPrimaryKey{}
+		}
+	default:
+		iter.ReportError("decode CrossConnectSpecMacsecPropertiesPrimaryKey", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type CrossConnectGroupSpecMacsecPropertiesCodec struct {
+}
+
+func (CrossConnectGroupSpecMacsecPropertiesCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*CrossConnectGroupSpecMacsecProperties)(ptr) == nil
+}
+
+func (CrossConnectGroupSpecMacsecPropertiesCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*CrossConnectGroupSpecMacsecProperties)(ptr)
+	var objs []CrossConnectGroupSpecMacsecProperties
+	if obj != nil {
+		objs = []CrossConnectGroupSpecMacsecProperties{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecProperties{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (CrossConnectGroupSpecMacsecPropertiesCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*CrossConnectGroupSpecMacsecProperties)(ptr) = CrossConnectGroupSpecMacsecProperties{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []CrossConnectGroupSpecMacsecProperties
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecProperties{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*CrossConnectGroupSpecMacsecProperties)(ptr) = objs[0]
+			} else {
+				*(*CrossConnectGroupSpecMacsecProperties)(ptr) = CrossConnectGroupSpecMacsecProperties{}
+			}
+		} else {
+			*(*CrossConnectGroupSpecMacsecProperties)(ptr) = CrossConnectGroupSpecMacsecProperties{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj CrossConnectGroupSpecMacsecProperties
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecProperties{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*CrossConnectGroupSpecMacsecProperties)(ptr) = obj
+		} else {
+			*(*CrossConnectGroupSpecMacsecProperties)(ptr) = CrossConnectGroupSpecMacsecProperties{}
+		}
+	default:
+		iter.ReportError("decode CrossConnectGroupSpecMacsecProperties", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type CrossConnectGroupSpecMacsecPropertiesPrimaryKeyCodec struct {
+}
+
+func (CrossConnectGroupSpecMacsecPropertiesPrimaryKeyCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*CrossConnectGroupSpecMacsecPropertiesPrimaryKey)(ptr) == nil
+}
+
+func (CrossConnectGroupSpecMacsecPropertiesPrimaryKeyCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*CrossConnectGroupSpecMacsecPropertiesPrimaryKey)(ptr)
+	var objs []CrossConnectGroupSpecMacsecPropertiesPrimaryKey
+	if obj != nil {
+		objs = []CrossConnectGroupSpecMacsecPropertiesPrimaryKey{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecPropertiesPrimaryKey{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (CrossConnectGroupSpecMacsecPropertiesPrimaryKeyCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*CrossConnectGroupSpecMacsecPropertiesPrimaryKey)(ptr) = CrossConnectGroupSpecMacsecPropertiesPrimaryKey{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []CrossConnectGroupSpecMacsecPropertiesPrimaryKey
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecPropertiesPrimaryKey{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*CrossConnectGroupSpecMacsecPropertiesPrimaryKey)(ptr) = objs[0]
+			} else {
+				*(*CrossConnectGroupSpecMacsecPropertiesPrimaryKey)(ptr) = CrossConnectGroupSpecMacsecPropertiesPrimaryKey{}
+			}
+		} else {
+			*(*CrossConnectGroupSpecMacsecPropertiesPrimaryKey)(ptr) = CrossConnectGroupSpecMacsecPropertiesPrimaryKey{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj CrossConnectGroupSpecMacsecPropertiesPrimaryKey
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(CrossConnectGroupSpecMacsecPropertiesPrimaryKey{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*CrossConnectGroupSpecMacsecPropertiesPrimaryKey)(ptr) = obj
+		} else {
+			*(*CrossConnectGroupSpecMacsecPropertiesPrimaryKey)(ptr) = CrossConnectGroupSpecMacsecPropertiesPrimaryKey{}
+		}
+	default:
+		iter.ReportError("decode CrossConnectGroupSpecMacsecPropertiesPrimaryKey", "unexpected JSON type")
 	}
 }
 
@@ -3976,6 +4304,164 @@ func (IpsecConnectionTunnelManagementSpecEncryptionDomainConfigCodec) Decode(ptr
 		}
 	default:
 		iter.ReportError("decode IpsecConnectionTunnelManagementSpecEncryptionDomainConfig", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type IpsecConnectionTunnelManagementSpecPhaseOneDetailsCodec struct {
+}
+
+func (IpsecConnectionTunnelManagementSpecPhaseOneDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*IpsecConnectionTunnelManagementSpecPhaseOneDetails)(ptr) == nil
+}
+
+func (IpsecConnectionTunnelManagementSpecPhaseOneDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*IpsecConnectionTunnelManagementSpecPhaseOneDetails)(ptr)
+	var objs []IpsecConnectionTunnelManagementSpecPhaseOneDetails
+	if obj != nil {
+		objs = []IpsecConnectionTunnelManagementSpecPhaseOneDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseOneDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (IpsecConnectionTunnelManagementSpecPhaseOneDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*IpsecConnectionTunnelManagementSpecPhaseOneDetails)(ptr) = IpsecConnectionTunnelManagementSpecPhaseOneDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []IpsecConnectionTunnelManagementSpecPhaseOneDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseOneDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*IpsecConnectionTunnelManagementSpecPhaseOneDetails)(ptr) = objs[0]
+			} else {
+				*(*IpsecConnectionTunnelManagementSpecPhaseOneDetails)(ptr) = IpsecConnectionTunnelManagementSpecPhaseOneDetails{}
+			}
+		} else {
+			*(*IpsecConnectionTunnelManagementSpecPhaseOneDetails)(ptr) = IpsecConnectionTunnelManagementSpecPhaseOneDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj IpsecConnectionTunnelManagementSpecPhaseOneDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseOneDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*IpsecConnectionTunnelManagementSpecPhaseOneDetails)(ptr) = obj
+		} else {
+			*(*IpsecConnectionTunnelManagementSpecPhaseOneDetails)(ptr) = IpsecConnectionTunnelManagementSpecPhaseOneDetails{}
+		}
+	default:
+		iter.ReportError("decode IpsecConnectionTunnelManagementSpecPhaseOneDetails", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type IpsecConnectionTunnelManagementSpecPhaseTwoDetailsCodec struct {
+}
+
+func (IpsecConnectionTunnelManagementSpecPhaseTwoDetailsCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*IpsecConnectionTunnelManagementSpecPhaseTwoDetails)(ptr) == nil
+}
+
+func (IpsecConnectionTunnelManagementSpecPhaseTwoDetailsCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*IpsecConnectionTunnelManagementSpecPhaseTwoDetails)(ptr)
+	var objs []IpsecConnectionTunnelManagementSpecPhaseTwoDetails
+	if obj != nil {
+		objs = []IpsecConnectionTunnelManagementSpecPhaseTwoDetails{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseTwoDetails{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (IpsecConnectionTunnelManagementSpecPhaseTwoDetailsCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*IpsecConnectionTunnelManagementSpecPhaseTwoDetails)(ptr) = IpsecConnectionTunnelManagementSpecPhaseTwoDetails{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []IpsecConnectionTunnelManagementSpecPhaseTwoDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseTwoDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*IpsecConnectionTunnelManagementSpecPhaseTwoDetails)(ptr) = objs[0]
+			} else {
+				*(*IpsecConnectionTunnelManagementSpecPhaseTwoDetails)(ptr) = IpsecConnectionTunnelManagementSpecPhaseTwoDetails{}
+			}
+		} else {
+			*(*IpsecConnectionTunnelManagementSpecPhaseTwoDetails)(ptr) = IpsecConnectionTunnelManagementSpecPhaseTwoDetails{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj IpsecConnectionTunnelManagementSpecPhaseTwoDetails
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(IpsecConnectionTunnelManagementSpecPhaseTwoDetails{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*IpsecConnectionTunnelManagementSpecPhaseTwoDetails)(ptr) = obj
+		} else {
+			*(*IpsecConnectionTunnelManagementSpecPhaseTwoDetails)(ptr) = IpsecConnectionTunnelManagementSpecPhaseTwoDetails{}
+		}
+	default:
+		iter.ReportError("decode IpsecConnectionTunnelManagementSpecPhaseTwoDetails", "unexpected JSON type")
 	}
 }
 

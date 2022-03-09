@@ -88,7 +88,7 @@ func (r *GuardDetectorRecipe) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range guarddetectorrecipeForceNewList {
+	for key, _ := range guarddetectorrecipeForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

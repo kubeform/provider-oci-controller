@@ -88,7 +88,7 @@ func (r *AnalyticsCluster) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range analyticsclusterForceNewList {
+	for key, _ := range analyticsclusterForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

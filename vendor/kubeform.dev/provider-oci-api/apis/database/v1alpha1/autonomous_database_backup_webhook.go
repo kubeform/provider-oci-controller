@@ -89,7 +89,7 @@ func (r *AutonomousDatabaseBackup) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range autonomousdatabasebackupForceNewList {
+	for key, _ := range autonomousdatabasebackupForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

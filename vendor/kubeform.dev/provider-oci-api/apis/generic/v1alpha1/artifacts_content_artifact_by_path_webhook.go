@@ -92,7 +92,7 @@ func (r *ArtifactsContentArtifactByPath) ValidateUpdate(old runtime.Object) erro
 		return err
 	}
 
-	for key := range artifactscontentartifactbypathForceNewList {
+	for key, _ := range artifactscontentartifactbypathForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

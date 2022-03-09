@@ -86,7 +86,7 @@ func (r *CrossConnectGroup) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range crossconnectgroupForceNewList {
+	for key, _ := range crossconnectgroupForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

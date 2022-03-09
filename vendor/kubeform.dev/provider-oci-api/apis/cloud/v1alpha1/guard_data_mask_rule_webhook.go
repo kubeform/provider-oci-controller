@@ -89,7 +89,7 @@ func (r *GuardDataMaskRule) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range guarddatamaskruleForceNewList {
+	for key, _ := range guarddatamaskruleForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

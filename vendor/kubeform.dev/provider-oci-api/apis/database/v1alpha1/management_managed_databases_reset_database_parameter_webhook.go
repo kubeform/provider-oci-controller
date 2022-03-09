@@ -93,7 +93,7 @@ func (r *ManagementManagedDatabasesResetDatabaseParameter) ValidateUpdate(old ru
 		return err
 	}
 
-	for key := range managementmanageddatabasesresetdatabaseparameterForceNewList {
+	for key, _ := range managementmanageddatabasesresetdatabaseparameterForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

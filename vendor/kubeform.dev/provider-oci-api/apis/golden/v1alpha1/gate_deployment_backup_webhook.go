@@ -92,7 +92,7 @@ func (r *GateDeploymentBackup) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range gatedeploymentbackupForceNewList {
+	for key, _ := range gatedeploymentbackupForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

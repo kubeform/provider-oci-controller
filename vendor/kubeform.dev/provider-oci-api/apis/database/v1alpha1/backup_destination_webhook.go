@@ -89,7 +89,7 @@ func (r *BackupDestination) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range backupdestinationForceNewList {
+	for key, _ := range backupdestinationForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

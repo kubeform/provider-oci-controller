@@ -93,7 +93,7 @@ func (r *Sign) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range signForceNewList {
+	for key, _ := range signForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -50,10 +50,20 @@ type NodePoolSpecInitialNodeLabels struct {
 
 type NodePoolSpecNodeConfigDetailsPlacementConfigs struct {
 	AvailabilityDomain *string `json:"availabilityDomain" tf:"availability_domain"`
-	SubnetID           *string `json:"subnetID" tf:"subnet_id"`
+	// +optional
+	CapacityReservationID *string `json:"capacityReservationID,omitempty" tf:"capacity_reservation_id"`
+	SubnetID              *string `json:"subnetID" tf:"subnet_id"`
 }
 
 type NodePoolSpecNodeConfigDetails struct {
+	// +optional
+	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
+	// +optional
+	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
+	// +optional
+	IsPvEncryptionInTransitEnabled *bool `json:"isPvEncryptionInTransitEnabled,omitempty" tf:"is_pv_encryption_in_transit_enabled"`
+	// +optional
+	KmsKeyID *string `json:"kmsKeyID,omitempty" tf:"kms_key_id"`
 	// +optional
 	NsgIDS           []string                                        `json:"nsgIDS,omitempty" tf:"nsg_ids"`
 	PlacementConfigs []NodePoolSpecNodeConfigDetailsPlacementConfigs `json:"placementConfigs" tf:"placement_configs"`
@@ -96,9 +106,13 @@ type NodePoolSpecNodes struct {
 	// +optional
 	AvailabilityDomain *string `json:"availabilityDomain,omitempty" tf:"availability_domain"`
 	// +optional
+	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
+	// +optional
 	Error *NodePoolSpecNodesError `json:"error,omitempty" tf:"error"`
 	// +optional
 	FaultDomain *string `json:"faultDomain,omitempty" tf:"fault_domain"`
+	// +optional
+	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
 	ID *string `json:"ID,omitempty" tf:"id"`
 	// +optional
@@ -117,6 +131,8 @@ type NodePoolSpecNodes struct {
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional
 	SubnetID *string `json:"subnetID,omitempty" tf:"subnet_id"`
+	// +optional
+	SystemTags map[string]string `json:"systemTags,omitempty" tf:"system_tags"`
 }
 
 type NodePoolSpec struct {
@@ -140,6 +156,10 @@ type NodePoolSpecResource struct {
 
 	ClusterID     *string `json:"clusterID" tf:"cluster_id"`
 	CompartmentID *string `json:"compartmentID" tf:"compartment_id"`
+	// +optional
+	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
+	// +optional
+	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
 	InitialNodeLabels []NodePoolSpecInitialNodeLabels `json:"initialNodeLabels,omitempty" tf:"initial_node_labels"`
 	KubernetesVersion *string                         `json:"kubernetesVersion" tf:"kubernetes_version"`
@@ -169,6 +189,8 @@ type NodePoolSpecResource struct {
 	SshPublicKey *string `json:"sshPublicKey,omitempty" tf:"ssh_public_key"`
 	// +optional
 	SubnetIDS []string `json:"subnetIDS,omitempty" tf:"subnet_ids"`
+	// +optional
+	SystemTags map[string]string `json:"systemTags,omitempty" tf:"system_tags"`
 }
 
 type NodePoolStatus struct {

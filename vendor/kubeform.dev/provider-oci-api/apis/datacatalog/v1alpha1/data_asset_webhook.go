@@ -89,7 +89,7 @@ func (r *DataAsset) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range dataassetForceNewList {
+	for key, _ := range dataassetForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

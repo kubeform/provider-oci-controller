@@ -86,7 +86,7 @@ func (r *ExadataIormConfig) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range exadataiormconfigForceNewList {
+	for key, _ := range exadataiormconfigForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

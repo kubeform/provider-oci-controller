@@ -88,7 +88,7 @@ func (r *HttpRedirect) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range httpredirectForceNewList {
+	for key, _ := range httpredirectForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

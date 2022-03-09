@@ -55,6 +55,8 @@ type DatabaseSpecDatabaseDbBackupConfigBackupDestinationDetails struct {
 	ID *string `json:"ID,omitempty" tf:"id"`
 	// +optional
 	Type *string `json:"type,omitempty" tf:"type"`
+	// +optional
+	VpcUser *string `json:"vpcUser,omitempty" tf:"vpc_user"`
 }
 
 type DatabaseSpecDatabaseDbBackupConfig struct {
@@ -111,6 +113,8 @@ type DatabaseSpecDbBackupConfigBackupDestinationDetails struct {
 	ID *string `json:"ID,omitempty" tf:"id"`
 	// +optional
 	Type *string `json:"type,omitempty" tf:"type"`
+	// +optional
+	VpcUser *string `json:"vpcUser,omitempty" tf:"vpc_user"`
 }
 
 type DatabaseSpecDbBackupConfig struct {

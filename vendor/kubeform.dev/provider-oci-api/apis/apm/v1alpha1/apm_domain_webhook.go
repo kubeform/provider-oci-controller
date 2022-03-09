@@ -88,7 +88,7 @@ func (r *ApmDomain) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range apmdomainForceNewList {
+	for key, _ := range apmdomainForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

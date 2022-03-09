@@ -88,7 +88,7 @@ func (r *PrivateEndpoint) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range privateendpointForceNewList {
+	for key, _ := range privateendpointForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

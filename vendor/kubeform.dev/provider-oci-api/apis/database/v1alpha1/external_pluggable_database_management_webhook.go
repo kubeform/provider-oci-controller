@@ -89,7 +89,7 @@ func (r *ExternalPluggableDatabaseManagement) ValidateUpdate(old runtime.Object)
 		return err
 	}
 
-	for key := range externalpluggabledatabasemanagementForceNewList {
+	for key, _ := range externalpluggabledatabasemanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -48,8 +48,18 @@ type VolumeGroupSpecSourceDetails struct {
 	// +optional
 	VolumeGroupID *string `json:"volumeGroupID,omitempty" tf:"volume_group_id"`
 	// +optional
+	VolumeGroupReplicaID *string `json:"volumeGroupReplicaID,omitempty" tf:"volume_group_replica_id"`
+	// +optional
 	// +kubebuilder:validation:MaxItems=64
 	VolumeIDS []string `json:"volumeIDS,omitempty" tf:"volume_ids"`
+}
+
+type VolumeGroupSpecVolumeGroupReplicas struct {
+	AvailabilityDomain *string `json:"availabilityDomain" tf:"availability_domain"`
+	// +optional
+	DisplayName *string `json:"displayName,omitempty" tf:"display_name"`
+	// +optional
+	VolumeGroupReplicaID *string `json:"volumeGroupReplicaID,omitempty" tf:"volume_group_replica_id"`
 }
 
 type VolumeGroupSpec struct {
@@ -84,6 +94,8 @@ type VolumeGroupSpecResource struct {
 	// +optional
 	IsHydrated *bool `json:"isHydrated,omitempty" tf:"is_hydrated"`
 	// +optional
+	PreserveVolumeReplica *bool `json:"preserveVolumeReplica,omitempty" tf:"preserve_volume_replica"`
+	// +optional
 	SizeInGbs *string `json:"sizeInGbs,omitempty" tf:"size_in_gbs"`
 	// +optional
 	SizeInMbs     *string                       `json:"sizeInMbs,omitempty" tf:"size_in_mbs"`
@@ -92,6 +104,10 @@ type VolumeGroupSpecResource struct {
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional
 	TimeCreated *string `json:"timeCreated,omitempty" tf:"time_created"`
+	// +optional
+	VolumeGroupReplicas []VolumeGroupSpecVolumeGroupReplicas `json:"volumeGroupReplicas,omitempty" tf:"volume_group_replicas"`
+	// +optional
+	VolumeGroupReplicasDeletion *bool `json:"volumeGroupReplicasDeletion,omitempty" tf:"volume_group_replicas_deletion"`
 	// +optional
 	VolumeIDS []string `json:"volumeIDS,omitempty" tf:"volume_ids"`
 }

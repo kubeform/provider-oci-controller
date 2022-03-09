@@ -86,7 +86,7 @@ func (r *AnalyticsNamespace) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range analyticsnamespaceForceNewList {
+	for key, _ := range analyticsnamespaceForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

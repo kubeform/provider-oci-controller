@@ -88,7 +88,7 @@ func (r *BuildPipeline) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range buildpipelineForceNewList {
+	for key, _ := range buildpipelineForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -86,7 +86,7 @@ func (r *ExternalNonContainerDatabase) ValidateUpdate(old runtime.Object) error 
 		return err
 	}
 
-	for key := range externalnoncontainerdatabaseForceNewList {
+	for key, _ := range externalnoncontainerdatabaseForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

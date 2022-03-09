@@ -139,6 +139,13 @@ type DeploymentSpecSpecificationRequestPoliciesCors struct {
 	MaxAgeInSeconds *int64 `json:"maxAgeInSeconds,omitempty" tf:"max_age_in_seconds"`
 }
 
+type DeploymentSpecSpecificationRequestPoliciesMutualTls struct {
+	// +optional
+	AllowedSans []string `json:"allowedSans,omitempty" tf:"allowed_sans"`
+	// +optional
+	IsVerifiedCertificateRequired *bool `json:"isVerifiedCertificateRequired,omitempty" tf:"is_verified_certificate_required"`
+}
+
 type DeploymentSpecSpecificationRequestPoliciesRateLimiting struct {
 	RateInRequestsPerSecond *int64  `json:"rateInRequestsPerSecond" tf:"rate_in_requests_per_second"`
 	RateKey                 *string `json:"rateKey" tf:"rate_key"`
@@ -149,6 +156,8 @@ type DeploymentSpecSpecificationRequestPolicies struct {
 	Authentication *DeploymentSpecSpecificationRequestPoliciesAuthentication `json:"authentication,omitempty" tf:"authentication"`
 	// +optional
 	Cors *DeploymentSpecSpecificationRequestPoliciesCors `json:"cors,omitempty" tf:"cors"`
+	// +optional
+	MutualTls *DeploymentSpecSpecificationRequestPoliciesMutualTls `json:"mutualTls,omitempty" tf:"mutual_tls"`
 	// +optional
 	RateLimiting *DeploymentSpecSpecificationRequestPoliciesRateLimiting `json:"rateLimiting,omitempty" tf:"rate_limiting"`
 }

@@ -42,6 +42,11 @@ func (r *NotebookSession) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &NotebookSession{}
 
 var notebooksessionForceNewList = map[string]bool{
+	"/notebook_session_config_details/*/block_storage_size_in_gbs":                             true,
+	"/notebook_session_config_details/*/notebook_session_shape_config_details/*/memory_in_gbs": true,
+	"/notebook_session_config_details/*/notebook_session_shape_config_details/*/ocpus":         true,
+	"/notebook_session_config_details/*/shape":                                                 true,
+	"/notebook_session_config_details/*/subnet_id":                                             true,
 	"/project_id": true,
 }
 
@@ -88,7 +93,7 @@ func (r *NotebookSession) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range notebooksessionForceNewList {
+	for key, _ := range notebooksessionForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

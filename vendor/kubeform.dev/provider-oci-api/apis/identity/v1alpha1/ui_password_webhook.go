@@ -88,7 +88,7 @@ func (r *UiPassword) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range uipasswordForceNewList {
+	for key, _ := range uipasswordForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

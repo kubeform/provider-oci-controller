@@ -90,7 +90,7 @@ func (r *AgentManagementAgentInstallKey) ValidateUpdate(old runtime.Object) erro
 		return err
 	}
 
-	for key := range agentmanagementagentinstallkeyForceNewList {
+	for key, _ := range agentmanagementagentinstallkeyForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

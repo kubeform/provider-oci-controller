@@ -86,7 +86,7 @@ func (r *IpsecConnectionTunnelManagement) ValidateUpdate(old runtime.Object) err
 		return err
 	}
 
-	for key := range ipsecconnectiontunnelmanagementForceNewList {
+	for key, _ := range ipsecconnectiontunnelmanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

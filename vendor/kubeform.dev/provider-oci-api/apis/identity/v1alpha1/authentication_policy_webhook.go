@@ -88,7 +88,7 @@ func (r *AuthenticationPolicy) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range authenticationpolicyForceNewList {
+	for key, _ := range authenticationpolicyForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

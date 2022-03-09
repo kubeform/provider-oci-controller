@@ -108,6 +108,8 @@ type ApplicationSpecResource struct {
 	// +optional
 	TimeUpdated *string `json:"timeUpdated,omitempty" tf:"time_updated"`
 	// +optional
+	Type *string `json:"type,omitempty" tf:"type"`
+	// +optional
 	WarehouseBucketURI *string `json:"warehouseBucketURI,omitempty" tf:"warehouse_bucket_uri"`
 }
 

@@ -88,7 +88,7 @@ func (r *MaintenanceRun) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range maintenancerunForceNewList {
+	for key, _ := range maintenancerunForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

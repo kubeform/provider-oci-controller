@@ -69,6 +69,8 @@ type VmClusterAddVirtualMachineSpecResource struct {
 	// +optional
 	CpusEnabled *int64 `json:"cpusEnabled,omitempty" tf:"cpus_enabled"`
 	// +optional
+	DataStorageSizeInGb *float64 `json:"dataStorageSizeInGb,omitempty" tf:"data_storage_size_in_gb"`
+	// +optional
 	DataStorageSizeInTbs *float64 `json:"dataStorageSizeInTbs,omitempty" tf:"data_storage_size_in_tbs"`
 	// +optional
 	DbNodeStorageSizeInGbs *int64                                    `json:"dbNodeStorageSizeInGbs,omitempty" tf:"db_node_storage_size_in_gbs"`
@@ -95,6 +97,8 @@ type VmClusterAddVirtualMachineSpecResource struct {
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional
 	MemorySizeInGbs *int64 `json:"memorySizeInGbs,omitempty" tf:"memory_size_in_gbs"`
+	// +optional
+	OcpusEnabled *float64 `json:"ocpusEnabled,omitempty" tf:"ocpus_enabled"`
 	// +optional
 	Shape *string `json:"shape,omitempty" tf:"shape"`
 	// +optional

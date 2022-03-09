@@ -110,6 +110,20 @@ type ClusterSpecOptionsKubernetesNetworkConfig struct {
 	ServicesCIDR *string `json:"servicesCIDR,omitempty" tf:"services_cidr"`
 }
 
+type ClusterSpecOptionsPersistentVolumeConfig struct {
+	// +optional
+	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
+	// +optional
+	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
+}
+
+type ClusterSpecOptionsServiceLbConfig struct {
+	// +optional
+	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
+	// +optional
+	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
+}
+
 type ClusterSpecOptions struct {
 	// +optional
 	AddOns *ClusterSpecOptionsAddOns `json:"addOns,omitempty" tf:"add_ons"`
@@ -117,6 +131,10 @@ type ClusterSpecOptions struct {
 	AdmissionControllerOptions *ClusterSpecOptionsAdmissionControllerOptions `json:"admissionControllerOptions,omitempty" tf:"admission_controller_options"`
 	// +optional
 	KubernetesNetworkConfig *ClusterSpecOptionsKubernetesNetworkConfig `json:"kubernetesNetworkConfig,omitempty" tf:"kubernetes_network_config"`
+	// +optional
+	PersistentVolumeConfig *ClusterSpecOptionsPersistentVolumeConfig `json:"persistentVolumeConfig,omitempty" tf:"persistent_volume_config"`
+	// +optional
+	ServiceLbConfig *ClusterSpecOptionsServiceLbConfig `json:"serviceLbConfig,omitempty" tf:"service_lb_config"`
 	// +optional
 	ServiceLbSubnetIDS []string `json:"serviceLbSubnetIDS,omitempty" tf:"service_lb_subnet_ids"`
 }
@@ -144,9 +162,13 @@ type ClusterSpecResource struct {
 	AvailableKubernetesUpgrades []string `json:"availableKubernetesUpgrades,omitempty" tf:"available_kubernetes_upgrades"`
 	CompartmentID               *string  `json:"compartmentID" tf:"compartment_id"`
 	// +optional
+	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
+	// +optional
 	EndpointConfig *ClusterSpecEndpointConfig `json:"endpointConfig,omitempty" tf:"endpoint_config"`
 	// +optional
 	Endpoints *ClusterSpecEndpoints `json:"endpoints,omitempty" tf:"endpoints"`
+	// +optional
+	FreeformTags map[string]string `json:"freeformTags,omitempty" tf:"freeform_tags"`
 	// +optional
 	ImagePolicyConfig *ClusterSpecImagePolicyConfig `json:"imagePolicyConfig,omitempty" tf:"image_policy_config"`
 	// +optional
@@ -161,7 +183,9 @@ type ClusterSpecResource struct {
 	Options *ClusterSpecOptions `json:"options,omitempty" tf:"options"`
 	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
-	VcnID *string `json:"vcnID" tf:"vcn_id"`
+	// +optional
+	SystemTags map[string]string `json:"systemTags,omitempty" tf:"system_tags"`
+	VcnID      *string           `json:"vcnID" tf:"vcn_id"`
 }
 
 type ClusterStatus struct {

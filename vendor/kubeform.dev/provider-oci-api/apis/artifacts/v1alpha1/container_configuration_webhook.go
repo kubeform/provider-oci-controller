@@ -86,7 +86,7 @@ func (r *ContainerConfiguration) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range containerconfigurationForceNewList {
+	for key, _ := range containerconfigurationForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

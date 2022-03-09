@@ -93,7 +93,7 @@ func (r *IntegrationInstance) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range integrationinstanceForceNewList {
+	for key, _ := range integrationinstanceForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

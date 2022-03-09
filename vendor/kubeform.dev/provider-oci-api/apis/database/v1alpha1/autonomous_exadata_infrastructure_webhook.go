@@ -92,7 +92,7 @@ func (r *AutonomousExadataInfrastructure) ValidateUpdate(old runtime.Object) err
 		return err
 	}
 
-	for key := range autonomousexadatainfrastructureForceNewList {
+	for key, _ := range autonomousexadatainfrastructureForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

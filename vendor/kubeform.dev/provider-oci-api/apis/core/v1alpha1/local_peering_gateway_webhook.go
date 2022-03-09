@@ -89,7 +89,7 @@ func (r *LocalPeeringGateway) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range localpeeringgatewayForceNewList {
+	for key, _ := range localpeeringgatewayForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

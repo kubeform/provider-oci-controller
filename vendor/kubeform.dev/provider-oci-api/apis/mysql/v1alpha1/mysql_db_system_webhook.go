@@ -50,7 +50,6 @@ var mysqldbsystemForceNewList = map[string]bool{
 	"/fault_domain":            true,
 	"/hostname_label":          true,
 	"/ip_address":              true,
-	"/is_highly_available":     true,
 	"/mysql_version":           true,
 	"/port":                    true,
 	"/port_x":                  true,
@@ -103,7 +102,7 @@ func (r *MysqlDbSystem) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range mysqldbsystemForceNewList {
+	for key, _ := range mysqldbsystemForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

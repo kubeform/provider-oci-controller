@@ -90,6 +90,8 @@ type GateDatabaseRegistrationSpecResource struct {
 	// +optional
 	SecretID *string `json:"secretID,omitempty" tf:"secret_id"`
 	// +optional
+	SessionMode *string `json:"sessionMode,omitempty" tf:"session_mode"`
+	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional
 	SubnetID *string `json:"subnetID,omitempty" tf:"subnet_id"`

@@ -42,8 +42,9 @@ func (r *PluggableDatabasesLocalClone) SetupWebhookWithManager(mgr ctrl.Manager)
 var _ webhook.Validator = &PluggableDatabasesLocalClone{}
 
 var pluggabledatabaseslocalcloneForceNewList = map[string]bool{
-	"/cloned_pdb_name":       true,
-	"/pluggable_database_id": true,
+	"/cloned_pdb_name":                    true,
+	"/pluggable_database_id":              true,
+	"/should_pdb_admin_account_be_locked": true,
 }
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
@@ -89,7 +90,7 @@ func (r *PluggableDatabasesLocalClone) ValidateUpdate(old runtime.Object) error 
 		return err
 	}
 
-	for key := range pluggabledatabaseslocalcloneForceNewList {
+	for key, _ := range pluggabledatabaseslocalcloneForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

@@ -89,7 +89,7 @@ func (r *PathRouteSet) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range pathroutesetForceNewList {
+	for key, _ := range pathroutesetForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

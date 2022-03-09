@@ -94,7 +94,7 @@ func (r *EncryptedData) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range encrypteddataForceNewList {
+	for key, _ := range encrypteddataForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

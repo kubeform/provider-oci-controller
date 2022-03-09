@@ -88,7 +88,7 @@ func (r *AnalyticsLogAnalyticsLogGroup) ValidateUpdate(old runtime.Object) error
 		return err
 	}
 
-	for key := range analyticsloganalyticsloggroupForceNewList {
+	for key, _ := range analyticsloganalyticsloggroupForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

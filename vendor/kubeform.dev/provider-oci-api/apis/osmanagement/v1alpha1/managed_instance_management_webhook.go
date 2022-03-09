@@ -86,7 +86,7 @@ func (r *ManagedInstanceManagement) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range managedinstancemanagementForceNewList {
+	for key, _ := range managedinstancemanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

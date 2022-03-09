@@ -90,7 +90,7 @@ func (r *AutonomousContainerDatabaseDataguardAssociationOperation) ValidateUpdat
 		return err
 	}
 
-	for key := range autonomouscontainerdatabasedataguardassociationoperationForceNewList {
+	for key, _ := range autonomouscontainerdatabasedataguardassociationoperationForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

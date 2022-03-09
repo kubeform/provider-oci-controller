@@ -86,7 +86,7 @@ func (r *ConfigConfig) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range configconfigForceNewList {
+	for key, _ := range configconfigForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

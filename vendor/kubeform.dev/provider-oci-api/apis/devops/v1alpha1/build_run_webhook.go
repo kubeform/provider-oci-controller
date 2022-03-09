@@ -93,7 +93,7 @@ func (r *BuildRun) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range buildrunForceNewList {
+	for key, _ := range buildrunForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

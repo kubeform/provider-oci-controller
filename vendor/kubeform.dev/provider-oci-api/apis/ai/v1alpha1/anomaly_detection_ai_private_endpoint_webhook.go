@@ -88,7 +88,7 @@ func (r *AnomalyDetectionAiPrivateEndpoint) ValidateUpdate(old runtime.Object) e
 		return err
 	}
 
-	for key := range anomalydetectionaiprivateendpointForceNewList {
+	for key, _ := range anomalydetectionaiprivateendpointForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

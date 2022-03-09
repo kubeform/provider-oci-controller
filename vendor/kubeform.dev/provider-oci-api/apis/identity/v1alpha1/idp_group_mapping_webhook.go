@@ -88,7 +88,7 @@ func (r *IdpGroupMapping) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range idpgroupmappingForceNewList {
+	for key, _ := range idpgroupmappingForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

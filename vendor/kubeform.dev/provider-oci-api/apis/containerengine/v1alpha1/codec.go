@@ -35,6 +35,8 @@ func GetEncoder() map[string]jsoniter.ValEncoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsAddOns{}).Type1()):                     ClusterSpecOptionsAddOnsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsAdmissionControllerOptions{}).Type1()): ClusterSpecOptionsAdmissionControllerOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsKubernetesNetworkConfig{}).Type1()):    ClusterSpecOptionsKubernetesNetworkConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsPersistentVolumeConfig{}).Type1()):     ClusterSpecOptionsPersistentVolumeConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsServiceLbConfig{}).Type1()):            ClusterSpecOptionsServiceLbConfigCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NodePoolSpecNodeConfigDetails{}).Type1()):                NodePoolSpecNodeConfigDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NodePoolSpecNodeShapeConfig{}).Type1()):                  NodePoolSpecNodeShapeConfigCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NodePoolSpecNodeSource{}).Type1()):                       NodePoolSpecNodeSourceCodec{},
@@ -53,6 +55,8 @@ func GetDecoder() map[string]jsoniter.ValDecoder {
 		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsAddOns{}).Type1()):                     ClusterSpecOptionsAddOnsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsAdmissionControllerOptions{}).Type1()): ClusterSpecOptionsAdmissionControllerOptionsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsKubernetesNetworkConfig{}).Type1()):    ClusterSpecOptionsKubernetesNetworkConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsPersistentVolumeConfig{}).Type1()):     ClusterSpecOptionsPersistentVolumeConfigCodec{},
+		jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsServiceLbConfig{}).Type1()):            ClusterSpecOptionsServiceLbConfigCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NodePoolSpecNodeConfigDetails{}).Type1()):                NodePoolSpecNodeConfigDetailsCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NodePoolSpecNodeShapeConfig{}).Type1()):                  NodePoolSpecNodeShapeConfigCodec{},
 		jsoniter.MustGetKind(reflect2.TypeOf(NodePoolSpecNodeSource{}).Type1()):                       NodePoolSpecNodeSourceCodec{},
@@ -702,6 +706,164 @@ func (ClusterSpecOptionsKubernetesNetworkConfigCodec) Decode(ptr unsafe.Pointer,
 		}
 	default:
 		iter.ReportError("decode ClusterSpecOptionsKubernetesNetworkConfig", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type ClusterSpecOptionsPersistentVolumeConfigCodec struct {
+}
+
+func (ClusterSpecOptionsPersistentVolumeConfigCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ClusterSpecOptionsPersistentVolumeConfig)(ptr) == nil
+}
+
+func (ClusterSpecOptionsPersistentVolumeConfigCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ClusterSpecOptionsPersistentVolumeConfig)(ptr)
+	var objs []ClusterSpecOptionsPersistentVolumeConfig
+	if obj != nil {
+		objs = []ClusterSpecOptionsPersistentVolumeConfig{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsPersistentVolumeConfig{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ClusterSpecOptionsPersistentVolumeConfigCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ClusterSpecOptionsPersistentVolumeConfig)(ptr) = ClusterSpecOptionsPersistentVolumeConfig{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ClusterSpecOptionsPersistentVolumeConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsPersistentVolumeConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ClusterSpecOptionsPersistentVolumeConfig)(ptr) = objs[0]
+			} else {
+				*(*ClusterSpecOptionsPersistentVolumeConfig)(ptr) = ClusterSpecOptionsPersistentVolumeConfig{}
+			}
+		} else {
+			*(*ClusterSpecOptionsPersistentVolumeConfig)(ptr) = ClusterSpecOptionsPersistentVolumeConfig{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ClusterSpecOptionsPersistentVolumeConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsPersistentVolumeConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ClusterSpecOptionsPersistentVolumeConfig)(ptr) = obj
+		} else {
+			*(*ClusterSpecOptionsPersistentVolumeConfig)(ptr) = ClusterSpecOptionsPersistentVolumeConfig{}
+		}
+	default:
+		iter.ReportError("decode ClusterSpecOptionsPersistentVolumeConfig", "unexpected JSON type")
+	}
+}
+
+// +k8s:deepcopy-gen=false
+type ClusterSpecOptionsServiceLbConfigCodec struct {
+}
+
+func (ClusterSpecOptionsServiceLbConfigCodec) IsEmpty(ptr unsafe.Pointer) bool {
+	return (*ClusterSpecOptionsServiceLbConfig)(ptr) == nil
+}
+
+func (ClusterSpecOptionsServiceLbConfigCodec) Encode(ptr unsafe.Pointer, stream *jsoniter.Stream) {
+	obj := (*ClusterSpecOptionsServiceLbConfig)(ptr)
+	var objs []ClusterSpecOptionsServiceLbConfig
+	if obj != nil {
+		objs = []ClusterSpecOptionsServiceLbConfig{*obj}
+	}
+
+	jsonit := jsoniter.Config{
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+		TagKey:                 "tf",
+		TypeEncoders:           getEncodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsServiceLbConfig{}).Type1())),
+	}.Froze()
+
+	byt, _ := jsonit.Marshal(objs)
+
+	stream.Write(byt)
+}
+
+func (ClusterSpecOptionsServiceLbConfigCodec) Decode(ptr unsafe.Pointer, iter *jsoniter.Iterator) {
+	switch iter.WhatIsNext() {
+	case jsoniter.NilValue:
+		iter.Skip()
+		*(*ClusterSpecOptionsServiceLbConfig)(ptr) = ClusterSpecOptionsServiceLbConfig{}
+		return
+	case jsoniter.ArrayValue:
+		objsByte := iter.SkipAndReturnBytes()
+		if len(objsByte) > 0 {
+			var objs []ClusterSpecOptionsServiceLbConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsServiceLbConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objsByte, &objs)
+
+			if len(objs) > 0 {
+				*(*ClusterSpecOptionsServiceLbConfig)(ptr) = objs[0]
+			} else {
+				*(*ClusterSpecOptionsServiceLbConfig)(ptr) = ClusterSpecOptionsServiceLbConfig{}
+			}
+		} else {
+			*(*ClusterSpecOptionsServiceLbConfig)(ptr) = ClusterSpecOptionsServiceLbConfig{}
+		}
+	case jsoniter.ObjectValue:
+		objByte := iter.SkipAndReturnBytes()
+		if len(objByte) > 0 {
+			var obj ClusterSpecOptionsServiceLbConfig
+
+			jsonit := jsoniter.Config{
+				EscapeHTML:             true,
+				SortMapKeys:            true,
+				ValidateJsonRawMessage: true,
+				TagKey:                 "tf",
+				TypeDecoders:           getDecodersWithout(jsoniter.MustGetKind(reflect2.TypeOf(ClusterSpecOptionsServiceLbConfig{}).Type1())),
+			}.Froze()
+			jsonit.Unmarshal(objByte, &obj)
+
+			*(*ClusterSpecOptionsServiceLbConfig)(ptr) = obj
+		} else {
+			*(*ClusterSpecOptionsServiceLbConfig)(ptr) = ClusterSpecOptionsServiceLbConfig{}
+		}
+	default:
+		iter.ReportError("decode ClusterSpecOptionsServiceLbConfig", "unexpected JSON type")
 	}
 }
 

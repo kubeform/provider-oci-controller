@@ -23,6 +23,7 @@ import (
 	analyticsv1alpha1 "kubeform.dev/provider-oci-api/apis/analytics/v1alpha1"
 	apigatewayv1alpha1 "kubeform.dev/provider-oci-api/apis/apigateway/v1alpha1"
 	apmv1alpha1 "kubeform.dev/provider-oci-api/apis/apm/v1alpha1"
+	appmgmtv1alpha1 "kubeform.dev/provider-oci-api/apis/appmgmt/v1alpha1"
 	artifactsv1alpha1 "kubeform.dev/provider-oci-api/apis/artifacts/v1alpha1"
 	auditv1alpha1 "kubeform.dev/provider-oci-api/apis/audit/v1alpha1"
 	autoscalingv1alpha1 "kubeform.dev/provider-oci-api/apis/autoscaling/v1alpha1"
@@ -69,12 +70,17 @@ import (
 	ocvpv1alpha1 "kubeform.dev/provider-oci-api/apis/ocvp/v1alpha1"
 	odav1alpha1 "kubeform.dev/provider-oci-api/apis/oda/v1alpha1"
 	onsv1alpha1 "kubeform.dev/provider-oci-api/apis/ons/v1alpha1"
+	operatorv1alpha1 "kubeform.dev/provider-oci-api/apis/operator/v1alpha1"
 	opsiv1alpha1 "kubeform.dev/provider-oci-api/apis/opsi/v1alpha1"
 	optimizerv1alpha1 "kubeform.dev/provider-oci-api/apis/optimizer/v1alpha1"
 	osmanagementv1alpha1 "kubeform.dev/provider-oci-api/apis/osmanagement/v1alpha1"
+	ospv1alpha1 "kubeform.dev/provider-oci-api/apis/osp/v1alpha1"
 	schv1alpha1 "kubeform.dev/provider-oci-api/apis/sch/v1alpha1"
 	servicev1alpha1 "kubeform.dev/provider-oci-api/apis/service/v1alpha1"
 	streamingv1alpha1 "kubeform.dev/provider-oci-api/apis/streaming/v1alpha1"
+	usagev1alpha1 "kubeform.dev/provider-oci-api/apis/usage/v1alpha1"
+	vaultv1alpha1 "kubeform.dev/provider-oci-api/apis/vault/v1alpha1"
+	visualv1alpha1 "kubeform.dev/provider-oci-api/apis/visual/v1alpha1"
 	vulnerabilityv1alpha1 "kubeform.dev/provider-oci-api/apis/vulnerability/v1alpha1"
 	waasv1alpha1 "kubeform.dev/provider-oci-api/apis/waas/v1alpha1"
 	wafv1alpha1 "kubeform.dev/provider-oci-api/apis/waf/v1alpha1"
@@ -94,6 +100,7 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	analyticsv1alpha1.AddToScheme,
 	apigatewayv1alpha1.AddToScheme,
 	apmv1alpha1.AddToScheme,
+	appmgmtv1alpha1.AddToScheme,
 	artifactsv1alpha1.AddToScheme,
 	auditv1alpha1.AddToScheme,
 	autoscalingv1alpha1.AddToScheme,
@@ -140,12 +147,17 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	ocvpv1alpha1.AddToScheme,
 	odav1alpha1.AddToScheme,
 	onsv1alpha1.AddToScheme,
+	operatorv1alpha1.AddToScheme,
 	opsiv1alpha1.AddToScheme,
 	optimizerv1alpha1.AddToScheme,
 	osmanagementv1alpha1.AddToScheme,
+	ospv1alpha1.AddToScheme,
 	schv1alpha1.AddToScheme,
 	servicev1alpha1.AddToScheme,
 	streamingv1alpha1.AddToScheme,
+	usagev1alpha1.AddToScheme,
+	vaultv1alpha1.AddToScheme,
+	visualv1alpha1.AddToScheme,
 	vulnerabilityv1alpha1.AddToScheme,
 	waasv1alpha1.AddToScheme,
 	wafv1alpha1.AddToScheme,

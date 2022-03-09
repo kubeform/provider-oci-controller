@@ -89,7 +89,7 @@ func (r *ComputationCustomTable) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range computationcustomtableForceNewList {
+	for key, _ := range computationcustomtableForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

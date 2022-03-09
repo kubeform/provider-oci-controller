@@ -88,7 +88,9 @@ type ProfileSpecResource struct {
 
 	ID string `json:"id,omitempty" tf:"id,omitempty"`
 
-	CompartmentID *string `json:"compartmentID" tf:"compartment_id"`
+	// +optional
+	AggregationIntervalInDays *int64  `json:"aggregationIntervalInDays,omitempty" tf:"aggregation_interval_in_days"`
+	CompartmentID             *string `json:"compartmentID" tf:"compartment_id"`
 	// +optional
 	DefinedTags map[string]string `json:"definedTags,omitempty" tf:"defined_tags"`
 	Description *string           `json:"description" tf:"description"`

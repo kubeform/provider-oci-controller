@@ -90,7 +90,7 @@ func (r *VmClusterNetwork) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range vmclusternetworkForceNewList {
+	for key, _ := range vmclusternetworkForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

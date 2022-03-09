@@ -1385,7 +1385,7 @@ kmodules.xyz/resource-metrics/api
 ## explicit
 kubeform.dev/apimachinery/api/v1alpha1
 kubeform.dev/apimachinery/pkg/util
-# kubeform.dev/provider-oci-api v0.4.1-0.20220126230552-bccdf37f01ba
+# kubeform.dev/provider-oci-api v0.4.1-0.20220309072008-7da3cdc363d6
 ## explicit
 kubeform.dev/provider-oci-api/api/provider
 kubeform.dev/provider-oci-api/apis/ai
@@ -1396,6 +1396,8 @@ kubeform.dev/provider-oci-api/apis/apigateway
 kubeform.dev/provider-oci-api/apis/apigateway/v1alpha1
 kubeform.dev/provider-oci-api/apis/apm
 kubeform.dev/provider-oci-api/apis/apm/v1alpha1
+kubeform.dev/provider-oci-api/apis/appmgmt
+kubeform.dev/provider-oci-api/apis/appmgmt/v1alpha1
 kubeform.dev/provider-oci-api/apis/artifacts
 kubeform.dev/provider-oci-api/apis/artifacts/v1alpha1
 kubeform.dev/provider-oci-api/apis/audit
@@ -1488,18 +1490,28 @@ kubeform.dev/provider-oci-api/apis/oda
 kubeform.dev/provider-oci-api/apis/oda/v1alpha1
 kubeform.dev/provider-oci-api/apis/ons
 kubeform.dev/provider-oci-api/apis/ons/v1alpha1
+kubeform.dev/provider-oci-api/apis/operator
+kubeform.dev/provider-oci-api/apis/operator/v1alpha1
 kubeform.dev/provider-oci-api/apis/opsi
 kubeform.dev/provider-oci-api/apis/opsi/v1alpha1
 kubeform.dev/provider-oci-api/apis/optimizer
 kubeform.dev/provider-oci-api/apis/optimizer/v1alpha1
 kubeform.dev/provider-oci-api/apis/osmanagement
 kubeform.dev/provider-oci-api/apis/osmanagement/v1alpha1
+kubeform.dev/provider-oci-api/apis/osp
+kubeform.dev/provider-oci-api/apis/osp/v1alpha1
 kubeform.dev/provider-oci-api/apis/sch
 kubeform.dev/provider-oci-api/apis/sch/v1alpha1
 kubeform.dev/provider-oci-api/apis/service
 kubeform.dev/provider-oci-api/apis/service/v1alpha1
 kubeform.dev/provider-oci-api/apis/streaming
 kubeform.dev/provider-oci-api/apis/streaming/v1alpha1
+kubeform.dev/provider-oci-api/apis/usage
+kubeform.dev/provider-oci-api/apis/usage/v1alpha1
+kubeform.dev/provider-oci-api/apis/vault
+kubeform.dev/provider-oci-api/apis/vault/v1alpha1
+kubeform.dev/provider-oci-api/apis/visual
+kubeform.dev/provider-oci-api/apis/visual/v1alpha1
 kubeform.dev/provider-oci-api/apis/vulnerability
 kubeform.dev/provider-oci-api/apis/vulnerability/v1alpha1
 kubeform.dev/provider-oci-api/apis/waas

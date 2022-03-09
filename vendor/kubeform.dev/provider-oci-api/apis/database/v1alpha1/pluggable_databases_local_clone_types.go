@@ -87,13 +87,17 @@ type PluggableDatabasesLocalCloneSpecResource struct {
 	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	// +optional
-	OpenMode         *string `json:"openMode,omitempty" tf:"open_mode"`
+	OpenMode *string `json:"openMode,omitempty" tf:"open_mode"`
+	// +optional
 	PdbAdminPassword *string `json:"-" sensitive:"true" tf:"pdb_admin_password"`
 	// +optional
 	PdbName             *string `json:"pdbName,omitempty" tf:"pdb_name"`
 	PluggableDatabaseID *string `json:"pluggableDatabaseID" tf:"pluggable_database_id"`
 	// +optional
-	State                   *string `json:"state,omitempty" tf:"state"`
+	ShouldPdbAdminAccountBeLocked *bool `json:"shouldPdbAdminAccountBeLocked,omitempty" tf:"should_pdb_admin_account_be_locked"`
+	// +optional
+	State *string `json:"state,omitempty" tf:"state"`
+	// +optional
 	TargetTdeWalletPassword *string `json:"-" sensitive:"true" tf:"target_tde_wallet_password"`
 	// +optional
 	TimeCreated *string `json:"timeCreated,omitempty" tf:"time_created"`

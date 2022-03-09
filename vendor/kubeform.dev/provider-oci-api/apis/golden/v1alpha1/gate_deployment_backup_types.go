@@ -79,9 +79,13 @@ type GateDeploymentBackupSpecResource struct {
 	// +optional
 	OggVersion *string `json:"oggVersion,omitempty" tf:"ogg_version"`
 	// +optional
+	SizeInBytes *float64 `json:"sizeInBytes,omitempty" tf:"size_in_bytes"`
+	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional
 	SystemTags map[string]string `json:"systemTags,omitempty" tf:"system_tags"`
+	// +optional
+	TimeBackupFinished *string `json:"timeBackupFinished,omitempty" tf:"time_backup_finished"`
 	// +optional
 	TimeCreated *string `json:"timeCreated,omitempty" tf:"time_created"`
 	// +optional

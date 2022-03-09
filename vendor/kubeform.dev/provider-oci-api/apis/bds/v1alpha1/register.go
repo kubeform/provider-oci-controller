@@ -60,6 +60,10 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&AutoScalingConfigurationList{},
 		&BdsInstance{},
 		&BdsInstanceList{},
+		&BdsInstanceAPIKey{},
+		&BdsInstanceAPIKeyList{},
+		&BdsInstanceMetastoreConfig{},
+		&BdsInstanceMetastoreConfigList{},
 	)
 
 	scheme.AddKnownTypes(SchemeGroupVersion,

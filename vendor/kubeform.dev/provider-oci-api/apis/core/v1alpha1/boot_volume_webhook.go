@@ -91,7 +91,7 @@ func (r *BootVolume) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range bootvolumeForceNewList {
+	for key, _ := range bootvolumeForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

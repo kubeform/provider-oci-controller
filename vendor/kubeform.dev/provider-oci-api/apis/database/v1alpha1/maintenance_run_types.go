@@ -41,6 +41,17 @@ type MaintenanceRun struct {
 	Status            MaintenanceRunStatus `json:"status,omitempty"`
 }
 
+type MaintenanceRunSpecEstimatedPatchingTime struct {
+	// +optional
+	EstimatedDbServerPatchingTime *int64 `json:"estimatedDbServerPatchingTime,omitempty" tf:"estimated_db_server_patching_time"`
+	// +optional
+	EstimatedNetworkSwitchesPatchingTime *int64 `json:"estimatedNetworkSwitchesPatchingTime,omitempty" tf:"estimated_network_switches_patching_time"`
+	// +optional
+	EstimatedStorageServerPatchingTime *int64 `json:"estimatedStorageServerPatchingTime,omitempty" tf:"estimated_storage_server_patching_time"`
+	// +optional
+	TotalEstimatedPatchingTime *int64 `json:"totalEstimatedPatchingTime,omitempty" tf:"total_estimated_patching_time"`
+}
+
 type MaintenanceRunSpec struct {
 	State *MaintenanceRunSpecResource `json:"state,omitempty" tf:"-"`
 
@@ -63,13 +74,27 @@ type MaintenanceRunSpecResource struct {
 	// +optional
 	CompartmentID *string `json:"compartmentID,omitempty" tf:"compartment_id"`
 	// +optional
+	CurrentCustomActionTimeoutInMins *int64 `json:"currentCustomActionTimeoutInMins,omitempty" tf:"current_custom_action_timeout_in_mins"`
+	// +optional
+	CurrentPatchingComponent *string `json:"currentPatchingComponent,omitempty" tf:"current_patching_component"`
+	// +optional
+	CustomActionTimeoutInMins *int64 `json:"customActionTimeoutInMins,omitempty" tf:"custom_action_timeout_in_mins"`
+	// +optional
 	Description *string `json:"description,omitempty" tf:"description"`
 	// +optional
 	DisplayName *string `json:"displayName,omitempty" tf:"display_name"`
 	// +optional
+	EstimatedComponentPatchingStartTime *string `json:"estimatedComponentPatchingStartTime,omitempty" tf:"estimated_component_patching_start_time"`
+	// +optional
+	EstimatedPatchingTime *MaintenanceRunSpecEstimatedPatchingTime `json:"estimatedPatchingTime,omitempty" tf:"estimated_patching_time"`
+	// +optional
+	IsCustomActionTimeoutEnabled *bool `json:"isCustomActionTimeoutEnabled,omitempty" tf:"is_custom_action_timeout_enabled"`
+	// +optional
 	IsEnabled *bool `json:"isEnabled,omitempty" tf:"is_enabled"`
 	// +optional
 	IsPatchNowEnabled *bool `json:"isPatchNowEnabled,omitempty" tf:"is_patch_now_enabled"`
+	// +optional
+	IsResumePatching *bool `json:"isResumePatching,omitempty" tf:"is_resume_patching"`
 	// +optional
 	LifecycleDetails *string `json:"lifecycleDetails,omitempty" tf:"lifecycle_details"`
 	MaintenanceRunID *string `json:"maintenanceRunID" tf:"maintenance_run_id"`
@@ -82,15 +107,25 @@ type MaintenanceRunSpecResource struct {
 	// +optional
 	PatchID *string `json:"patchID,omitempty" tf:"patch_id"`
 	// +optional
+	PatchingEndTime *string `json:"patchingEndTime,omitempty" tf:"patching_end_time"`
+	// +optional
 	PatchingMode *string `json:"patchingMode,omitempty" tf:"patching_mode"`
+	// +optional
+	PatchingStartTime *string `json:"patchingStartTime,omitempty" tf:"patching_start_time"`
+	// +optional
+	PatchingStatus *string `json:"patchingStatus,omitempty" tf:"patching_status"`
 	// +optional
 	PeerMaintenanceRunID *string `json:"peerMaintenanceRunID,omitempty" tf:"peer_maintenance_run_id"`
 	// +optional
 	State *string `json:"state,omitempty" tf:"state"`
 	// +optional
+	TargetDbServerVersion *string `json:"targetDbServerVersion,omitempty" tf:"target_db_server_version"`
+	// +optional
 	TargetResourceID *string `json:"targetResourceID,omitempty" tf:"target_resource_id"`
 	// +optional
 	TargetResourceType *string `json:"targetResourceType,omitempty" tf:"target_resource_type"`
+	// +optional
+	TargetStorageServerVersion *string `json:"targetStorageServerVersion,omitempty" tf:"target_storage_server_version"`
 	// +optional
 	TimeEnded *string `json:"timeEnded,omitempty" tf:"time_ended"`
 	// +optional

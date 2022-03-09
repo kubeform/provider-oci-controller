@@ -102,7 +102,7 @@ func (r *DataGuardAssociation) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range dataguardassociationForceNewList {
+	for key, _ := range dataguardassociationForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

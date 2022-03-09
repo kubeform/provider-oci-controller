@@ -42,7 +42,8 @@ func (r *ManagementDbManagementPrivateEndpoint) SetupWebhookWithManager(mgr ctrl
 var _ webhook.Validator = &ManagementDbManagementPrivateEndpoint{}
 
 var managementdbmanagementprivateendpointForceNewList = map[string]bool{
-	"/subnet_id": true,
+	"/is_cluster": true,
+	"/subnet_id":  true,
 }
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
@@ -88,7 +89,7 @@ func (r *ManagementDbManagementPrivateEndpoint) ValidateUpdate(old runtime.Objec
 		return err
 	}
 
-	for key := range managementdbmanagementprivateendpointForceNewList {
+	for key, _ := range managementdbmanagementprivateendpointForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

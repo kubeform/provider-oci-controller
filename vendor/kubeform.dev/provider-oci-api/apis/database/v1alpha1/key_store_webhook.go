@@ -88,7 +88,7 @@ func (r *KeyStore) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range keystoreForceNewList {
+	for key, _ := range keystoreForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

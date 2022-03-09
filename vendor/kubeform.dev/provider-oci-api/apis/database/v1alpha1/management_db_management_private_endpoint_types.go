@@ -63,7 +63,9 @@ type ManagementDbManagementPrivateEndpointSpecResource struct {
 	CompartmentID *string `json:"compartmentID" tf:"compartment_id"`
 	// +optional
 	Description *string `json:"description,omitempty" tf:"description"`
-	Name        *string `json:"name" tf:"name"`
+	// +optional
+	IsCluster *bool   `json:"isCluster,omitempty" tf:"is_cluster"`
+	Name      *string `json:"name" tf:"name"`
 	// +optional
 	NsgIDS []string `json:"nsgIDS,omitempty" tf:"nsg_ids"`
 	// +optional

@@ -42,8 +42,9 @@ func (r *PluggableDatabase) SetupWebhookWithManager(mgr ctrl.Manager) error {
 var _ webhook.Validator = &PluggableDatabase{}
 
 var pluggabledatabaseForceNewList = map[string]bool{
-	"/container_database_id": true,
-	"/pdb_name":              true,
+	"/container_database_id":              true,
+	"/pdb_name":                           true,
+	"/should_pdb_admin_account_be_locked": true,
 }
 
 // ValidateCreate implements webhook.Validator so a webhook will be registered for the type
@@ -89,7 +90,7 @@ func (r *PluggableDatabase) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range pluggabledatabaseForceNewList {
+	for key, _ := range pluggabledatabaseForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

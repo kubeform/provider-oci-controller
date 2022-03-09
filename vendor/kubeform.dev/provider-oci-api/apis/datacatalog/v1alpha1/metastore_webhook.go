@@ -89,7 +89,7 @@ func (r *Metastore) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range metastoreForceNewList {
+	for key, _ := range metastoreForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

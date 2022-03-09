@@ -89,7 +89,7 @@ func (r *ExternalNonContainerDatabaseManagement) ValidateUpdate(old runtime.Obje
 		return err
 	}
 
-	for key := range externalnoncontainerdatabasemanagementForceNewList {
+	for key, _ := range externalnoncontainerdatabasemanagementForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

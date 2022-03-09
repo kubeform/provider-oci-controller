@@ -61,6 +61,8 @@ type LoadBalancerListenerSpecResource struct {
 	ID string `json:"id,omitempty" tf:"id,omitempty"`
 
 	DefaultBackendSetName *string `json:"defaultBackendSetName" tf:"default_backend_set_name"`
+	// +optional
+	IpVersion             *string `json:"ipVersion,omitempty" tf:"ip_version"`
 	Name                  *string `json:"name" tf:"name"`
 	NetworkLoadBalancerID *string `json:"networkLoadBalancerID" tf:"network_load_balancer_id"`
 	Port                  *int64  `json:"port" tf:"port"`

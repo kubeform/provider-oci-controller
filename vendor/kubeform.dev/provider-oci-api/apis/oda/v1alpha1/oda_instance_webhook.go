@@ -88,7 +88,7 @@ func (r *OdaInstance) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range odainstanceForceNewList {
+	for key, _ := range odainstanceForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

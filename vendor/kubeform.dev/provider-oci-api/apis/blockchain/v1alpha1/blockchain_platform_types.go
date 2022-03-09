@@ -155,6 +155,8 @@ type BlockchainPlatformSpecResource struct {
 	// +optional
 	PlatformShapeType *string `json:"platformShapeType,omitempty" tf:"platform_shape_type"`
 	// +optional
+	PlatformVersion *string `json:"platformVersion,omitempty" tf:"platform_version"`
+	// +optional
 	Replicas *BlockchainPlatformSpecReplicas `json:"replicas,omitempty" tf:"replicas"`
 	// +optional
 	ServiceEndpoint *string `json:"serviceEndpoint,omitempty" tf:"service_endpoint"`

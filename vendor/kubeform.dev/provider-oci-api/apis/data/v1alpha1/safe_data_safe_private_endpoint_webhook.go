@@ -90,7 +90,7 @@ func (r *SafeDataSafePrivateEndpoint) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range safedatasafeprivateendpointForceNewList {
+	for key, _ := range safedatasafeprivateendpointForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

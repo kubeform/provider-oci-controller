@@ -163,6 +163,11 @@ func (in *EsxiHostSpecResource) DeepCopyInto(out *EsxiHostSpecResource) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.FailedEsxiHostID != nil {
+		in, out := &in.FailedEsxiHostID, &out.FailedEsxiHostID
+		*out = new(string)
+		**out = **in
+	}
 	if in.FreeformTags != nil {
 		in, out := &in.FreeformTags, &out.FreeformTags
 		*out = make(map[string]string, len(*in))
@@ -170,8 +175,18 @@ func (in *EsxiHostSpecResource) DeepCopyInto(out *EsxiHostSpecResource) {
 			(*out)[key] = val
 		}
 	}
+	if in.GracePeriodEndDate != nil {
+		in, out := &in.GracePeriodEndDate, &out.GracePeriodEndDate
+		*out = new(string)
+		**out = **in
+	}
 	if in.NextSku != nil {
 		in, out := &in.NextSku, &out.NextSku
+		*out = new(string)
+		**out = **in
+	}
+	if in.ReplacementEsxiHostID != nil {
+		in, out := &in.ReplacementEsxiHostID, &out.ReplacementEsxiHostID
 		*out = new(string)
 		**out = **in
 	}

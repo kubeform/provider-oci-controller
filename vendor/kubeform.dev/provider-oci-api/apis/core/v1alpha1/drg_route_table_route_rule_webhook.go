@@ -88,7 +88,7 @@ func (r *DrgRouteTableRouteRule) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range drgroutetablerouteruleForceNewList {
+	for key, _ := range drgroutetablerouteruleForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

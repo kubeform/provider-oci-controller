@@ -44,7 +44,9 @@ var _ webhook.Validator = &AutonomousContainerDatabase{}
 var autonomouscontainerdatabaseForceNewList = map[string]bool{
 	"/autonomous_exadata_infrastructure_id": true,
 	"/autonomous_vm_cluster_id":             true,
+	"/cloud_autonomous_vm_cluster_id":       true,
 	"/db_unique_name":                       true,
+	"/is_automatic_failover_enabled":        true,
 	"/key_store_id":                         true,
 	"/kms_key_id":                           true,
 	"/peer_autonomous_container_database_backup_config/*/backup_destination_details/*/id":             true,
@@ -56,6 +58,7 @@ var autonomouscontainerdatabaseForceNewList = map[string]bool{
 	"/peer_autonomous_container_database_display_name":                                                true,
 	"/peer_autonomous_exadata_infrastructure_id":                                                      true,
 	"/peer_autonomous_vm_cluster_id":                                                                  true,
+	"/peer_cloud_autonomous_vm_cluster_id":                                                            true,
 	"/peer_db_unique_name":                                                                            true,
 	"/protection_mode":                                                                                true,
 	"/service_level_agreement_type":                                                                   true,
@@ -105,7 +108,7 @@ func (r *AutonomousContainerDatabase) ValidateUpdate(old runtime.Object) error {
 		return err
 	}
 
-	for key := range autonomouscontainerdatabaseForceNewList {
+	for key, _ := range autonomouscontainerdatabaseForceNewList {
 		keySplit := strings.Split(key, "/*")
 		length := len(keySplit)
 		checkIfAnyDif := false

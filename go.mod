@@ -10,7 +10,8 @@ require (
 	github.com/hashicorp/hcl v1.0.0
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 	github.com/imdario/mergo v0.3.12
-	github.com/json-iterator/go v1.1.11
+	github.com/json-iterator/go v1.1.12
+	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/spf13/cobra v1.1.3
 	github.com/terraform-providers/terraform-provider-oci v1.0.19-0.20211027181219-4636c81febf0
 	github.com/zclconf/go-cty v1.9.1
